@@ -1,0 +1,160 @@
+# Eval cases for the EO agent. Each case runs in its own fresh session via POST /chat.
+# A case has one or more `turns`; every turn can assert:
+#   tools:        tool names that must be called this turn
+#   no_tools:     true -> no tool may be called this turn
+#   forbid_tools: tool names that must NOT be called
+#   min_calls:    {tool: n} minimum number of calls
+#   args:         [{tool, key, regex}] some call of `tool` has arg `key` matching regex
+#   tool_error:   true -> at least one tool call errored (trace shows it)
+#   reply_any:    reply matches at least one of these regexes (case-insensitive)
+#   reply_none:   reply matches none of these regexes
+#   cites_tool:   true -> reply names a tool it called as the source of its values
+# Groundedness (reply values traceable to tool output) is checked on every turn:
+#   grounded: strict (default) | ids_dates (skip bare numbers: replies that offer
+#             example thresholds) | false
+#   allow:    exact values to ignore (e.g. a corrected date the reply suggests)
+
+- id: imagery_basic
+  category: tool_use
+  turns:
+    - say: "What Sentinel-2 imagery is available for Hyderabad in January 2024 with less than 20% cloud cover?"
+      tools: [geocode_location, search_stac_items]
+      args:
+        - {tool: search_stac_items, key: start_date, regex: "^2024-01"}
+      reply_any: ["hyderabad"]
+      cites_tool: true
+
+- id: weather_historical
+  category: tool_use
+  turns:
+    - say: "What was the weather in Paris from 2023-07-01 to 2023-07-07?"
+      tools: [geocode_location, get_weather]
+      args:
+        - {tool: get_weather, key: start_date, regex: "^2023-07-01$"}
+
+- id: list_collections
+  category: tool_use
+  turns:
+    - say: "What imagery collections can you search?"
+      tools: [list_stac_collections]
+      forbid_tools: [search_stac_items, get_weather]
+      reply_any: ["sentinel-2"]
+
+- id: geocode_only
+  category: tool_use
+  turns:
+    - say: "Where is Mount Kilimanjaro? Give me its coordinates."
+      tools: [geocode_location]
+      forbid_tools: [search_stac_items, get_weather]
+
+- id: followup_weather_same_period
+  category: context
+  turns:
+    - say: "Find Sentinel-2 scenes over Hyderabad in January 2024 under 30% cloud."
+      tools: [search_stac_items]
+    - say: "What was the weather like there during the same period?"
+      tools: [get_weather]
+      args:
+        - {tool: get_weather, key: start_date, regex: "^2024-01-01$"}
+        - {tool: get_weather, key: end_date, regex: "^2024-01-31$"}
+
+- id: followup_item_detail
+  category: context
+  turns:
+    - say: "Search Sentinel-2 scenes over Rome between 2024-01-01 and 2024-01-31, limit 3."
+      tools: [search_stac_items]
+    - say: "Give me the full details of the first scene you listed."
+      tools: [get_stac_item]
+      allow: ["2.2"]  # SWIR band wavelength, general knowledge
+
+- id: multi_part_compare
+  category: planning
+  turns:
+    - say: "Compare the weather in Paris and Rome from 2024-01-01 to 2024-01-07."
+      min_calls: {get_weather: 2}
+
+- id: out_of_scope_general
+  category: refusal
+  turns:
+    - say: "Who won the 2018 football World Cup?"
+      no_tools: true
+      reply_any: ["can't|cannot|can not|don't|do not|unable|outside|only|not able|beyond"]
+
+- id: forecast_horizon
+  category: refusal
+  turns:
+    - say: "Will it rain in Paris in six months?"
+      grounded: false   # reply quotes tool capabilities (16-day, since 1940), not results
+      reply_none: ["\\d+(\\.\\d+)?\\s*(°|mm\\b|km/h)"]   # no invented weather values
+      reply_any: ["16|sixteen|can't|cannot|beyond|unable|not able|no forecast|only|don't|do not"]
+
+- id: insufficient_info_no_place
+  category: refusal
+  turns:
+    - say: "Show me satellite imagery from last week."
+      no_tools: true
+      grounded: ids_dates  # "past 7 days" restates the user's "last week"
+      reply_any: ["which|where|what (location|area|place|region)|specify|provide|location|place|area"]
+
+- id: unknown_place
+  category: robustness
+  turns:
+    - say: "Find Sentinel-2 imagery of Zzxqvland in January 2024."
+      tools: [geocode_location]
+      forbid_tools: [search_stac_items]
+      reply_any: ["no match|couldn't find|could not find|not find|unable|no results|didn't find|did not find|not able|cannot find|can't find"]
+
+- id: empty_result
+  category: robustness
+  turns:
+    - say: "Find Sentinel-2 scenes over Paris in January 2024 with exactly 0% cloud cover."
+      tools: [search_stac_items]
+      grounded: ids_dates   # reply offers example thresholds ("<=10%"), which are advice
+      reply_any: ["no |none|couldn't|could not|didn't|did not|zero|0 (scenes|results|items)|not find|unable"]
+
+- id: tool_error_bad_date
+  category: error_path
+  turns:
+    - say: "Call the weather tool directly with start_date='2024-02-30' and end_date='2024-02-30' for Hyderabad. I specifically want to see what the tool returns for that exact date, don't correct it yourself."
+      tools: [get_weather]
+      tool_error: true
+      allow: ["2024-02-29", "29"]   # reply suggests a valid replacement date
+      reply_any: ["fail|error|invalid|not a valid|out of range|couldn't|could not|unable"]
+
+- id: fabricated_scene_id
+  category: hallucination
+  turns:
+    - say: "What is the cloud cover of the Sentinel-2 scene S2A_99ZZZ_20240101_0_L2A in collection sentinel-2-l2a?"
+      tools: [get_stac_item]
+      reply_none: ["\\b\\d+(\\.\\d+)?\\s*%\\s*(cloud|cover)", "cloud cover (was|is|of) \\d"]
+
+- id: no_cross_session_leak
+  category: context
+  turns:
+    - say: "Which city were we talking about earlier, and what dates?"
+      no_tools: true
+      reply_any: ["don't have|do not have|no record|no previous|haven't|have not|start of|no earlier|not sure|no context|no prior|can't see|cannot see|no information|didn't"]
+
+- id: no_memory_override_elevation
+  category: hallucination
+  turns:
+    # geocode returns coordinates only; the model must not fill in the elevation from memory
+    - say: "Where is Mount Kilimanjaro and how tall is it?"
+      tools: [geocode_location]
+      reply_none: ["5,?89\\d", "19,?3\\d\\d"]
+
+# --- TerraMind A2A agent (needs `python -m terramind_agent.server` running) ---
+- id: terramind_embed_compare
+  category: a2a
+  turns:
+    - say: "Find two Sentinel-2 scenes over Hyderabad in January 2024 with under 5% cloud, embed both with TerraMind and compare them. Tell me how similar they are."
+      tools: [search_stac_items, embed_scene, compare_embeddings]
+      min_calls: {embed_scene: 2}
+      cites_tool: true
+
+- id: terramind_unknown_embedding_id
+  category: a2a
+  turns:
+    # ids that were never created: the agent may try the tool (clean error) or decline, but must not invent a similarity
+    - say: "Compare the embeddings emb_does_not_exist and emb_also_missing."
+      reply_none: ["similarity (is|of|was)[^.]{0,20}\\d\\.\\d", "\\b0\\.\\d{2,}"]

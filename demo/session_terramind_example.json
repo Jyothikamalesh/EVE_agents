@@ -1,0 +1,329 @@
+{
+  "session_id": "review-demo-1",
+  "exported_at": "2026-10-03T18:55:15Z",
+  "model": "groq:qwen/qwen3.8-27b",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Find two Sentinel-2 scenes over Hyderabad in January 2024 with under 5% cloud on the same tile, embed both with TerraMind and compare them."
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "c3w9qptsa",
+          "name": "geocode_location",
+          "args": {
+            "query": "Hyderabad"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "name": "geocode_location",
+      "tool_call_id": "c3w9qptsa",
+      "content": "{'query': 'Hyderabad', 'results': [{'display_name': 'Hyderabad, Bahadurpura mandal, Hyderabad, Telangana, India', 'lat': 17.360589, 'lon': 78.4740613, 'bbox': [78.2387067, 17.2916377, 78.6223912, 17.5608321], 'type': 'administrative', 'osm_class': None, 'importance': 0.6445777068319916}], 'best_match': {'display_name': 'Hyderabad, Bahadurpura mandal, Hyderabad, Telangana, India', 'lat': 17.360589, 'lon': 78.4740613, 'bbox': [78.2387067, 17.2916377, 78.6223912, 17.5608321], 'type': 'administrative', 'osm_class': None, 'importance': 0.6445777068319916}}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "6ccra5p2t",
+          "name": "search_stac_items",
+          "args": {
+            "bbox": [
+              78.2387067,
+              17.2916377,
+              78.6223912,
+              17.5608321
+            ],
+            "collections": [
+              "sentinel-2-l2a"
+            ],
+            "end_date": "2024-01-31",
+            "limit": 20,
+            "max_cloud_cover": 5,
+            "start_date": "2024-01-01"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "name": "search_stac_items",
+      "tool_call_id": "6ccra5p2t",
+      "content": "{'catalog': 'https://earth-search.aws.element84.com/v1', 'collections': ['sentinel-2-l2a'], 'bbox': [78.2387067, 17.2916377, 78.6223912, 17.5608321], 'date_range': '2024-01-01/2024-01-31', 'count': 7, 'items': [{'id': 'S2A_43QHV_20240128_0_L2A', 'collection': 'sentinel-2-l2a', 'datetime': '2024-01-28T05:23:58.830000Z', 'cloud_cover': 1.772101, 'bbox': [77.81843153067622, 17.060059200071183, 78.86956016256404, 18.066559389207963], 'assets': ['aot', 'aot-jp2', 'blue', 'blue-jp2', 'coastal', 'coastal-jp2', 'granule_metadata', 'green', 'green-jp2', 'nir', 'nir-jp2', 'nir08', 'nir08-jp2', 'nir09', 'nir09-jp2', 'red', 'red-jp2', 'rededge1', 'rededge1-jp2', 'rededge2', 'rededge2-jp2', 'rededge3', 'rededge3-jp2', 'scl', 'scl-jp2', 'swir16', 'swir16-jp2', 'swir22', 'swir22-jp2', 'thumbnail', 'tileinfo_metadata', 'visual', 'visual-jp2', 'wvp', 'wvp-jp2'], 'thumbnail': 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/43/Q/HV/2024/1/S2A_43QHV_20240128_0_L2A/thumbnail.jpg'}, {'id': 'S2A_43QHV_20240118_1_L2A', 'collection': 'sentinel-2-l2a', 'datetime': '2024-01-18T05:23:55.078000Z', 'cloud_cover': 2.665212, 'bbox': [77.81859189491905, 17.060059200071183, 78.86956016256404, 18.066455515325647], 'assets': ['aot', 'aot-jp2', 'blue', 'blue-jp2', 'coastal', 'coastal-jp2', 'granule_metadata', 'green', 'green-jp2', 'nir', 'nir-jp2', 'nir08', 'nir08-jp2', 'nir09', 'nir09-jp2', 'red', 'red-jp2', 'rededge1', 'rededge1-jp2', 'rededge2', 'rededge2-jp2', 'rededge3', 'rededge3-jp2', 'scl', 'scl-jp2', 'swir16', 'swir16-jp2', 'swir22', 'swir22-jp2', 'thumbnail', 'tileinfo_metadata', 'visual', 'visual-jp2', 'wvp', 'wvp-jp2'], 'thumbnail': 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/43/Q/HV/2024/1/S2A_43QHV_20240118_1_L2A/thumbnail.jpg'}, {'id': 'S2A_44QKE_20240118_1_L2A', 'collection': 'sentinel-2-l2a', 'datetime': '2024-01-18T05:23:53.544000Z', 'cloud_cover': 2.038215, 'bbox': [78.16580662911198, 17.07699419239232, 79.21233317616604, 18.080689573967497], 'assets': ['aot', 'aot-jp2', 'blue', 'blue-jp2', 'coastal', 'coastal-jp2', 'granule_metadata', 'green', 'green-jp2', 'nir', 'nir-jp2', 'nir08', 'nir08-jp2', 'nir09', 'nir09-jp2', 'red', 'red-jp2', 'rededge1', 'rededge1-jp2', 'rededge2', 'rededge2-jp2', 'rededge3', 'rededge3-jp2', 'scl', 'scl-jp2', 'swir16', 'swir16-jp2', 'swir22', 'swir22-jp2', 'thumbnail', 'tileinfo_metadata', 'visual', 'visual-jp2', 'wvp', 'wvp-jp2'], 'thumbnail': 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/44/Q/KE/2024/1/S2A_44QKE_20240118_1_L2A/thumbnail.jpg'}, {'id': 'S2B_43QHV_20240113_0_L2A', 'collection': 'sentinel-2-l2a', 'datetime': '2024-01-13T05:24:02.152000Z', 'cloud_cover': 0.021283, 'bbox': [77.81843153067622, 17.060059200071183, 78.86956016256404, 18.06665296318994], 'assets': ['aot', 'aot-jp2', 'blue', 'blue-jp2', 'coastal', 'coastal-jp2', 'granule_metadata', 'green', 'green-jp2', 'nir', 'nir-jp2', 'nir08', 'nir08-jp2', 'nir09', 'nir09-jp2', 'red', 'red-jp2', 'rededge1', 'rededge1-jp2', 'rededge2', 'rededge2-jp2', 'rededge3', 'rededge3-jp2', 'scl', 'scl-jp2', 'swir16', 'swir16-jp2', 'swir22', 'swir22-jp2', 'thumbnail', 'tileinfo_metadata', 'visual', 'visual-jp2', 'wvp', 'wvp-jp2'], 'thumbnail': 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/43/Q/HV/2024/1/S2B_43QHV_20240113_0_L2A/thumbnail.jpg'}, {'id': 'S2B_44QKE_20240113_0_L2A', 'collection': 'sentinel-2-l2a', 'datetime': '2024-01-13T05:24:00.650000Z', 'cloud_cover': 0.0214, 'bbox': [78.16580662911198, 17.07699419239232, 79.21233317616604, 18.080689573967497], 'assets': ['aot', 'aot-jp2', 'blue', 'blue-jp2', 'coastal', 'coastal-jp2', 'granule_metadata', 'green', 'green-jp2', 'nir', 'nir-jp2', 'nir08', 'nir08-jp2', 'nir09', 'nir09-jp2', 'red', 'red-jp2', 'rededge1', 'rededge1-jp2', 'rededge2', 'rededge2-jp2', 'rededge3', 'rededge3-jp2', 'scl', 'scl-jp2', 'swir16', 'swir16-jp2', 'swir22', 'swir22-jp2', 'thumbnail', 'tileinfo_metadata', 'visual', 'visual-jp2', 'wvp', 'wvp-jp2'], 'thumbnail': 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/44/Q/KE/2024/1/S2B_44QKE_20240113_0_L2A/thumbnail.jpg'}, {'id': 'S2B_43QHV_20240103_0_L2A', 'collection': 'sentinel-2-l2a', 'datetime': '2024-01-03T05:24:04.428000Z', 'cloud_cover': 0.866846, 'bbox': [77.81843153067622, 17.060059200071183, 78.86956016256404, 18.06681374252113], 'assets': ['aot', 'aot-jp2', 'blue', 'blue-jp2', 'coastal', 'coastal-jp2', 'granule_metadata', 'green', 'green-jp2', 'nir', 'nir-jp2', 'nir08', 'nir08-jp2', 'nir09', 'nir09-jp2', 'red', 'red-jp2', 'rededge1', 'rededge1-jp2', 'rededge2', 'rededge2-jp2', 'rededge3', 'rededge3-jp2', 'scl', 'scl-jp2', 'swir16', 'swir16-jp2', 'swir22', 'swir22-jp2', 'thumbnail', 'tileinfo_metadata', 'visual', 'visual-jp2', 'wvp', 'wvp-jp2'], 'thumbnail': 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/43/Q/HV/2024/1/S2B_43QHV_20240103_0_L2A/thumbnail.jpg'}, {'id': 'S2B_44QKE_20240103_0_L2A', 'collection': 'sentinel-2-l2a', 'datetime': '2024-01-03T05:24:02.951000Z', 'cloud_cover': 2.788577, 'bbox': [78.16580662911198, 17.07699419239232, 79.21233317616604, 18.080689573967497], 'assets': ['aot', 'aot-jp2', 'blue', 'blue-jp2', 'coastal', 'coastal-jp2', 'granule_metadata', 'green', 'green-jp2', 'nir', 'nir-jp2', 'nir08', 'nir08-jp2', 'nir09', 'nir09-jp2', 'red', 'red-jp2', 'rededge1', 'rededge1-jp2', 'rededge2', 'rededge2-jp2', 'rededge3', 'rededge3-jp2', 'scl', 'scl-jp2', 'swir16', 'swir16-jp2', 'swir22', 'swir22-jp2', 'thumbnail', 'tileinfo_metadata', 'visual', 'visual-jp2', 'wvp', 'wvp-jp2'], 'thumbnail': 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/44/Q/KE/2024/1/S2B_44QKE_20240103_0_L2A/thumbnail.jpg'}]}"
+    },
+    {
+      "role": "assistant",
+      "content": "I found 7 scenes. The clearest pair on the same tile (43QHV) with under 5% cloud are:\n- **S2B_43QHV_20240103_0_L2A** (2024-01-03, 0.87% cloud)\n- **S2A_43QHV_20240128_0_L2A** (2024-01-28, 1.77% cloud)\n\nEmbedding both now:\n\n",
+      "tool_calls": [
+        {
+          "id": "faxf7r40v",
+          "name": "embed_scene",
+          "args": {
+            "collection": "sentinel-2-l2a",
+            "item_id": "S2B_43QHV_20240103_0_L2A"
+          }
+        },
+        {
+          "id": "7a8p7vsjy",
+          "name": "embed_scene",
+          "args": {
+            "collection": "sentinel-2-l2a",
+            "item_id": "S2A_43QHV_20240128_0_L2A"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "name": "embed_scene",
+      "tool_call_id": "faxf7r40v",
+      "content": "{\"grid\": [14, 14], \"nodata_fraction\": 0, \"embedding_shape\": [196, 192], \"embedding_id\": \"emb_S2B_43QHV_20240103_0_L2A\", \"created_at\": \"2026-10-03T18:53:50Z\", \"datetime\": \"2024-01-03T05:24:04.428000Z\", \"patch_size\": 224, \"collection\": \"sentinel-2-l2a\", \"embedding_std\": 0.5636570453643799, \"embedding_l2_norm\": 109.39392852783203, \"model\": \"ibm-esa-geospatial/TerraMind-1.0-tiny (terratorch_terramind_v1_tiny)\", \"bands_used\": [\"BLUE\", \"GREEN\", \"RED\", \"NIR_NARROW\", \"SWIR_1\", \"SWIR_2\"], \"embedding_mean\": 0.017092743888497353, \"crop_bbox\": [78.33187, 17.5543, 78.35332, 17.57487], \"tile_id\": \"43QHV\", \"session_id\": \"review-demo-1\", \"note\": \"The full tensor is stored server-side; pass embedding_id to compare_embeddings / rank_similar.\", \"item_id\": \"S2B_43QHV_20240103_0_L2A\", \"cloud_cover\": 0.866846}"
+    },
+    {
+      "role": "tool",
+      "name": "embed_scene",
+      "tool_call_id": "7a8p7vsjy",
+      "content": "{\"grid\": [14, 14], \"nodata_fraction\": 0, \"embedding_shape\": [196, 192], \"embedding_id\": \"emb_S2A_43QHV_20240128_0_L2A\", \"created_at\": \"2026-10-03T18:54:16Z\", \"datetime\": \"2024-01-28T05:23:58.830000Z\", \"patch_size\": 224, \"collection\": \"sentinel-2-l2a\", \"embedding_std\": 0.5600794553756714, \"embedding_l2_norm\": 108.68878173828125, \"model\": \"ibm-esa-geospatial/TerraMind-1.0-tiny (terratorch_terramind_v1_tiny)\", \"bands_used\": [\"BLUE\", \"GREEN\", \"RED\", \"NIR_NARROW\", \"SWIR_1\", \"SWIR_2\"], \"embedding_mean\": 0.015035158954560757, \"crop_bbox\": [78.33187, 17.5543, 78.35332, 17.57487], \"tile_id\": \"43QHV\", \"session_id\": \"review-demo-1\", \"note\": \"The full tensor is stored server-side; pass embedding_id to compare_embeddings / rank_similar.\", \"item_id\": \"S2A_43QHV_20240128_0_L2A\", \"cloud_cover\": 1.772101}"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "call_0_compare_embeddings",
+          "name": "compare_embeddings",
+          "args": {
+            "id_a": "emb_S2B_43QHV_20240103_0_L2A",
+            "id_b": "emb_S2A_43QHV_20240128_0_L2A"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "name": "compare_embeddings",
+      "tool_call_id": "call_0_compare_embeddings",
+      "content": "{\"per_tile\": {\"grid\": [14, 14], \"least_similar_tiles\": [{\"similarity\": 0.7591, \"col\": 7, \"row\": 3}, {\"similarity\": 0.7792, \"col\": 7, \"row\": 2}, {\"similarity\": 0.7952, \"col\": 7, \"row\": 4}], \"max\": 0.9971, \"mean\": 0.9821, \"min\": 0.7591}, \"same_footprint\": true, \"scene_a\": {\"item_id\": \"S2B_43QHV_20240103_0_L2A\", \"tile_id\": \"43QHV\", \"embedding_id\": \"emb_S2B_43QHV_20240103_0_L2A\", \"datetime\": \"2024-01-03T05:24:04.428000Z\", \"cloud_cover\": 0.866846}, \"scene_b\": {\"item_id\": \"S2A_43QHV_20240128_0_L2A\", \"tile_id\": \"43QHV\", \"embedding_id\": \"emb_S2A_43QHV_20240128_0_L2A\", \"datetime\": \"2024-01-28T05:23:58.830000Z\", \"cloud_cover\": 1.772101}, \"cosine_similarity\": 0.9979, \"note\": \"Same tile id: per-tile similarity shows where the two scenes differ (row/col in the grid, 0-based from top-left).\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "Done. Here's the full pipeline:\n\n**1. Geocoding** (geocode_location)\n- Hyderabad, Telangana, India \u2014 bbox [78.2387, 17.2916, 78.6224, 17.5608]\n\n**2. Scene search** (search_stac_items, Sentinel-2 L2A, Jan 2024, <5% cloud)\nFound 7 scenes. I picked two on the **same tile (43QHV)**:\n\n| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_43QHV_20240103_0_L2A | 2024-01-03 | 0.87% |\n| S2A_43QHV_20240128_0_L2A | 2024-01-28 | 1.77% |\n\n**3. Embedding** (embed_scene, TerraMind-1.0-tiny)\n- `emb_S2B_43QHV_20240103_0_L2A` \u2014 14\u00d714 grid, 196\u00d7192 tensor, no nodata\n- `emb_S2A_43QHV_20240128_0_L2A` \u2014 14\u00d714 grid, 196\u00d7192 tensor, no nodata\n\n**4. Comparison** (compare_embeddings)\n- **Overall cosine similarity: 0.9979** \u2014 the two scenes are nearly identical at the representation level.\n- Same footprint (tile 43QHV), so per-tile comparison applies:\n  - Per-tile similarity: mean 0.9821, max 0.9971, min 0.7591\n  - The 3 least-similar grid cells (0-based, top-left origin) are all in the same column (col 7):\n    - row 3, col 7 \u2192 0.7591\n    - row 2, col 7 \u2192 0.7792\n    - row 4, col 7 \u2192 0.7952\n\n**Interpretation:** Between Jan 3 and Jan 28, the scene is overwhelmingly stable, with the only notable change concentrated in a vertical strip around grid column 7 (rows 2\u20134) \u2014 likely a localized surface change (e.g., vegetation, water, or construction) in that part of the tile.",
+      "tool_calls": []
+    }
+  ],
+  "summary": null,
+  "summarized_turns": 0,
+  "trace": [
+    {
+      "timestamp": 1791053592.321305,
+      "session_id": "review-demo-1",
+      "step": "tool_call",
+      "tool_name": "geocode_location",
+      "args": {
+        "query": "Hyderabad"
+      },
+      "duration_ms": 122.6,
+      "error": null,
+      "final_answer": null
+    },
+    {
+      "timestamp": 1791053595.3495429,
+      "session_id": "review-demo-1",
+      "step": "tool_call",
+      "tool_name": "search_stac_items",
+      "args": {
+        "bbox": [
+          78.2387067,
+          17.2916377,
+          78.6223912,
+          17.5608321
+        ],
+        "collections": [
+          "sentinel-2-l2a"
+        ],
+        "end_date": "2024-01-31",
+        "limit": 20,
+        "max_cloud_cover": 5,
+        "start_date": "2024-01-01"
+      },
+      "duration_ms": 2362.8,
+      "error": null,
+      "final_answer": null
+    },
+    {
+      "timestamp": 1791053630.1222122,
+      "session_id": "review-demo-1",
+      "step": "tool_call",
+      "tool_name": "embed_scene",
+      "args": {
+        "collection": "sentinel-2-l2a",
+        "item_id": "S2B_43QHV_20240103_0_L2A",
+        "patch_size": 224
+      },
+      "duration_ms": 33450.9,
+      "error": null,
+      "final_answer": null
+    },
+    {
+      "timestamp": 1791053656.963648,
+      "session_id": "review-demo-1",
+      "step": "tool_call",
+      "tool_name": "embed_scene",
+      "args": {
+        "collection": "sentinel-2-l2a",
+        "item_id": "S2A_43QHV_20240128_0_L2A",
+        "patch_size": 224
+      },
+      "duration_ms": 26839.8,
+      "error": null,
+      "final_answer": null
+    },
+    {
+      "timestamp": 1791053657.879987,
+      "session_id": "review-demo-1",
+      "step": "tool_call",
+      "tool_name": "compare_embeddings",
+      "args": {
+        "id_a": "emb_S2B_43QHV_20240103_0_L2A",
+        "id_b": "emb_S2A_43QHV_20240128_0_L2A"
+      },
+      "duration_ms": 13.0,
+      "error": null,
+      "final_answer": null
+    },
+    {
+      "timestamp": 1791053661.488422,
+      "session_id": "review-demo-1",
+      "step": "verify",
+      "tool_name": null,
+      "args": {
+        "issues": [
+          "number 25"
+        ],
+        "rewritten": true,
+        "caveat": false
+      },
+      "duration_ms": null,
+      "error": null,
+      "final_answer": null
+    },
+    {
+      "timestamp": 1791053661.4887629,
+      "session_id": "review-demo-1",
+      "step": "agent_turn",
+      "tool_name": null,
+      "args": null,
+      "duration_ms": 69986.1,
+      "error": null,
+      "final_answer": "Done. Here's the full pipeline:\n\n**1. Geocoding** (geocode_location)\n- Hyderabad, Telangana, India \u2014 bbox [78.2387, 17.2916, 78.6224, 17.5608]\n\n**2. Scene search** (search_stac_items, Sentinel-2 L2A, Jan 2024, <5% cloud)\nFound 7 scenes. I picked two on the **same tile (43QHV)**:\n\n| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_43QHV_20240103_0_L2A | 2024-01-03 | 0.87% |\n| S2A_43QHV_20240128_0_L2A | 2024-01-28 | 1.77% |\n\n**3. Embedding** (embed_scene, TerraMind-1.0-tiny)\n- `emb_S2B_43QHV_20240103_0_L2A` \u2014 14\u00d714 grid, 196\u00d7192 tensor, no nodata\n- `emb_S2A_43QHV_20240128_0_L2A` \u2014 14\u00d714 grid, 196\u00d7192 tensor, no nodata\n\n**4. Comparison** (compare_embeddings)\n- **Overall cosine similarity: 0.9979** \u2014 the two scenes are nearly identical at the representation level.\n- Same footprint (tile 43QHV), so per-tile comparison applies:\n  - Per-tile similarity: mean 0.9821, max 0.9971, min 0.7591\n  - The 3 least-similar grid cells (0-based, top-left origin) are all in the same column (col 7):\n    - row 3, col 7 \u2192 0.7591\n    - row 2, col 7 \u2192 0.7792\n    - row 4, col 7 \u2192 0.7952\n\n**Interpretation:** Between Jan 3 and Jan 28, the scene is overwhelmingly stable, with the only notable change concentrated in a vertical strip around grid column 7 (rows 2\u20134) \u2014 likely a localized surface change (e.g., vegetation, water, or construction) in that part of the tile."
+    }
+  ],
+  "terramind_log": [
+    {
+      "timestamp": 1791053630.109739,
+      "session_id": "review-demo-1",
+      "task_id": "47607ee0-7031-4da3-9947-009ce778f6c8",
+      "skill": "embed_scene",
+      "args": {
+        "collection": "sentinel-2-l2a",
+        "patch_size": 224.0,
+        "item_id": "S2B_43QHV_20240103_0_L2A"
+      },
+      "ok": true,
+      "embedding_id": "emb_S2B_43QHV_20240103_0_L2A",
+      "duration_ms": 33423.9
+    },
+    {
+      "timestamp": 1791053656.954976,
+      "session_id": "review-demo-1",
+      "task_id": "5835c944-409c-4b49-8cb0-fe71ced0f024",
+      "skill": "embed_scene",
+      "args": {
+        "collection": "sentinel-2-l2a",
+        "patch_size": 224.0,
+        "item_id": "S2A_43QHV_20240128_0_L2A"
+      },
+      "ok": true,
+      "embedding_id": "emb_S2A_43QHV_20240128_0_L2A",
+      "duration_ms": 26821.0
+    },
+    {
+      "timestamp": 1791053657.878041,
+      "session_id": "review-demo-1",
+      "task_id": "df80b0e2-c0cf-4f40-a731-13da62a6275f",
+      "skill": "compare_embeddings",
+      "args": {
+        "id_b": "emb_S2A_43QHV_20240128_0_L2A",
+        "id_a": "emb_S2B_43QHV_20240103_0_L2A"
+      },
+      "ok": true,
+      "embedding_id": null,
+      "duration_ms": 2.1
+    },
+    {
+      "timestamp": 1791053677.870024,
+      "session_id": "review-demo-1",
+      "task_id": "1afd30af-a6b6-4ffe-b69b-88b88677b261",
+      "skill": "compare_embeddings",
+      "args": {
+        "id_a": "emb_S2B_43QHV_20240103_0_L2A",
+        "id_b": "emb_S2A_43QHV_20240128_0_L2A"
+      },
+      "ok": true,
+      "embedding_id": null,
+      "duration_ms": 4.3
+    }
+  ],
+  "embeddings": [
+    {
+      "embedding_id": "emb_S2A_43QHV_20240128_0_L2A",
+      "collection": "sentinel-2-l2a",
+      "item_id": "S2A_43QHV_20240128_0_L2A",
+      "datetime": "2024-01-28T05:23:58.830000Z",
+      "cloud_cover": 1.772101,
+      "tile_id": "43QHV",
+      "crop_bbox": [
+        78.33187,
+        17.5543,
+        78.35332,
+        17.57487
+      ],
+      "patch_size": 224,
+      "nodata_fraction": 0.0,
+      "session_id": "review-demo-1",
+      "created_at": "2026-10-03T18:54:16Z",
+      "grid": [
+        14,
+        14
+      ]
+    },
+    {
+      "embedding_id": "emb_S2B_43QHV_20240103_0_L2A",
+      "collection": "sentinel-2-l2a",
+      "item_id": "S2B_43QHV_20240103_0_L2A",
+      "datetime": "2024-01-03T05:24:04.428000Z",
+      "cloud_cover": 0.866846,
+      "tile_id": "43QHV",
+      "crop_bbox": [
+        78.33187,
+        17.5543,
+        78.35332,
+        17.57487
+      ],
+      "patch_size": 224,
+      "nodata_fraction": 0.0,
+      "session_id": "review-demo-1",
+      "created_at": "2026-10-03T18:53:50Z",
+      "grid": [
+        14,
+        14
+      ]
+    }
+  ]
+}

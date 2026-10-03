@@ -32,17 +32,89 @@ def tool_call_label(tool_name: str) -> str:
 # ─── Text-format tool-call parsing (Mistral / EVE-Instruct) ───────────────────
 
 
+def _parse_json_array_tool_calls(text: str) -> Optional[List[Dict[str, Any]]]:
+    """Parse ``[{"name": ..., "arguments": {...}}, ...]`` (seen from Qwen3 on Groq).
+
+    Distinct from the bare Mistral format (``name{json}``, no enclosing list) —
+    this is a straight JSON array of ``{"name", "arguments"}`` objects. Returns
+    ``None`` (not ``[]``) when *text* isn't this format, so callers can fall
+    back to the bare-format parser rather than treating "no calls found" as
+    "zero tool calls intended".
+    """
+    try:
+        parsed = json.loads(text)
+    except (json.JSONDecodeError, ValueError):
+        return None
+    if not isinstance(parsed, list) or not parsed:
+        return None
+    calls: List[Dict[str, Any]] = []
+    for idx, entry in enumerate(parsed):
+        if not isinstance(entry, dict) or "name" not in entry:
+            return None
+        calls.append(
+            {
+                "id": f"call_{idx}_{entry['name']}",
+                "name": entry["name"],
+                "args": entry.get("arguments", entry.get("args", {})),
+                "type": "tool_call",
+            }
+        )
+    return calls
+
+
+_XML_NAME_RE = re.compile(r"<tool_name>\s*([A-Za-z_]\w*)\s*</tool_name>|<function=([A-Za-z_]\w*)>")
+_XML_PARAM_RE = re.compile(r"<parameter=([A-Za-z_]\w*)>(.*?)</parameter>", re.S)
+_XML_SPLIT_RE = re.compile(r"(?=<tool_use>)|(?=<tool_call>)|(?=<function=)")
+
+
+def _parse_xml_tool_calls(content: str) -> List[Dict[str, Any]]:
+    """Parse XML-style calls some open models emit as plain text instead of native tool calls:
+
+        <tool_use><tool_name>geocode_location</tool_name><parameter=query>Paris</parameter></function></tool_call>
+        <tool_call><function=get_weather><parameter=lat>48.85</parameter>...</function></tool_call>
+
+    Parameter values are JSON-decoded when they parse (numbers, lists), else kept as strings.
+    """
+    calls: List[Dict[str, Any]] = []
+    for block in _XML_SPLIT_RE.split(content):
+        m = _XML_NAME_RE.search(block)
+        if not m:
+            continue
+        name = m.group(1) or m.group(2)
+        args: Dict[str, Any] = {}
+        for key, raw in _XML_PARAM_RE.findall(block):
+            raw = raw.strip()
+            try:
+                args[key] = json.loads(raw)
+            except ValueError:
+                args[key] = raw
+        calls.append({"id": f"call_{len(calls)}_{name}", "name": name, "args": args, "type": "tool_call"})
+    return calls
+
+
 def parse_text_tool_calls(content: str) -> List[Dict[str, Any]]:
-    """Parse ``[TOOL_CALLS]tool_name{"key": "val"} ...`` into structured dicts.
+    """Parse text-format tool calls into structured dicts.
+
+    Handles three formats seen in the wild. Two follow a ``[TOOL_CALLS]`` marker:
+
+    - Mistral/EVE-Instruct bare format: ``tool_name{"key": "val"} ...``
+    - JSON array format (e.g. Qwen3 on Groq): ``[{"name": ..., "arguments": {...}}]``
+
+    and the XML style (``<tool_use>`` / ``<function=...>``), which has no marker.
 
     Returns a list compatible with ``AIMessage.tool_calls``.
     """
     if _TEXT_TOOL_CALL_MARKER not in content:
-        return []
+        return _parse_xml_tool_calls(content)
 
     text = content[
         content.index(_TEXT_TOOL_CALL_MARKER) + len(_TEXT_TOOL_CALL_MARKER) :
     ].strip()
+
+    json_array_calls = _parse_json_array_tool_calls(text)
+    if json_array_calls is not None:
+        return json_array_calls
+
     calls: List[Dict[str, Any]] = []
     i = 0
     while i < len(text):

@@ -35,8 +35,9 @@ class AgentMessagesState(MessagesState):
     """Messages graph state for pluggable agent graphs.
 
     Extends :class:`~langgraph.graph.MessagesState` (which provides the
-    ``messages`` list) with no additional fields by default.  Kept as an
-    explicit subclass so that:
+    ``messages`` list) with the rolling-summary fields used when a graph is
+    compiled with ``summary_every`` (see ``graphs/context.py``); both are
+    simply absent/unused otherwise.  Kept as an explicit subclass so that:
 
     - All node functions share a single type annotation that can be
       extended in-place without touching every ``add_node`` call.
@@ -46,6 +47,13 @@ class AgentMessagesState(MessagesState):
     Recovery routing is structural (via the ``agent_fallback`` node) rather
     than flag-based, so no ``use_fallback_llm`` field is needed in state.
     """
+
+    # Running summary of the turns that have left the prompt window.
+    summary: str
+    # How many whole turns (from the start of the thread) the summary covers.
+    summarized_turns: int
+    # Result of the last answer check (see ``graphs/verify.py``): checked/issues/rewritten.
+    verification: dict
 
 
 # ─── Standalone MCP interceptor (no backend dependencies) ─────────────────────

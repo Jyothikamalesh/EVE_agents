@@ -6,7 +6,7 @@ relative so this tree can be cloned as its own repository.
 """
 
 import logging
-from typing import Any, List, Literal, Optional
+from typing import Any, Callable, Dict, List, Literal, Optional
 
 from langchain_core.messages import (
     AIMessage,
@@ -18,6 +18,15 @@ from langchain_core.tools import BaseTool
 from langgraph.graph import END, START, StateGraph
 
 from ..base import AgentGraph, AgentMessagesState
+from ..context import (
+    DEFAULT_MAX_CHARS,
+    Compactor,
+    compact_old_tool_messages,
+    summarize_turns,
+    summary_block,
+    turn_starts,
+)
+from ..verify import make_verify_node
 from ..policies import (
     DEFAULT_LLM_IDLE_TIMEOUT,
     DEFAULT_LLM_RUN_TIMEOUT,
@@ -68,9 +77,22 @@ class ReactAgent(AgentGraph):
         llm_run_timeout: Optional[float] = DEFAULT_LLM_RUN_TIMEOUT,
         llm_idle_timeout: Optional[float] = DEFAULT_LLM_IDLE_TIMEOUT,
         on_policy=None,
+        extra_instruction: Optional[Callable[[], Optional[str]]] = None,
+        tool_compactors: Optional[Dict[str, Compactor]] = None,
+        summary_every: Optional[int] = None,
+        keep_recent_turns: int = 2,
+        compact_max_chars: int = DEFAULT_MAX_CHARS,
+        verify: bool = False,
+        max_tool_calls: Optional[int] = None,
         **kwargs,
     ):
-        instruction = self.instruction_text(history=history, summary=summary)
+        # Context policy (both opt-in; see graphs/context.py):
+        # - ``tool_compactors`` (a dict, possibly empty): tool results from earlier turns are
+        #   compacted in the prompt (per-tool function, else a length cap). Stored history is untouched.
+        # - ``summary_every=N``: once N turns have aged out of the last ``keep_recent_turns``
+        #   verbatim turns, fold them into a rolling summary (one LLM call per N turns) and
+        #   drop them from the prompt.
+        base_instruction = self.instruction_text(history=history, summary=summary)
         primary_llm_bound = llm.bind_tools(tools) if tools else llm
         fallback_llm_bound = (
             fallback_llm.bind_tools(tools)
@@ -82,6 +104,18 @@ class ReactAgent(AgentGraph):
         # shared invocation logic
         async def _invoke(state: AgentMessagesState, llm_bound):
             messages = list(state["messages"])
+            summary = state.get("summary") or ""
+            if summary_every:
+                # Turns already folded into the summary leave the prompt (they stay in state).
+                starts = turn_starts(messages)
+                done = int(state.get("summarized_turns") or 0)
+                if 0 < done < len(starts):
+                    messages = messages[starts[done] :]
+            if tool_compactors is not None:
+                messages = compact_old_tool_messages(messages, tool_compactors, compact_max_chars)
+            extra = extra_instruction() if extra_instruction else None
+            parts = (base_instruction, summary_block(summary), extra)
+            instruction = "\n\n".join(p for p in parts if p) or None
             if instruction:
                 messages = [SystemMessage(content=instruction)] + messages
 
@@ -129,6 +163,28 @@ class ReactAgent(AgentGraph):
 
             return {"messages": [response]}
 
+        # rolling-summary node: runs once per request, before the agent
+        async def context_fn(state: AgentMessagesState):
+            messages = state["messages"]
+            starts = turn_starts(messages)
+            done = int(state.get("summarized_turns") or 0)
+            # turns old enough to leave the verbatim window (the current turn is the last one)
+            target = len(starts) - 1 - keep_recent_turns
+            if target - done < summary_every:
+                return {}
+            chunk = messages[starts[done] : starts[target]]
+            try:
+                new_summary = await summarize_turns(
+                    llm, state.get("summary") or "", chunk, tool_compactors, compact_max_chars
+                )
+            except Exception:  # noqa: BLE001 - keep the old summary; the token trim is the backstop
+                logger.exception("Rolling summary failed; keeping previous summary")
+                return {}
+            if not new_summary:
+                return {}
+            logger.info("Rolling summary updated: turns %d..%d folded in", done + 1, target)
+            return {"summary": new_summary, "summarized_turns": target}
+
         # primary agent node
         async def agent_fn(state: AgentMessagesState):
             return await _invoke(state, primary_llm_bound)
@@ -138,11 +194,38 @@ class ReactAgent(AgentGraph):
             return await _invoke(state, fallback_llm_bound)
 
         # ── routing ────────────────────────────────────────────────────────
-        def should_continue(state: AgentMessagesState) -> Literal["tools", "__end__"]:
+        # with ``verify`` the final answer passes through the verifier node before ending
+        after_agent = "verify" if verify else END
+
+        def _turn_tool_calls(messages) -> int:
+            starts = turn_starts(messages)
+            return sum(isinstance(m, ToolMessage) for m in messages[starts[-1]:]) if starts else 0
+
+        def should_continue(state: AgentMessagesState) -> Literal["tools", "limit", "verify", "__end__"]:
             last = state["messages"][-1]
             if getattr(last, "tool_calls", None):
+                if max_tool_calls and _turn_tool_calls(state["messages"]) >= max_tool_calls:
+                    return "limit"
                 return "tools"
-            return END
+            return after_agent
+
+        # Loop guard: a model that keeps retrying a failing tool would otherwise run until the
+        # recursion limit. Answer the pending calls as skipped and end the turn with a plain message.
+        async def limit_fn(state: AgentMessagesState):
+            last = state["messages"][-1]
+            msgs = state["messages"]
+            starts = turn_starts(msgs)
+            errors = [str(m.content) for m in msgs[starts[-1]:] if isinstance(m, ToolMessage) and "error" in str(m.content).lower()]
+            skipped = [
+                ToolMessage(content="Skipped: tool-call limit reached for this turn.", tool_call_id=tc["id"], name=tc["name"])
+                for tc in last.tool_calls
+            ]
+            detail = f" The last error was: {errors[-1][:300]}" if errors else ""
+            text = (
+                f"I stopped because this turn hit the tool-call limit without reaching an answer.{detail} "
+                "Please rephrase or narrow the request and I'll try again."
+            )
+            return {"messages": skipped + [AIMessage(content=text)]}
 
         # ── build graph ────────────────────────────────────────────────────
         builder = StateGraph(AgentMessagesState)
@@ -158,10 +241,22 @@ class ReactAgent(AgentGraph):
             ),
         )
         builder.add_node("tools", self.make_tools_node(tools))
-        builder.add_edge(START, "agent")
-        builder.add_conditional_edges(
-            "agent", should_continue, {"tools": "tools", END: END}
-        )
+        route_map = {"tools": "tools", END: END}
+        if max_tool_calls:
+            builder.add_node("limit", limit_fn)
+            builder.add_edge("limit", "verify" if verify else END)
+            route_map["limit"] = "limit"
+        if verify:
+            builder.add_node("verify", make_verify_node(llm, [t.name for t in tools]))
+            builder.add_edge("verify", END)
+            route_map["verify"] = "verify"
+        if summary_every:
+            builder.add_node("context", context_fn)
+            builder.add_edge(START, "context")
+            builder.add_edge("context", "agent")
+        else:
+            builder.add_edge(START, "agent")
+        builder.add_conditional_edges("agent", should_continue, route_map)
         builder.add_edge("tools", "agent")
 
         if has_fallback:
@@ -185,8 +280,6 @@ class ReactAgent(AgentGraph):
                 ),
                 **fallback_node_kwargs,
             )
-            builder.add_conditional_edges(
-                "agent_fallback", should_continue, {"tools": "tools", END: END}
-            )
+            builder.add_conditional_edges("agent_fallback", should_continue, route_map)
 
         return builder.compile(checkpointer=checkpointer)
