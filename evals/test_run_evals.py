@@ -88,6 +88,19 @@ def test_verifier_interventions_are_reported_separately_from_passes():
     assert run_evals.verifier_line(summarize([run("x", True)])) == ""
 
 
+def test_detection_scores_reach_the_live_report():
+    from evals.eval_detection import run as run_detection, summarize as summarize_detection
+    det = summarize_detection(run_detection())
+    line = run_evals.detection_line(det)
+    assert "precision" in line and "recall" in line and "F1" in line and "false alarms 0/" in line
+    assert run_evals.detection_line(None) == ""
+    with tempfile.TemporaryDirectory() as d:
+        run_evals.RESULTS_DIR = Path(d)
+        results = [run("a", True)]
+        md = write_reports(results, summarize(results), "t", "m", 1, det).read_text()
+        assert "verifier as detector" in md
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     for fn in fns:

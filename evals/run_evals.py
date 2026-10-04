@@ -218,10 +218,20 @@ def verifier_line(summary: dict) -> str:
             f"left {v['caveats']} caveats · flagged in: {where}")
 
 
-def write_reports(results: list[dict], summary: dict, stamp: str, model: str, repeat: int = 1) -> Path:
+def detection_line(d: dict | None) -> str:
+    """One line for the verifier-as-detector benchmark (offline, no model): precision / recall / F1."""
+    if not d:
+        return ""
+    o, e, fa = d["overall"], d["predicted_detectable"], d["false_alarm_rate"]
+    f = lambda x: "n/a" if x is None else f"{x:.0%}"  # noqa: E731
+    return (f"verifier as detector ({d['items']} labelled replies): precision {f(o['precision'])} · recall {f(o['recall'])} · F1 {f(o['f1'])}"
+            f" (recall {f(e['recall'])} on the error types it is built for) · false alarms {fa['flagged']}/{fa['of']}")
+
+
+def write_reports(results: list[dict], summary: dict, stamp: str, model: str, repeat: int = 1, detection: dict | None = None) -> Path:
     RESULTS_DIR.mkdir(exist_ok=True)
     (RESULTS_DIR / f"{stamp}.json").write_text(
-        json.dumps({"summary": summary, "model": model, "repeat": repeat, "results": results}, indent=2))
+        json.dumps({"summary": summary, "model": model, "repeat": repeat, "detection": detection, "results": results}, indent=2))
     skipped = f" · skipped: {', '.join(summary['skipped'])}" if summary["skipped"] else ""
     head = f"**{summary['passed']}/{summary['cases']} cases passed" + (" every run" if repeat > 1 else "") + f"** · {summary['groundedness']}{skipped}"
     lines = [f"# Eval run {stamp}", "", f"Model: `{model}`  ", head]
@@ -233,6 +243,9 @@ def write_reports(results: list[dict], summary: dict, stamp: str, model: str, re
     if vl:
         lines += ["", vl + "  "]
         lines += ["(the pass rates above score the final replies, after any verifier rewrite)"]
+    dl = detection_line(detection)
+    if dl:
+        lines += ["", dl + "  ", "(per scenario and error type: `python -m evals.eval_detection`; map in `evals/SCENARIOS.md`)"]
     lines += ["", "| category | passed |", "|---|---|", *[f"| {c} | {v} |" for c, v in summary["by_category"].items()], "",
               "| case | passes | tools (first run, per turn) | notes |", "|---|---|---|---|"]
     first = {}
@@ -258,6 +271,7 @@ def main() -> int:
     ap.add_argument("--only", help="comma-separated case ids")
     ap.add_argument("--timeout", type=float, default=120)
     ap.add_argument("--repeat", type=int, default=1, help="run every case N times (fresh session each) and report pass counts")
+    ap.add_argument("--skip-detection", action="store_true", help="do not score the verifier on the labelled detection benchmark")
     ap.add_argument("--min-pass-rate", type=float, default=1.0,
                     help="exit 0 only if runs_passed/runs is at least this (default 1.0: every run passes)")
     args = ap.parse_args()
@@ -314,7 +328,11 @@ def main() -> int:
                         print(f"        - turn {t['turn']}: {f}")
 
     summary = summarize(results)
-    path = write_reports(results, summary, stamp, health.get("model", "?"), args.repeat)
+    detection = None
+    if not args.skip_detection:  # offline and cheap (no model): the verifier's precision / recall / F1 on labelled replies
+        from evals.eval_detection import run as run_detection, summarize as summarize_detection
+        detection = summarize_detection(run_detection())
+    path = write_reports(results, summary, stamp, health.get("model", "?"), args.repeat, detection)
     note = f" · skipped {len(summary['skipped'])}: {', '.join(summary['skipped'])}" if summary["skipped"] else ""
     if args.repeat > 1:
         print("\npasses per case (lowest first):")
@@ -330,6 +348,9 @@ def main() -> int:
     vl = verifier_line(summary)
     if vl:
         print(vl)
+    dl = detection_line(detection)
+    if dl:
+        print(dl)
     print("by category:", summary["by_category"])
     print(f"report: {path}")
     if not summary["runs"]:

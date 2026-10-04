@@ -74,6 +74,15 @@ exercised and nothing tested false premises, injection, table grounding or the T
 ambiguous place names (a known gap: geocoding returns one match by default), the loop guard live, tool-result
 prompt injection, non-English input, latency or cost, and concurrent sessions.
 
+## Detection benchmark and the scenario map
+
+Every `run_evals` run also prints and records the benchmark's headline precision / recall / F1 (offline, no model; `--skip-detection` turns it off). `python -m evals.eval_detection` gives the full per-scenario tables and scores the verifier as a hallucination detector: 284 labelled replies
+(`detection_fixtures.py`) in ten scenarios, precision / recall / F1 per scenario and per error type, a
+false-alarm rate, and a sweep of how often a random wrong number passes. `test_detection.py` pins the
+results, including the known weaknesses. **`SCENARIOS.md`** explains why each scenario was chosen, maps
+every other scenario (covered, partial or not), records 27 exploratory scenarios tried once, and lists where
+a labelled true/false dataset would be better than a live case.
+
 ## Offline tests (no network, no model)
 
 ```bash
@@ -88,6 +97,7 @@ python -m evals.test_llm_factory       # provider selection (groq/ollama/vllm/op
 python -m evals.test_node_trace        # node-level trace recorder (UI graph data)
 python -m evals.test_a2a_client        # A2A tools described by the Agent Card; the EO prompt names no tools
 python -m evals.test_run_evals         # repeat statistics: Wilson interval, flaky/failing detection, verifier interventions, report
+python -m evals.test_detection         # the detection benchmark's results, incl. the known weaknesses
 ```
 
 The `a2a` cases in `cases.yaml` need `python -m terramind_agent.server` running. A case can list `requires_tools`;

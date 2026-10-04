@@ -201,6 +201,12 @@ covers the mechanics offline.
   (the 2 replies it flagged were real errors, e.g. the hottest day given as 2026-03-26 when
   the data puts 34.8 °C on 2026-03-27, and a 58.1% scene called "the lowest cloud cover" next to
   an 18.0% scene), and it caught 1,266 of 1,271 (99.6%) deliberately swapped values.
+  A separate **detection benchmark** (`python -m evals.eval_detection`, 284 labelled replies on fresh
+  synthetic data, predictions written before the first run) reports precision, recall and F1 per scenario:
+  100% / 99% / 100% on attribution, ids, dates, superlatives and citations, but weak on plain numbers: a
+  random wrong 1-decimal number passes 33% of the time against a dense weather payload (1% for 2 decimals
+  in a sparse one), and small integers, embedding ids, echoed user claims and wrong values hidden in
+  advice text are missed. See `evals/SCENARIOS.md`.
   Known limits: a swap inside a sentence that compares several records, a record referred to
   only by position ("the second one"), and claims with no value in them are not checked; it
   is a tripwire, not a proof.
@@ -210,7 +216,7 @@ covers the mechanics offline.
   `evals/results/<stamp>.{json,md}`. Offline tests:
   `python -m evals.test_groundedness`, `test_pairing`, `test_verify`, `test_context_policy`,
   `test_terramind_skills`, `test_loop_guard`, `test_text_tool_calls`, `test_llm_factory`,
-  `test_node_trace`, `test_a2a_client`, `test_run_evals`.
+  `test_node_trace`, `test_a2a_client`, `test_run_evals`, `test_detection`.
   See `evals/README.md`.
 
 ## Session memory

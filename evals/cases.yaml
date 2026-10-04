@@ -122,6 +122,7 @@
       tools: [get_weather]
       tool_error: true
       no_rewrite: true   # the suggested valid replacement date is advice, not a claim
+      reply_all: ['out of range']   # the TOOL's own error text must reach the user, not just the model's own knowledge that Feb 30 does not exist
       reply_any: ["fail|error|invalid|not a valid|out of range|couldn't|could not|unable"]
 
 - id: fabricated_scene_id
