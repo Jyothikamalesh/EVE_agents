@@ -23,10 +23,12 @@ from ..context import (
     Compactor,
     compact_old_tool_messages,
     summarize_turns,
+    ledger_block,
+    request_ledger,
     summary_block,
     turn_starts,
 )
-from ..verify import make_verify_node
+from ..verify import make_verify_node, tool_capability_text
 from ..policies import (
     DEFAULT_LLM_IDLE_TIMEOUT,
     DEFAULT_LLM_RUN_TIMEOUT,
@@ -80,6 +82,8 @@ class ReactAgent(AgentGraph):
         extra_instruction: Optional[Callable[[], Optional[str]]] = None,
         tool_compactors: Optional[Dict[str, Compactor]] = None,
         summary_every: Optional[int] = None,
+        summary_token_budget: Optional[int] = None,
+        summary_min_turns: int = 2,
         keep_recent_turns: int = 2,
         compact_max_chars: int = DEFAULT_MAX_CHARS,
         verify: bool = False,
@@ -89,9 +93,13 @@ class ReactAgent(AgentGraph):
         # Context policy (both opt-in; see graphs/context.py):
         # - ``tool_compactors`` (a dict, possibly empty): tool results from earlier turns are
         #   compacted in the prompt (per-tool function, else a length cap). Stored history is untouched.
-        # - ``summary_every=N``: once N turns have aged out of the last ``keep_recent_turns``
-        #   verbatim turns, fold them into a rolling summary (one LLM call per N turns) and
-        #   drop them from the prompt.
+        # - ``summary_token_budget=T`` (on-demand): when the prompt for the new turn would exceed T
+        #   tokens, fold every turn older than the last ``keep_recent_turns`` into a rolling summary
+        #   (one LLM call, at least ``summary_min_turns`` turns at a time) and drop them from the
+        #   prompt. Short conversations never pay for it.
+        # - ``summary_every=N`` (fixed schedule, used when no budget is given): fold once N turns
+        #   have aged out of the last ``keep_recent_turns`` verbatim turns.
+        summary_on = bool(summary_every or summary_token_budget)
         base_instruction = self.instruction_text(history=history, summary=summary)
         primary_llm_bound = llm.bind_tools(tools) if tools else llm
         fallback_llm_bound = (
@@ -101,23 +109,31 @@ class ReactAgent(AgentGraph):
         )
         has_fallback = fallback_llm_bound is not None
 
-        # shared invocation logic
-        async def _invoke(state: AgentMessagesState, llm_bound):
+        # what the model would be sent for this state, before the hard token trim
+        def _prompt_messages(state: AgentMessagesState):
             messages = list(state["messages"])
             summary = state.get("summary") or ""
-            if summary_every:
+            ledger = None
+            if summary_on:
                 # Turns already folded into the summary leave the prompt (they stay in state).
+                # The user's own words for those turns stay as a numbered ledger, in order.
                 starts = turn_starts(messages)
                 done = int(state.get("summarized_turns") or 0)
                 if 0 < done < len(starts):
+                    ledger = ledger_block(request_ledger(messages, done))
                     messages = messages[starts[done] :]
             if tool_compactors is not None:
                 messages = compact_old_tool_messages(messages, tool_compactors, compact_max_chars)
             extra = extra_instruction() if extra_instruction else None
-            parts = (base_instruction, summary_block(summary), extra)
+            parts = (base_instruction, summary_block(summary), ledger, extra)
             instruction = "\n\n".join(p for p in parts if p) or None
             if instruction:
                 messages = [SystemMessage(content=instruction)] + messages
+            return messages
+
+        # shared invocation logic
+        async def _invoke(state: AgentMessagesState, llm_bound):
+            messages = _prompt_messages(state)
 
             if trim_messages is not None:
                 messages = trim_messages(
@@ -170,7 +186,19 @@ class ReactAgent(AgentGraph):
             done = int(state.get("summarized_turns") or 0)
             # turns old enough to leave the verbatim window (the current turn is the last one)
             target = len(starts) - 1 - keep_recent_turns
-            if target - done < summary_every:
+            if target <= done:
+                return {}
+            if summary_token_budget:
+                # on demand: only when the prompt this turn would be sent is over budget
+                size = tiktoken_counter(_prompt_messages(state))
+                if size <= summary_token_budget:
+                    return {}
+                # hysteresis: batch at least ``summary_min_turns`` turns per call (so a tight budget
+                # cannot cost one summary call per turn), unless the prompt is far over budget
+                if target - done < summary_min_turns and size <= 1.5 * summary_token_budget:
+                    return {}
+                logger.info("Prompt is %d tokens (budget %d): folding turns %d..%d", size, summary_token_budget, done + 1, target)
+            elif target - done < summary_every:
                 return {}
             chunk = messages[starts[done] : starts[target]]
             try:
@@ -247,10 +275,10 @@ class ReactAgent(AgentGraph):
             builder.add_edge("limit", "verify" if verify else END)
             route_map["limit"] = "limit"
         if verify:
-            builder.add_node("verify", make_verify_node(llm, [t.name for t in tools]))
+            builder.add_node("verify", make_verify_node(llm, [t.name for t in tools], [tool_capability_text(t) for t in tools]))
             builder.add_edge("verify", END)
             route_map["verify"] = "verify"
-        if summary_every:
+        if summary_on:
             builder.add_node("context", context_fn)
             builder.add_edge(START, "context")
             builder.add_edge("context", "agent")

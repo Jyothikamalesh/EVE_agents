@@ -29,12 +29,14 @@ from fastapi import FastAPI, HTTPException
 from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
 from pydantic import BaseModel
 
+from agents.graphs.verify import tool_capability_text
 from service.eo_agent import EOReactAgent
 from service.eo_agent.compaction import EO_COMPACTORS
 from service.a2a_client import load_a2a_tools
 from service.llm import describe as describe_llm
 from service.llm import make_llm
 from service.mcp_client import load_traced_tools
+from service.node_trace import NodeTraceHandler, load_turns, save_turn
 from service.sessions import export_session, serialize_messages
 from service.tracing import record_step, start_trace
 
@@ -48,8 +50,11 @@ logger = logging.getLogger(__name__)
 MODEL = describe_llm()  # "provider:model", see service/llm.py
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 CHECKPOINT_DB_PATH = os.environ.get("CHECKPOINT_DB_PATH", str(DATA_DIR / "checkpoints.sqlite"))
-# Context policy: fold turns into a rolling summary once SUMMARY_EVERY turns have aged out of
-# the last KEEP_RECENT verbatim turns; tool results from earlier turns are compacted in the prompt.
+# Context policy (always on): tool results from earlier turns are compacted in the prompt, and turns
+# older than the last KEEP_RECENT are folded into a rolling summary on demand, when the prompt for the
+# new turn would exceed SUMMARY_TOKEN_BUDGET tokens (short chats never pay for a summary call).
+# Set EVE_SUMMARY_TOKEN_BUDGET=0 to use a fixed schedule instead: every SUMMARY_EVERY aged-out turns.
+SUMMARY_TOKEN_BUDGET = int(os.environ.get("EVE_SUMMARY_TOKEN_BUDGET", "3000"))
 SUMMARY_EVERY = int(os.environ.get("EVE_SUMMARY_EVERY", "3"))
 KEEP_RECENT = int(os.environ.get("EVE_KEEP_RECENT_TURNS", "2"))
 # Loop guard: tool calls allowed per turn before the agent stops and explains.
@@ -70,11 +75,14 @@ for _h in logging.getLogger().handlers:
     _h.addFilter(_SessionFilter())
 _graph = None  # set during lifespan startup
 _llm = None
+_remote_tools: dict[str, str] = {}  # tool name -> remote agent label (A2A tools), for the node trace
+_tool_info: list[dict] = []  # name, description and capability text of every bound tool, listed by /tools
+_tool_names: list[str] = []  # every tool bound to the agent, listed by /health (the evals use it)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global _graph, _llm
+    global _graph, _llm, _remote_tools, _tool_names, _tool_info
     if os.environ.get("EVE_LLM_PROVIDER", "groq").lower() == "groq" and not os.environ.get("GROQ_API_KEY"):
         raise RuntimeError("GROQ_API_KEY not set (expected in .env), or choose another EVE_LLM_PROVIDER")
 
@@ -82,14 +90,19 @@ async def lifespan(app: FastAPI):
     async with AsyncSqliteSaver.from_conn_string(CHECKPOINT_DB_PATH) as checkpointer:
         await checkpointer.setup()  # no-op after the first run; creates tables once
         # Tools: the EO MCP server (required) plus the TerraMind A2A agent's skills (optional).
-        tools = await load_traced_tools(lambda: _session_id_var.get(), await load_a2a_tools(session_id_getter=lambda: _session_id_var.get()))
+        a2a_tools = await load_a2a_tools(session_id_getter=lambda: _session_id_var.get())
+        _remote_tools = {t.name: "TerraMind A2A agent" for t in a2a_tools}
+        tools = await load_traced_tools(lambda: _session_id_var.get(), a2a_tools)
+        _tool_names = [t.name for t in tools]
+        _tool_info = [{"name": t.name, "description": t.description, "text": tool_capability_text(t)} for t in tools]
         _llm = make_llm()
         _graph = EOReactAgent().compile(
             llm=_llm,
             tools=tools,
             checkpointer=checkpointer,
             tool_compactors=EO_COMPACTORS,
-            summary_every=SUMMARY_EVERY,
+            summary_token_budget=SUMMARY_TOKEN_BUDGET or None,
+            summary_every=None if SUMMARY_TOKEN_BUDGET else SUMMARY_EVERY,
             keep_recent_turns=KEEP_RECENT,
             verify=True,
             max_tool_calls=MAX_TOOL_CALLS,
@@ -115,11 +128,19 @@ class ChatResponse(BaseModel):
     session_id: str
     reply: str
     trace: list
+    turn: int | None = None  # 1-based turn number; GET /sessions/{id}/node_runs has its node-level trace
 
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "model": MODEL}
+    return {"status": "ok", "model": MODEL, "tools": _tool_names}
+
+
+@app.get("/tools")
+async def tools():
+    """What each bound tool says about itself (description + parameter schema); the verifier treats whole
+    numbers in it as supported facts about the tool's limits, and the evals use the same evidence."""
+    return {"tools": _tool_info}
 
 
 async def _session_state(session_id: str) -> dict:
@@ -141,6 +162,12 @@ async def get_session(session_id: str):
     }
 
 
+@app.get("/sessions/{session_id}/node_runs")
+async def get_node_runs(session_id: str):
+    """Node-level trace per turn: node runs in order, with model calls (full prompts) and tool calls."""
+    return {"session_id": session_id, "turns": load_turns(session_id)}
+
+
 @app.get("/sessions/{session_id}/export")
 async def get_session_export(session_id: str):
     """One JSON file with the whole session: messages, API trace, TerraMind agent log, embeddings."""
@@ -153,14 +180,16 @@ async def chat(req: ChatRequest):
     steps = start_trace()
     start = time.perf_counter()
     try:
-        config = {"configurable": {"thread_id": req.session_id}}
+        node_trace = NodeTraceHandler(remote_tools=_remote_tools)
+        config = {"configurable": {"thread_id": req.session_id}, "callbacks": [node_trace]}
         before = (await _graph.aget_state(config)).values or {}
         result = await _graph.ainvoke({"messages": [("user", req.message)]}, config=config)
         if result.get("summarized_turns", 0) != before.get("summarized_turns", 0):
             record_step(
                 session_id=req.session_id,
                 step="context_summary",
-                args={"summarized_turns": result["summarized_turns"], "every": SUMMARY_EVERY, "keep_recent": KEEP_RECENT},
+                args={"summarized_turns": result["summarized_turns"], "token_budget": SUMMARY_TOKEN_BUDGET or None,
+                      "every": None if SUMMARY_TOKEN_BUDGET else SUMMARY_EVERY, "keep_recent": KEEP_RECENT},
                 final_answer=result.get("summary"),
             )
         v = result.get("verification")
@@ -171,6 +200,8 @@ async def chat(req: ChatRequest):
                 args={k: v[k] for k in ("issues", "rewritten", "caveat") if k in v},
                 error=("; ".join(v.get("remaining") or v["issues"]) if v["issues"] else None) if v.get("caveat") else None,
             )
+        turn = sum(type(m).__name__ == "HumanMessage" for m in result["messages"])
+        save_turn(req.session_id, turn, node_trace.runs)
         final_message = result["messages"][-1]
         reply = final_message.content or "(no response generated)"
     finally:
@@ -183,4 +214,4 @@ async def chat(req: ChatRequest):
         duration_ms=duration_ms,
         final_answer=reply,
     )
-    return ChatResponse(session_id=req.session_id, reply=reply, trace=steps)
+    return ChatResponse(session_id=req.session_id, reply=reply, trace=steps, turn=turn)

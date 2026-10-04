@@ -17,7 +17,8 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import Any, Dict, List
+import json
+from typing import Any, Dict, List, Optional
 
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
 
@@ -33,6 +34,7 @@ REWRITE_SYSTEM = """You correct a draft answer so that every factual value in it
 Rules:
 - Use ONLY values (dates, scene IDs, numbers, coordinates) that appear in the tool results below or in the user's question.
 - Remove or rephrase any statement that relies on a listed unsupported value. If the data to answer is not in the tool results, say so plainly instead of answering from memory.
+- Keep what you can still say truthfully: explanations of what you cannot do and why, limits of your tools, and suggestions or offers to the user. Only claims about results need support, so do not delete the rest.
 - When you state a value from a tool, name the tool in parentheses, e.g. "cloud cover 3% (search_stac_items)".
 - Keep the answer concise. Output only the corrected answer."""
 
@@ -43,8 +45,8 @@ def _text(content: Any) -> str:
     return str(content)
 
 
-def _issues(reply, outputs, users, tool_names, called, no_tools_this_turn) -> List[str]:
-    res = check_groundedness(reply, outputs, users, mode="strict")
+def _issues(reply, outputs, users, tool_names, called, no_tools_this_turn, tool_texts=()) -> List[str]:
+    res = check_groundedness(reply, outputs, users, mode="strict", capability_texts=tool_texts)
     bad = list(res["unsupported"])
     if no_tools_this_turn:
         # a no-tool turn legitimately says "3 tools", "step 2"; small bare integers aren't claims
@@ -52,7 +54,7 @@ def _issues(reply, outputs, users, tool_names, called, no_tools_this_turn) -> Li
     return bad + find_uncalled_tool_citations(reply, tool_names, called)
 
 
-def make_verify_node(llm, tool_names: List[str]):
+def make_verify_node(llm, tool_names: List[str], tool_texts: Optional[List[str]] = None):
     async def verify_fn(state) -> Dict[str, Any]:
         msgs = state["messages"]
         final = msgs[-1]
@@ -68,7 +70,7 @@ def make_verify_node(llm, tool_names: List[str]):
         called = [m.name for m in msgs if isinstance(m, ToolMessage) and m.name]
 
         reply = _strip_thinking(_text(final.content))
-        issues = _issues(reply, outputs, users, tool_names, called, not turn_tools)
+        issues = _issues(reply, outputs, users, tool_names, called, not turn_tools, tool_texts or ())
         info: Dict[str, Any] = {"checked_chars": len(reply), "issues": issues, "rewritten": False, "caveat": False}
         if not issues:
             return {"verification": info}
@@ -91,7 +93,7 @@ def make_verify_node(llm, tool_names: List[str]):
         if rewritten:
             info["rewritten"] = True
             reply = rewritten
-            issues = _issues(reply, outputs, users, tool_names, called, not turn_tools)
+            issues = _issues(reply, outputs, users, tool_names, called, not turn_tools, tool_texts or ())
         info["remaining"] = issues
         if issues:
             info["caveat"] = True
@@ -102,3 +104,14 @@ def make_verify_node(llm, tool_names: List[str]):
         return {"messages": [AIMessage(content=reply, id=final.id)], "verification": info}
 
     return verify_fn
+
+
+def tool_capability_text(tool) -> str:
+    """A tool's description plus its parameter schema: what the tool says about itself (limits, defaults)."""
+    parts = [getattr(tool, "description", "") or ""]
+    try:
+        schema = tool.args_schema
+        parts.append(json.dumps(schema if isinstance(schema, dict) else schema.model_json_schema()))
+    except Exception:  # noqa: BLE001 - a tool without an introspectable schema just adds nothing
+        pass
+    return " ".join(parts)

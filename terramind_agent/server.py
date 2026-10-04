@@ -66,9 +66,13 @@ SKILL_CARDS = [
         id="embed_scene",
         name="Embed a Sentinel-2 scene",
         description=(
-            "Fetch the 6 TerraMind bands of a Sentinel-2 L2A scene (a centred crop), run TerraMind-1.0-tiny, "
-            "keep the full (196, 192) tensor server-side and return an embedding_id plus the scene's date, "
-            "cloud cover, tile id and basic statistics. args: collection, item_id, patch_size (default 224)."
+            "Run a Sentinel-2 L2A scene through the TerraMind foundation model (a centred crop, 6 bands) and "
+            "return an embedding_id plus the scene's date, cloud cover, tile id and basic statistics. The "
+            "(196, 192) tensor stays server-side, so pass only embedding_ids around. Use it only when the user "
+            "asks to embed, analyse, compare or find similar imagery at a representation level, after a "
+            "scene search has given a collection and item_id; not for ordinary 'show me imagery' requests. "
+            "The embedded crop is a 2.2 km square at the centre of the Sentinel-2 tile (about 110 km across), "
+            "not necessarily at the place searched for: say so, using crop_bbox. Takes about 30 seconds per scene."
         ),
         tags=["earth-observation", "foundation-model", "embedding"],
         examples=['{"skill": "embed_scene", "args": {"collection": "sentinel-2-l2a", "item_id": "S2B_43QHV_20240113_0_L2A"}}'],
@@ -77,16 +81,24 @@ SKILL_CARDS = [
         id="compare_embeddings",
         name="Compare two embedded scenes",
         description=(
-            "Cosine similarity of two stored embeddings (mean-pooled), plus a per-tile comparison "
-            "(mean/min/max, the 3 least-similar grid cells) when both scenes share a tile id. "
-            "args: id_a, id_b (embedding_ids from embed_scene)."
+            "Compare two scenes already embedded with embed_scene (needs their embedding_ids). Returns the "
+            "overall cosine similarity and, when both scenes share a tile id, where they differ: per-tile "
+            "mean/min/max and the 3 least-similar grid cells (row, col). If same_footprint is false, the "
+            "per-tile comparison does not apply: say so. The result carries a reading_guide, reference_points "
+            "and caveats: follow them when explaining it. Scores are compressed near 1.0, so explain results "
+            "by ranking and by where tiles differ, never as a percentage of 'sameness', and do not name a "
+            "type of change (the embeddings carry no land-cover labels)."
         ),
         tags=["earth-observation", "change-detection", "similarity"],
     ),
     AgentSkill(
         id="rank_similar",
         name="Rank scenes by similarity",
-        description="Rank embedded scenes by similarity to a reference. args: reference_id, candidate_ids (list).",
+        description=(
+            "Rank already-embedded scenes by similarity to a reference scene (needs embedding_ids from "
+            "embed_scene). Each row carries days_apart and caveats; the result carries a reading_guide and "
+            "reference_points: follow them. Treat near-equal scores (same third decimal) as tied."
+        ),
         tags=["earth-observation", "similarity", "retrieval"],
     ),
 ]

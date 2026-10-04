@@ -1,9 +1,10 @@
-# EVE Tier 1 EO Agent — LangGraph + MCP take-home
+# EVE Earth-Observation Agent — LangGraph + MCP + A2A take-home
 
 A single LangGraph ReAct agent for Earth Observation queries — geocode a
-place, search satellite imagery (STAC), get weather — exposed over HTTP,
-calling its tools through a real MCP server, with per-session conversation
-state, bounded context, and a readable trace of every tool call.
+place, search satellite imagery (STAC), get weather, and (bonus) embed and compare scenes with
+the TerraMind foundation model through a separate A2A agent. It is exposed over HTTP and calls
+its tools through a real MCP server, with per-session conversation state, bounded context, a
+groundedness check on every answer, and a readable trace of every tool call.
 
 ## Install & run (clean checkout)
 
@@ -13,7 +14,9 @@ Needs Python 3.11–3.13 and a free Groq key (console.groq.com). One environment
 scripts/setup.sh                 # venv + dependencies + .env + TerraMind weights (~1 GB total)
 #   scripts/setup.sh --skip-terramind   core agent only: no torch, much smaller
 $EDITOR .env                     # GROQ_API_KEY=gsk_...
-scripts/start_all.sh             # MCP server + TerraMind agent + API; Ctrl-C stops all
+scripts/start_all.sh             # MCP server + TerraMind agent + API (EO agent) + UI; Ctrl-C stops all
+#   scripts/start_all.sh --skip-terramind   without the TerraMind agent
+#   scripts/start_all.sh --no-ui            without the Streamlit UI (UI: http://127.0.0.1:8501)
 python scripts/run_demo.py       # the three required turns
 ```
 
@@ -23,7 +26,7 @@ Or start each process yourself (venv activated):
 python -m mcp_server.server              # 1. MCP server: geocoding, STAC, weather   :8765
 python -m terramind_agent.server         # 2. TerraMind A2A agent (optional)          :8767
 uvicorn service.api:app --port 8000      # 3. API: the LangGraph agent                :8000
-streamlit run scripts/ui_app.py          # 4. optional UI
+streamlit run scripts/ui_app.py          # 4. UI                                      :8501
 ```
 
 ```bash
@@ -36,7 +39,8 @@ curl -s http://127.0.0.1:8000/chat \
 constraint file; it was frozen on Python 3.13 / macOS arm64).
 
 If the TerraMind agent isn't running the API logs a warning and starts without its
-three tools. Why one environment works: the old setup used conda only for GDAL, but
+three tools; the prompt never mentions tools, so nothing refers to the missing ones, and the two
+`a2a` evals skip themselves (`GET /health` lists the bound tools). Why one environment works: the old setup used conda only for GDAL, but
 `rasterio` 1.4.x wheels bundle GDAL, so `pyproject.toml` caps `rasterio<1.5` (1.5 ships
 no wheels) and `pip install -e ".[dev,terramind]"` is enough. No OpenMP workaround
 variables are needed on macOS arm64 / Python 3.13.
@@ -100,8 +104,10 @@ HTTP, not a Python import of `agents.tools`.
 ## The graph
 
 `service/eo_agent/graph.py::EOReactAgent` is `agents/graphs/react/graph.py
-::ReactAgent` with one override: its own `prompts.yaml` (scoped to the tool
-families this service has, with explicit groundedness and citation rules).
+::ReactAgent` with one override: its own `prompts.yaml`, which holds only the cross-tool policy
+(never invent, report failures, cite the source tool, stay in scope). **It names no tools.** Each
+tool describes itself: MCP tools through their schemas and descriptions, A2A skills through their
+Agent Card, so what the agent is told always matches what is actually bound.
 
 ```
 START → context → agent ⇄ tools
@@ -125,7 +131,7 @@ START → context → agent ⇄ tools
 
 ## Context policy
 
-Three layers, each separate from storage:
+Four layers, each separate from storage:
 
 1. **Stored per session:** the full LangGraph message list, keyed by
    `thread_id = session_id` in an `AsyncSqliteSaver` (`data/checkpoints.sqlite`).
@@ -141,18 +147,32 @@ Three layers, each separate from storage:
    a `[compacted; call the tool again for full detail]` note. The current turn
    is never compacted and the stored history is untouched (the UI, evals and
    audits still see the raw payloads).
-3. **Rolling summary:** after every `EVE_SUMMARY_EVERY` (default 3) turns that
-   have aged out of the last `EVE_KEEP_RECENT_TURNS` (default 2) verbatim
-   turns, one LLM call folds them into a running summary (facts only: places,
-   bbox, dates, filters, scene IDs, errors) and they leave the prompt. With the
-   defaults the summary fires at turns 6, 9, … A failed summary call keeps the
-   old summary; the 96k-token `trim_messages` window is the final backstop.
+3. **Rolling summary, on demand:** when the prompt for the new turn would exceed
+   `EVE_SUMMARY_TOKEN_BUDGET` (default 3,000 tokens, calibrated against the current prompt: re-check it if the prompt changes), every turn older than the last
+   `EVE_KEEP_RECENT_TURNS` (default 2) verbatim turns is folded into a running summary (facts only:
+   places, bbox, dates, filters, scene IDs, errors) by one LLM call, and those turns leave the prompt.
+   Short conversations never pay for a summary call, and at least 2 turns are folded per call so a
+   tight budget cannot cost one call per turn (unless the prompt is 1.5x over budget). Set
+   `EVE_SUMMARY_TOKEN_BUDGET=0` for a fixed schedule instead (`EVE_SUMMARY_EVERY`, default 3). A failed
+   summary call keeps the old summary; the 96k-token `trim_messages` window is the final backstop.
+4. **Request ledger:** a summary keeps facts but loses order, so "the very first thing
+   I asked" went wrong (the model answered with the latest request). For every turn folded into
+   the summary, the prompt also carries the user's own words, numbered and in order
+   (`request_ledger` in `agents/graphs/context.py`). It is built in code from the stored
+   messages, with no LLM, so it cannot drift or invent, and costs about 30 tokens per turn.
 
 **Demonstrated:** `demo/demo_transcript_context.md` / `demo/demo_trace_context.jsonl`
-(`python scripts/run_demo_context.py`) — a 6-turn session where the summary
-fires (`context_summary` trace step) and a later follow-up that only the summary
-can answer still resolves correctly. On that session the prompt history went from
-~9,100 to ~1,400 tokens (about 85% smaller). `evals/test_context_policy.py`
+(`python scripts/run_demo_context.py`) — a 7-turn session. The prompt grows from about 450 to 3,100
+tokens over turns 1-5; at the start of turn 6 it would pass the 3,000-token budget, so turns 1-3 are
+folded (`context_summary` trace step) and the prompt drops to about 2,500 tokens. Turn 7 then asks
+about turn 1 ("which city, what cloud limit, what dates?"), which has left the prompt, and is answered
+correctly. For scale, the raw stored history of that session is about 9,700 tokens (tiktoken count of
+the stored messages; the prompt figures are the node trace's approximate count).
+
+**Measured:** the same 7-turn conversation run 5 times answered turn 7 correctly **5 of 5** with the
+ledger (and again 5 of 5 after switching to the on-demand trigger). Before the ledger it was **1 of 3**: the summary held the Hyderabad request, but the model
+reported the most recent one (Nairobi, 30%) as the first. The verifier cannot catch that failure,
+since every value in the wrong answer exists in the tool data. `evals/test_context_policy.py`
 covers the mechanics offline.
 
 ## Hallucination control and evals
@@ -164,19 +184,33 @@ covers the mechanics offline.
 - **`verify` node** (`agents/graphs/verify.py`, `agents/graphs/grounding.py`):
   a deterministic check (no LLM) that every date, scene ID and number in the
   final answer is traceable to a tool result, the rolling summary, or the
-  user's own words (with rounding, counts and min/max/mean/sum allowed), and
-  that every tool the answer cites was actually called. On failure the model
+  user's own words (with rounding, counts and min/max/mean/sum allowed; whole
+  numbers quoted from a tool's own description, like "16 days ahead", count as
+  supported; values in advisory sentences such as "e.g." or "would you like" are
+  exempt, scene ids never), and that every tool the answer cites as the source of
+  a value (`31.2 (get_weather)`) was actually called. On failure the model
   gets one rewrite pass with this turn's tool results and the offending
   values; if values still don't trace, they are listed in a visible
   `⚠️ Could not verify…` caveat. Every turn adds a `verify` step to the trace.
-  Known limit: a wrong value that coincides with another number in the
-  payload isn't caught; it is a tripwire, not a proof.
-- **Eval set** (`evals/`, 16 cases: tool use, multi-turn context, refusal,
+  Beyond existence, `agents/graphs/pairing.py` checks that a value sits with the
+  *right record* (a scene's cloud cover, a weather day's temperature) and that
+  "clearest / hottest / wettest / most similar" claims are true, by recomputing the
+  min or max from the tool data. It only judges lines that name exactly one record and
+  skips comparisons and ranges, so a correct answer is not flagged for how it is worded.
+  **Measured** on all 137 final replies stored from this project's runs: 0 false alarms
+  (the 2 replies it flagged were real errors, e.g. the hottest day given as 2026-03-26 when
+  the data puts 34.8 °C on 2026-03-27, and a 58.1% scene called "the lowest cloud cover" next to
+  an 18.0% scene), and it caught 1,266 of 1,271 (99.6%) deliberately swapped values.
+  Known limits: a swap inside a sentence that compares several records, a record referred to
+  only by position ("the second one"), and claims with no value in them are not checked; it
+  is a tripwire, not a proof.
+- **Eval set** (`evals/`, 25 cases: tool use, multi-turn context (incl. a 7-turn session), refusal, prompt injection,
   robustness, error path, hallucination): `python -m evals.run_evals`
-  scores tool use, reply content and groundedness, and writes
+  scores tool use, reply content and groundedness (`--repeat N` runs each case N times and reports passes per case, flaky cases and a pass rate with a 95% interval), and writes
   `evals/results/<stamp>.{json,md}`. Offline tests:
-  `python -m evals.test_groundedness`, `test_verify`, `test_context_policy`,
-  `test_terramind_skills`, `test_loop_guard`, `test_text_tool_calls`, `test_llm_factory`.
+  `python -m evals.test_groundedness`, `test_pairing`, `test_verify`, `test_context_policy`,
+  `test_terramind_skills`, `test_loop_guard`, `test_text_tool_calls`, `test_llm_factory`,
+  `test_node_trace`, `test_a2a_client`, `test_run_evals`.
   See `evals/README.md`.
 
 ## Session memory
@@ -204,6 +238,24 @@ Everything is keyed by the **session id** (the `session_id` you send to `/chat`)
 - TerraMind embeddings are persisted in `data/embeddings/<embedding_id>.npz` + `.json` (the JSON
   records the creating session), so they survive an agent restart (verified: restart, then
   `compare_embeddings` on earlier ids). Ids are scene-keyed, so any session can reuse them.
+
+## Graph trace in the UI
+
+After every turn the UI draws the graph for that turn (`🧭 Graph trace`): the fixed topology
+(`context → agent ⇄ tools → verify`, plus the TerraMind A2A agent when it was called), with the path
+that actually ran in blue and numbered in execution order, each node's run count and total time,
+and a hover tooltip per node (tokens in, turns in the prompt, whether a summary block was included,
+how many earlier tool results were compacted, tools requested, verifier verdict). Below it, "Inspect a
+step" shows one node run: what it was given, each model call (latency, tokens, response, requested
+tools), each tool call (args, result rendered like in the chat, remote agent and duration), what it
+produced, and a **Full prompt** popover with exactly what the model was sent.
+
+How it is recorded: `service/node_trace.py` is a LangChain callback handler passed in the run config
+(the graph code is untouched). It records every node run in order with its model and tool calls and
+is saved per turn in `logs/node_runs/<session_id>.jsonl` (prompts capped at 100 KB per call). The API
+serves it at `GET /sessions/{id}/node_runs`, the session export includes it, so reloading a session by
+id or replaying an exported file shows the same graphs. `python -m evals.test_node_trace` checks the
+recorded sequence, model calls, tool calls and errors offline with a fake model.
 
 ## MCP server (section 2.3)
 
@@ -253,7 +305,9 @@ service.api:app --port 8000` (see above).
 A second, separate **agent** (`terramind_agent/`, official `a2a-sdk` 1.x, A2A protocol 1.0, JSON-RPC)
 wraps the **TerraMind-1.0-tiny** EO foundation model (IBM/ESA, Apache 2.0). It publishes an Agent
 Card at `/.well-known/agent-card.json` with three skills, and the EO agent calls them as ordinary
-tools (`service/a2a_client.py`; skills are discovered from the card):
+tools (`service/a2a_client.py`; skills **and their descriptions** are read from the card, so the remote
+agent owns its own usage instructions; only the argument schemas stay in the client, because an Agent
+Card cannot declare typed parameters):
 
 | skill / tool | what it does |
 |---|---|
@@ -261,10 +315,20 @@ tools (`service/a2a_client.py`; skills are discovered from the card):
 | `compare_embeddings(id_a, id_b)` | cosine similarity of the mean-pooled embeddings; when both scenes share a tile id also per-tile mean/min/max and the 3 least-similar grid cells (row, col) = *where* they differ; says `same_footprint: false` otherwise |
 | `rank_similar(reference_id, candidate_ids)` | ranks embedded scenes by similarity to a reference |
 
+**Explaining the result.** The embeddings are appearance similarity with no land-cover labels, and the
+scores are compressed near 1.0, so every `compare_embeddings` / `rank_similar` result ships its own
+`reading_guide` (never a percentage of "sameness"; the third decimal is noise; a low tile says
+*where* appearance changed, not *what* changed), `reference_points` (measured: the same tile on
+different dates 0.998 to 0.999, two different tiles in southern India about 0.986, southern India against
+the Sahara 0.94 to 0.95; three scenes, indicative only), and per-comparison `caveats` and `days_apart` (a cloudy scene or a long
+gap can lower similarity). The EO prompt only says to follow such guidance, so the wording
+comes from the agent that knows what its numbers mean.
+
 The LLM only ever sees ids and summary numbers, never the tensor, and the verifier checks the
 numbers it quotes like any other tool output. The skills are deterministic, so the remote agent is
-thin; making its executor LLM-driven would not change the card or the wire format. Embeddings live
-in an in-memory dict (process lifetime); a vector store is the next step.
+thin; making its executor LLM-driven would not change the card or the wire format. Embeddings are
+held in memory and also written to `data/embeddings/` (see "Sessions, logs and traceability"), so
+they survive an agent restart; a real vector store is the next step.
 
 Guards: a crop that is more than 20% no-data (a scene at the swath edge; I hit this live: two
 different March scenes embedded to *identical* zero-input vectors with similarity 1.0) is rejected
@@ -308,9 +372,26 @@ working beats big and half-working." Specifically cut:
   verifier node and the context policy (`python -m evals.test_*`, no network);
   the eval set runs live against the API and model. There's no CI wiring, and
   tool-level tests (Nominatim / Earth Search / Open-Meteo) are not mocked.
+- **TerraMind crops are not centred on the place.** `embed_scene` embeds a 2.2 km square at the centre of
+  the Sentinel-2 tile (about 110 km across), not at the geocoded place; in my checks the crop was 25-28 km
+  from Hyderabad and Bengaluru. The result's `note` and `crop_bbox` say so and the agent relays it, but the
+  proper fix is an optional point or bbox argument that centres the crop on the place (and a footprint test
+  by crop overlap instead of tile id), so "similar to Hyderabad" would really mean Hyderabad.
+- **Verifier strictness on advisory text: found by `--repeat`, fixed.** The first 90-run measurement showed the
+  verifier rewriting 20% of turns that were actually good (capability statements quoting a tool's own limits,
+  suggested thresholds and dates, tool names merely mentioned), sometimes into a worse answer. Whole numbers from
+  tool descriptions now count as supported, values in advisory sentences are exempt (never scene ids), and a tool
+  name is a citation only when attached to a value; the rewrite prompt keeps explanations and suggestions. Now:
+  75/75 runs over 25 cases, 4 of 102 turns flagged, 3 of those a genuine repeatable table-transcription error
+  (see `evals/README.md`). Remaining limit: a derived value (a difference of two scores) is still flagged.
 - **Hard guarantees on hallucination.** The verifier is a deterministic
-  tripwire plus one rewrite; an LLM judge or NLI check would catch more
-  semantic errors at the cost of another model call per turn.
+  tripwire plus one rewrite: every value must exist in the tool data and sit
+  with the right record, and superlatives are recomputed. It does not check
+  claims with no value in them ("mostly clear skies"), swaps inside a sentence
+  that compares records, or references by position. Next steps: a larger,
+  independently written test set for the catch and false-alarm rates (the 137
+  replies above are this project's own runs). An LLM judge or NLI check would
+  catch more semantic errors at the cost of another model call per turn.
 
 ## Repo layout
 
@@ -319,7 +400,7 @@ agents/                  Portable LangGraph library (no backend imports)
   graphs/
     base.py              AgentGraph, make_tools_node (catches tool errors)
     context.py           turns, tool-output compaction, rolling summary
-    verify.py            answer verifier node (grounding.py = the checker)
+    verify.py            answer verifier node (grounding.py + pairing.py = the checker)
     utils.py             text-format tool-call parsing (Mistral + JSON-array)
     react/graph.py       ReactAgent — the tool-calling loop
   tools/                 _impl functions + LangChain @tool wrappers
@@ -331,7 +412,8 @@ service/                 The one app wiring library + MCP + A2A + HTTP together
   eo_agent/              EOReactAgent — ReactAgent + scoped system prompt
   mcp_client.py          MCP client wiring
   a2a_client.py          A2A client: TerraMind skills as tools
-  memory.py              Qdrant memory experiment, NOT connected
+  node_trace.py          node-level trace recorder (callback handler) behind the UI graph
+  sessions.py            session view/export
   tracing.py             per-tool-call timing/logging -> logs/traces.jsonl
   eo_agent/compaction.py per-tool compaction rules
   api.py                 FastAPI app — section 2.5
@@ -348,6 +430,8 @@ evals/                   eval set, groundedness checker re-export, offline tests
 demo/
   demo_transcript.md             the 3 required turns, replies matched to trace
   demo_trace.jsonl               raw trace from that run
+  demo_transcript_context.md     context policy: the rolling summary fires, a later follow-up still resolves
+  demo_trace_context.jsonl       raw trace from that run
   demo_transcript_terramind.md   bonus: real TerraMind embedding demo
   demo_trace_terramind.jsonl     raw trace from that run
 logs/
@@ -357,44 +441,16 @@ logs/
 ## Develop
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
+scripts/setup.sh                    # or: python -m venv .venv && . .venv/bin/activate && pip install -e ".[dev,terramind]"
+python -m evals.test_groundedness   # offline tests, no network or model (see evals/README.md)
+python -m evals.run_evals           # live evals against the running API
 ```
 
-## Library internals (for reuse outside this assignment)
+## Reusing the agent library
 
-`agents` is also a standalone, pip-installable LangGraph library (no backend
-imports) usable on its own — this is the shape it had before this service
-was built on top of it, and the shape a consuming backend (e.g. EVE's main
-backend) would still install:
-
-```bash
-pip install git+https://github.com/eve-esa/agents.git
-```
-
-Use via `AGENT_GRAPH_TYPE`:
-
-- Short name `react` — ReAct loop with tools (default; what this service subclasses).
-- Short name `simple` — single LLM node, **no tools** (smoke tests).
-- Fully qualified: `agents.graphs.react.graph.ReactAgent`,
-  `agents.graphs.simple.graph.SimpleChatAgent`.
-
-Each graph ships `prompts.yaml` next to `graph.py`; `AgentGraph` fills
-`prompts` from that file at init (`system` key = lead-in instruction).
-`compile()` receives `history` + `summary` from the caller; the base
-`format_history` serializes them to a text prefix ahead of `prompts['system']`.
-
-Fault tolerance (`langgraph>=1.2`) built into `ReactAgent`:
-
-- **LLM nodes** — `TimeoutPolicy`, an in-place `RetryPolicy` (`LLM_RETRY`)
-  for transient failures, and an `error_handler` routing to a dedicated
-  `agent_fallback` recovery node once retries are exhausted (registered only
-  when the caller supplies `fallback_llm` to `compile()` — not used by this
-  service).
-- **Tool nodes** — failures become `ToolMessage` content for the ReAct loop
-  to recover from (no node-level retry, which would re-invoke every tool
-  call in the turn) — see "Errors, logging, trace" above.
-
-`agents.tools.TIER1_TOOLS` is the direct-import tool list (geocoding, STAC,
-weather) — useful for quick experiments via `scripts/test_tier1_agent.py`, but **not** what `service/api.py` uses (see
-Architecture above for why).
+`agents/` is the portable LangGraph library this service is built on (from
+[eve-esa/agents](https://github.com/eve-esa/agents)): `ReactAgent` (the tool loop, with LLM
+timeouts, retries and an optional fallback model) plus the pieces added for this assignment
+(`context.py`, `verify.py`, `grounding.py`, the loop guard). `service/eo_agent/` subclasses it
+with an EO system prompt. The `simple` graph (single LLM node, no tools) is kept from upstream
+for smoke tests.

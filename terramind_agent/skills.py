@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import math
+from datetime import date
 import os
 import threading
 import time
@@ -216,8 +217,60 @@ def embed_scene(
         "embedding_mean": float(tokens.mean()),
         "embedding_std": float(tokens.std()),
         "embedding_l2_norm": float(np.linalg.norm(tokens)),
-        "note": "The full tensor is stored server-side; pass embedding_id to compare_embeddings / rank_similar.",
+        "note": "The full tensor is stored server-side; pass embedding_id to compare_embeddings / rank_similar. "
+                "The embedded crop is a 2.2 km square at the centre of the Sentinel-2 tile (about 110 km across), "
+                "not necessarily at the place that was searched for: crop_bbox says where it is.",
     }
+
+
+# What the numbers mean. The skills return *appearance* similarity from an embedding model with no
+# land-cover labels, so every comparison ships its own reading guide: the model that explains the
+# result to the user quotes this instead of improvising. The reference points are measured examples
+# (TerraMind-1.0-tiny, 224-pixel crops taken at the centre of each Sentinel-2 tile, mean-pooled cosine, a
+# handful of scenes): indicative only. Note what the crops are: a 2.2 km square at the tile centre, which is
+# often tens of km from the town the user searched for, so these are not "city" scores.
+READING_GUIDE = [
+    "Scores here are compressed towards 1.0 (see reference_points): read a score on that scale, never "
+    "as a percentage of 'sameness'.",
+    "Differences in the third decimal place (for example 0.9989 vs 0.9982) are not meaningful; treat "
+    "such scores as tied.",
+    "A low per-tile similarity says the appearance changed in that grid cell, not what changed: cloud, "
+    "shadow, season or sun angle can all cause it. Check cloud cover and dates (see caveats and "
+    "days_apart) before suggesting a cause.",
+    "These are appearance embeddings with no land-cover labels: do not name a type of change "
+    "(for example deforestation or flooding).",
+]
+REFERENCE_POINTS = {
+    "basis": "measured examples with TerraMind-1.0-tiny on 224-pixel (2.2 km) crops at the centre of each "
+             "Sentinel-2 tile, small sample; indicative only",
+    "examples": [
+        {"comparison": "the same tile on different dates (days to weeks apart)", "cosine_similarity": "0.998 to 0.999"},
+        {"comparison": "two different tiles in the same region (southern India, similar land cover)", "cosine_similarity": "about 0.986"},
+        {"comparison": "southern India against the Sahara (very different land cover)", "cosine_similarity": "0.94 to 0.95"},
+    ],
+}
+CLOUDY_PCT = 20.0
+SEASONAL_DAYS = 150
+
+
+def _days_apart(a: Any, b: Any) -> Optional[int]:
+    try:
+        return abs((date.fromisoformat(str(b)[:10]) - date.fromisoformat(str(a)[:10])).days)
+    except (TypeError, ValueError):
+        return None
+
+
+def _caveats(ma: Dict[str, Any], mb: Dict[str, Any], days: Optional[int]) -> List[str]:
+    """Reasons a low similarity may not mean change on the ground (from the scenes' own metadata)."""
+    out = []
+    for m in (ma, mb):
+        cc = m.get("cloud_cover")
+        if isinstance(cc, (int, float)) and cc > CLOUDY_PCT:
+            out.append(f"{m.get('item_id')} has {cc:.1f}% cloud cover; clouds can lower similarity "
+                       "independently of any change on the ground.")
+    if days is not None and days > SEASONAL_DAYS:
+        out.append(f"The scenes are {days} days apart; seasonal change can lower similarity.")
+    return out
 
 
 def _cos(a: np.ndarray, b: np.ndarray) -> np.ndarray:
@@ -234,6 +287,9 @@ def _compare(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, Any]:
         "scene_a": {k: ma.get(k) for k in ("embedding_id", "item_id", "datetime", "cloud_cover", "tile_id")},
         "scene_b": {k: mb.get(k) for k in ("embedding_id", "item_id", "datetime", "cloud_cover", "tile_id")},
     }
+    days = _days_apart(ma.get("datetime"), mb.get("datetime"))
+    out["days_apart"] = days
+    out["caveats"] = _caveats(ma, mb, days)
     same_tile = bool(ma.get("tile_id")) and ma.get("tile_id") == mb.get("tile_id")
     same_grid = ta.shape == tb.shape
     out["same_footprint"] = same_tile and same_grid
@@ -261,7 +317,8 @@ def _compare(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def compare_embeddings(id_a: str, id_b: str, *, store: EmbeddingStore = STORE) -> Dict[str, Any]:
-    return _compare(store.get(id_a), store.get(id_b))
+    out = _compare(store.get(id_a), store.get(id_b))
+    return {**out, "reading_guide": READING_GUIDE, "reference_points": REFERENCE_POINTS}
 
 
 def rank_similar(reference_id: str, candidate_ids: List[str], *, store: EmbeddingStore = STORE) -> Dict[str, Any]:
@@ -279,9 +336,12 @@ def rank_similar(reference_id: str, candidate_ids: List[str], *, store: Embeddin
             "cosine_similarity": cmp["cosine_similarity"],
             "same_footprint": cmp["same_footprint"],
             "mean_tile_similarity": (cmp["per_tile"] or {}).get("mean"),
+            "days_apart": cmp["days_apart"],
+            "caveats": cmp["caveats"],
         })
     rows.sort(key=lambda r: r["cosine_similarity"], reverse=True)
-    return {"reference_id": reference_id, "ranking": rows}
+    return {"reference_id": reference_id, "ranking": rows, "reading_guide": READING_GUIDE,
+            "reference_points": REFERENCE_POINTS}
 
 
 SKILLS: Dict[str, Callable[..., Dict[str, Any]]] = {

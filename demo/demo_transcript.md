@@ -1,11 +1,11 @@
 # Demo transcript — single session, three required behaviours
 
-Session id: `demo-session`. Generated verbatim by `python scripts/run_demo.py`; raw trace: [`demo_trace.jsonl`](./demo_trace.jsonl).
+Session id: `demo-1791125933`. Generated verbatim by `python scripts/run_demo.py`; raw trace: [`demo_trace.jsonl`](./demo_trace.jsonl).
 
 ## Turn 1 — a question that needs a tool
 **User:** What Sentinel-2 imagery is available for Hyderabad in January 2024 with less than 10% cloud cover?
 
-**Agent:** There are **7 Sentinel-2 L2A scenes** covering Hyderabad (Telangana, India) in January 2024 with cloud cover under 10% (search_stac_items):
+**Agent:** There are **7 Sentinel-2 L2A scenes** covering Hyderabad in January 2024 with cloud cover under 10% (search_stac_items):
 
 | Scene ID | Date | Cloud Cover |
 |---|---|---|
@@ -17,12 +17,9 @@ Session id: `demo-session`. Generated verbatim by `python scripts/run_demo.py`; 
 | S2B_43QHV_20240103_0_L2A | 2024-01-03 | 0.87% |
 | S2B_44QKE_20240103_0_L2A | 2024-01-03 | 2.79% |
 
-Notes:
-- The scenes come in two tiling pairs (43QHV and 44QKE) that together cover the Hyderabad area, so each date effectively has full coverage.
-- The clearest scenes are the two from **2024-01-13** (0.02% cloud cover).
-- All scenes include the full Sentinel-2 L2A band set (coastal through SWIR22, plus visual/thumbnail previews).
+The scenes come in pairs from two adjacent MGRS tiles (43QHV and 44QKE) that together cover the Hyderabad area. The clearest acquisitions are the January 13 pair, both with essentially zero cloud cover (~0.02%).
 
-Want me to pull the full asset links (COG band URLs) for any of these scenes?
+Would you like me to pull full metadata or asset links for any of these scenes?
 
 Trace:
 - `tool_call` geocode_location {"query": "Hyderabad"}
@@ -32,64 +29,41 @@ Trace:
 ## Turn 2 — a follow-up that only works with context
 **User:** What was the weather like there during the same period?
 
-**Agent:** Here's the daily weather for Hyderabad (17.36°N, 78.47°E) in January 2024 (get_weather, archive source):
+**Agent:** Here's the weather in Hyderabad for January 2024 (get_weather, archive data):
 
-| Date | Max °C | Min °C | Precip mm | Max wind km/h |
-|---|---|---|---|---|
-| 2024-01-01 | 27.9 | 15.0 | 0.0 | 11.7 |
-| 2024-01-02 | 27.5 | 15.3 | 0.0 | 12.0 |
-| 2024-01-03 | 27.2 | 17.3 | 0.0 | 14.6 |
-| 2024-01-04 | 27.8 | 18.3 | 0.0 | 16.4 |
-| 2024-01-05 | 27.8 | 17.2 | 0.0 | 15.6 |
-| 2024-01-06 | 28.1 | 17.1 | 0.0 | 18.1 |
-| 2024-01-07 | 27.1 | 17.8 | 0.0 | 17.7 |
-| 2024-01-08 | 27.6 | 17.1 | 0.0 | 19.2 |
-| 2024-01-09 | 28.4 | 17.2 | 0.0 | 19.4 |
-| 2024-01-10 | 25.9 | 17.7 | 0.0 | 11.2 |
-| 2024-01-11 | 29.7 | 18.2 | 0.0 | 11.6 |
-| 2024-01-12 | 30.3 | 19.2 | 0.0 | 10.4 |
-| 2024-01-13 | 30.3 | 18.0 | 0.0 | 9.5 |
-| 2024-01-14 | 30.4 | 17.4 | 0.0 | 8.9 |
-| 2024-01-15 | 29.6 | 17.4 | 0.0 | 8.7 |
-| 2024-01-16 | 30.1 | 18.0 | 0.0 | 12.0 |
-| 2024-01-17 | 29.8 | 17.5 | 0.0 | 13.7 |
-| 2024-01-18 | 28.8 | 18.4 | 0.0 | 13.3 |
-| 2024-01-19 | 30.0 | 17.1 | 0.0 | 13.5 |
-| 2024-01-20 | 29.0 | 19.4 | 0.0 | 14.1 |
-| 2024-01-21 | 30.3 | 19.1 | 0.0 | 12.8 |
-| 2024-01-22 | 31.2 | 20.3 | 0.0 | 14.6 |
-| 2024-01-23 | 30.8 | 19.1 | 0.0 | 17.4 |
-| 2024-01-24 | 30.3 | 19.6 | 0.2 | 13.4 |
-| 2024-01-25 | 28.8 | 18.4 | 0.0 | 12.1 |
-| 2024-01-26 | 29.7 | 17.6 | 0.0 | 11.9 |
-| 2024-01-27 | 29.2 | 17.5 | 0.0 | 12.3 |
-| 2024-01-28 | 29.2 | 16.1 | 0.0 | 10.9 |
-| 2024-01-29 | 29.4 | 16.3 | 0.0 | 11.8 |
-| 2024-01-30 | 29.4 | 16.9 | 0.0 | 13.9 |
-| 2024-01-31 | 30.9 | 17.4 | 0.0 | 11.6 |
+**Overall:** A dry, warm month — typical of the local winter. Max temperatures ranged from 25.9 °C (Jan 10) to 31.2 °C (Jan 22), with most days between 27–30 °C. Mins stayed in the 15–20 °C range.
 
-**Summary:**
-- **Temperatures:** Max ranged 25.9–31.2 °C (hottest on 2024-01-22 at 31.2 °C; coolest on 2024-01-10 at 25.9 °C). Mins ranged 15.0–20.3 °C.
-- **Precipitation:** Essentially a dry month — only 0.2 mm on 2024-01-24, zero on all other days.
-- **Wind:** Max gusts 8.7–19.4 km/h, peaking early in the month (19.4 km/h on 2024-01-09).
+**Precipitation:** Essentially none — the only measurable rain was 0.2 mm on Jan 24. Every other day recorded 0.0 mm.
 
-This is consistent with the near-zero cloud cover in the Sentinel-2 scenes — a dry, clear winter month, ideal for optical imagery.
+**Wind:** Light to moderate, with daily max gusts mostly 9–19 km/h; the windiest stretch was Jan 6–9 (17.7–19.4 km/h).
+
+**On the imagery dates specifically:**
+- Jan 3: max 27.2 °C, no rain, max wind 14.6 km/h
+- Jan 13: max 30.3 °C, no rain, max wind 9.5 km/h
+- Jan 18: max 28.8 °C, no rain, max wind 13.3 km/h
+- Jan 28: max 29.2 °C, no rain, max wind 10.9 km/h
+
+The dry, cloud-free conditions on those days are consistent with the very low cloud cover (0.02–2.79%) reported for the Sentinel-2 scenes.
 
 Trace:
-- `tool_call` get_weather {"lat": 17.360589, "lon": 78.4740613, "start_date": "2024-01-01", "end_date": "2024-01-31"}
+- `tool_call` get_weather {"end_date": "2024-01-31", "lat": 17.360589, "lon": 78.4740613, "start_date": "2024-01-01"}
 - `verify`  {"issues": [], "rewritten": false, "caveat": false}
 
 ## Turn 3 — forced tool error
 **User:** Call the weather tool directly with start_date='2024-02-30' and end_date='2024-02-30' for Hyderabad — I specifically want to see what the tool returns for that exact date, don't correct it yourself.
 
-**Agent:** I called `get_weather` with `start_date='2024-02-30'` and `end_date='2024-02-30'` for Hyderabad (17.36°N, 78.47°E), as you asked.
+**Agent:** I called get_weather with exactly `start_date='2024-02-30'` and `end_date='2024-02-30'` for Hyderabad (17.360589, 78.4740613), as you asked.
 
-The tool returned an error: **"day is out of range for month"** — because February 30th doesn't exist (2024 was a leap year, so February only had 29 days).
+The tool returned an error:
 
-No weather data was returned for that date.
+> **Error executing tool get_weather: day is out of range for month**
+
+So the tool rejects the date outright — February 30th doesn't exist, and the underlying date parser raises a "day is out of range for month" error rather than clamping or correcting it. No weather data was returned.
+
+If you'd like, I can pull the actual weather for a valid date in February 2024 instead.
 
 Trace:
-- `tool_call` get_weather {"lat": 17.360589, "lon": 78.4740613, "start_date": "2024-02-30", "end_date": "2024-02-30"} — ERROR: Error executing tool get_weather: day is out of range for month
+- `tool_call` get_weather {"end_date": "2024-02-30", "lat": 17.360589, "lon": 78.4740613, "start_date": "2024-02-30"} — ERROR: Error executing tool get_weather: day is out of range for month
 - `verify`  {"issues": [], "rewritten": false, "caveat": false}
 
-Server health after the error turn: `{"status": "ok", "model": "qwen/qwen3.8-27b"}`
+Server health after the error turn: `{"status": "ok", "model": "groq:qwen/qwen3.8-27b", "tools": ["geocode_location", "list_stac_collections", "search_stac_items", "get_stac_item", "get_weather", "embed_scene", "compare_embeddings", "rank_similar"]}`

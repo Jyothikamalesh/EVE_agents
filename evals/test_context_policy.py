@@ -9,8 +9,9 @@ import json
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
 from langgraph.checkpoint.memory import InMemorySaver
 
-from agents.graphs.context import compact_old_tool_messages, turn_starts
+from agents.graphs.context import compact_old_tool_messages, ledger_block, request_ledger, turn_starts
 from agents.graphs.react.graph import ReactAgent
+from agents.graphs.utils import tiktoken_counter
 from service.eo_agent.compaction import EO_COMPACTORS
 
 SEARCH = {
@@ -104,6 +105,79 @@ def test_summary_schedule_and_prompt_contents():
     assert humans(p9) == ["turn 7", "turn 8", "turn 9"] and "SUMMARY 2" in p9[0].content
     # raw history is never destroyed: all 9 turns remain in the checkpoint
     assert len(turn_starts(final["messages"])) == 9
+
+
+def test_request_ledger_is_ordered_verbatim_and_bounded():
+    msgs = [HumanMessage(content="Imagery of Hyderabad, Jan 2024, <10% cloud?"), AIMessage(content="ok"),
+            HumanMessage(content="  Weather\nthere?  "), AIMessage(content="ok"),
+            HumanMessage(content="x" * 500), HumanMessage(content="turn 4")]
+    lines = request_ledger(msgs, upto_turns=3)
+    assert lines[0] == "1. Imagery of Hyderabad, Jan 2024, <10% cloud?"   # the user's own words, first
+    assert lines[1] == "2. Weather there?"                                 # whitespace collapsed
+    assert lines[2].startswith("3. xxx") and lines[2].endswith("\u2026") and len(lines[2]) < 260
+    assert len(lines) == 3                                                 # only the turns asked for
+    assert request_ledger(msgs, 0) == [] and ledger_block([]) is None
+
+
+def test_ledger_reaches_the_prompt_only_for_folded_turns():
+    llm = FakeLLM()
+    graph = ReactAgent().compile(llm=llm, tools=[], checkpointer=InMemorySaver(),
+                                 tool_compactors=EO_COMPACTORS, summary_every=3, keep_recent_turns=2)
+    cfg = {"configurable": {"thread_id": "t"}}
+
+    async def run():
+        for n in range(1, 8):
+            await graph.ainvoke({"messages": [("user", f"question number {n}")]}, config=cfg)
+
+    asyncio.run(run())
+    before, after = llm.prompts[4][0].content, llm.prompts[5][0].content   # turn 5 vs turn 6 (summary fires)
+    assert "What the user asked in earlier turns" not in before
+    assert "1. question number 1\n2. question number 2\n3. question number 3" in after
+    assert "4. question number 4" not in after                              # turn 4 is still verbatim in the prompt
+    assert "not from the summary" in after
+
+
+def _run_budget(budget, turns, words=60, **kw):
+    llm = FakeLLM()
+    graph = ReactAgent().compile(llm=llm, tools=[], checkpointer=InMemorySaver(), tool_compactors=EO_COMPACTORS,
+                                 summary_token_budget=budget, keep_recent_turns=2, **kw)
+    cfg = {"configurable": {"thread_id": "t"}}
+    folded = []
+
+    async def run():
+        for n in range(1, turns + 1):
+            r = await graph.ainvoke({"messages": [("user", f"turn {n} " + "word " * words)]}, config=cfg)
+            folded.append(r.get("summarized_turns", 0))
+        return r
+
+    return llm, folded, asyncio.run(run())
+
+
+def test_token_budget_short_conversation_never_summarises():
+    llm, folded, _ = _run_budget(budget=100_000, turns=10)
+    assert llm.summaries == 0 and folded == [0] * 10
+
+
+def test_token_budget_summarises_only_when_the_prompt_is_over_budget():
+    probe, _, _ = _run_budget(budget=100_000, turns=1)
+    base = tiktoken_counter(probe.prompts[0])                       # system prompt + the first turn
+    llm, folded, final = _run_budget(budget=base + 250, turns=8)    # each further turn adds ~75 tokens
+    first = next(i for i, f in enumerate(folded) if f)            # 0-based index of the first fold
+    assert 2 <= first <= 5, folded                                  # not at once, but well before the end
+    # everything older than the 2 verbatim turns is folded in one call, so the prompt shrinks again
+    assert folded[first] == first - 2, folded
+    # hysteresis: at least 2 turns are folded per call, so a tight budget is not one summary per turn
+    assert llm.summaries <= 3 and len(set(folded)) <= 4, (llm.summaries, folded)
+    humans = lambda p: sum(isinstance(m, HumanMessage) for m in p)
+    assert humans(llm.prompts[first - 1]) == first                 # nothing folded yet: every turn verbatim
+    assert humans(llm.prompts[first]) == 3                          # then: the current turn + 2 recent ones
+    assert "SUMMARY 1" in llm.prompts[first][0].content
+    assert len(turn_starts(final["messages"])) == 8               # stored history untouched
+
+
+def test_token_budget_takes_precedence_over_the_fixed_schedule():
+    llm, folded, _ = _run_budget(budget=100_000, turns=8, summary_every=3)
+    assert llm.summaries == 0 and folded == [0] * 8
 
 
 def test_disabled_by_default():

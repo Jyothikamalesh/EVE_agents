@@ -1,9 +1,9 @@
 """Context-policy demo: a 7-turn session where the rolling summary fires, then a follow-up
 that only the summary (or a fresh tool call) can answer.
 
-With the defaults (summary every 3 turns, 2 verbatim turns kept) the summary is written
-at turn 6; turn 7 asks about turn 1. Writes demo/demo_transcript_context.md and
-demo/demo_trace_context.jsonl.
+With the defaults (summarise when the prompt passes 4,000 tokens, 2 verbatim turns kept) the
+summary is written at the start of turn 7, on the same request that asks about turn 1.
+Writes demo/demo_transcript_context.md and demo/demo_trace_context.jsonl.
 
 Prereqs: MCP server + API running (README). Usage: python scripts/run_demo_context.py [--base URL]
 """

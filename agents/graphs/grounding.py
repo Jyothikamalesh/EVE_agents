@@ -13,14 +13,20 @@ summarises:
   ("7 scenes", "max 31.2°C", "average 24.5");
 - the user said it (echoed "10%", "2024").
 
+Beyond existence, ``pairing.py`` checks that a value sits with the right record (a scene's cloud
+cover, a weather day's temperature) and that "clearest / hottest / most similar" claims are true.
+
 Known limits (documented, not hidden): a hallucinated value that happens to
-coincide with some other number in the payload is not caught, and a derived
+coincide with some other number *on the same record* is not caught, a derived
 value outside count/min/max/mean/sum (a difference, a ratio) is flagged even
-when correct. It is a cheap tripwire, not a proof.
+when correct, and pairing only covers lines that name exactly one record (a swap
+inside a sentence comparing two scenes, or a reference by position, is not
+checked). It is a cheap tripwire, not a proof.
 """
 
 from __future__ import annotations
 
+import ast
 import json
 import re
 from typing import Any, Iterable, List
@@ -58,9 +64,15 @@ def _numeric_lists(obj: Any) -> Iterable[List[float]]:
 
 
 def _as_obj(text: str) -> Any:
+    """Parse a tool result. The tools node stores ``str(result)``, a Python repr with single
+    quotes, so JSON alone would miss most results and the series stats (sum/min/max/mean) with them."""
     try:
         return json.loads(text)
     except (ValueError, TypeError):
+        pass
+    try:
+        return ast.literal_eval(text)
+    except (ValueError, SyntaxError, TypeError, MemoryError, RecursionError):
         return text
 
 
@@ -78,6 +90,8 @@ def _supported_numbers(tool_outputs: List[str], user_texts: List[str]) -> List[f
                 continue
             if isinstance(leaf, (int, float)):
                 vals.append(float(leaf))
+                if leaf < 0:
+                    vals.append(abs(float(leaf)))  # "1.289°S" is how a reply writes latitude -1.289
                 if isinstance(leaf, float) and abs(leaf) <= 1:
                     vals.append(leaf * 100)  # a ratio (similarity 0.73) is legitimately reported as 73%
         # numbers embedded in strings (display names, "count": "7", error text)
@@ -115,12 +129,32 @@ def _strip_list_markers(reply: str) -> str:
     return re.sub(r"^(\s*\|)\s*\d+\s*\|", r"\1", text, flags=re.M)
 
 
+# Sentences that offer or suggest something ("try <=10% cloud", "e.g. 2024-02-29", "would you like me to ...")
+# state values the agent is *proposing*, not results it is claiming, so those values need no source. Only
+# dates and numbers are exempt, never scene ids, and a value that also appears in a plain claim is not.
+ADVISORY_RE = re.compile(
+    r"(?<!\w)e\.g\.|(?<!\w)i\.e\.|\b(?:for example|for instance|such as|try|trying|suggest\w*|consider|would you like|"
+    r"do you want|want me to|if you(?:'d| would)? (?:like|want)|let me know|perhaps|maybe|relax\w*)\b", re.I)
+
+
+def _advisory_exempt(text: str, scrub) -> set:
+    """Dates and numbers that appear only in advisory sentences of *text*."""
+    from .pairing import _segments
+
+    advisory, plain = set(), set()
+    for seg in _segments(text):
+        tokens = {d[:10] for d in DATE_RE.findall(seg)} | set(NUM_RE.findall(scrub(seg)))
+        (advisory if ADVISORY_RE.search(seg) else plain).update(tokens)
+    return advisory - plain
+
+
 def check_groundedness(
     reply: str,
     tool_outputs: List[str],
     user_texts: List[str],
     mode: str = "strict",
     allow: Iterable[str] = (),
+    capability_texts: Iterable[str] = (),
 ) -> dict:
     """Return {"checked": n, "unsupported": [...], "grounded": bool}.
 
@@ -129,21 +163,27 @@ def check_groundedness(
     legitimately offers example thresholds ("try <=10% cloud") that are advice,
     not claims about results; dates and scene IDs must still be sourced.
     ``allow``: exact values (e.g. a corrected date the reply suggests) to ignore.
+    ``capability_texts``: the bound tools' descriptions and schemas. Whole numbers in them ("16 days ahead",
+    "back to 1940") are facts about what the tools can do, which a reply may quote; decimals still need a
+    tool result.
 
     With no tool outputs, any date/scene ID/number in the reply is unsupported
     unless the user supplied it.
     """
     allowed = {str(a) for a in allow}
+    scrub_values = lambda t: PRODUCT_RE.sub(" ", SCENE_ID_RE.sub(" ", DATE_RE.sub(" ", t)))  # noqa: E731
+    capability_texts = list(capability_texts)
     haystack = "\n".join(tool_outputs + user_texts)
     text = _strip_list_markers(reply.replace("\u2212", "-"))  # typographic minus -> "-"
     unsupported: List[str] = []
     checked = 0
+    exempt = _advisory_exempt(text, scrub_values)
 
     # Timestamps are checked by their date part; the time-of-day is not verified.
     dates = [m[:10] for m in DATE_RE.findall(text)]
     for d in dict.fromkeys(dates):
         checked += 1
-        if d not in haystack and d not in allowed:
+        if d not in haystack and d not in allowed and d not in exempt:
             unsupported.append(f"date {d}")
 
     ids = [i for i in SCENE_ID_RE.findall(text) if not DATE_RE.fullmatch(i)]
@@ -156,19 +196,38 @@ def check_groundedness(
         # product names ("Sentinel-2", "Landsat-8") are labels, not values
         scrubbed = PRODUCT_RE.sub(" ", SCENE_ID_RE.sub(" ", DATE_RE.sub(" ", text)))
         vals = _supported_numbers(tool_outputs, user_texts)
+        vals += [float(n) for t in capability_texts for n in NUM_RE.findall(t) if "." not in n]  # whole numbers only
         for tok in dict.fromkeys(NUM_RE.findall(scrubbed)):
             checked += 1
-            if tok not in allowed and not _number_supported(tok, vals):
+            if tok not in allowed and tok not in exempt and not _number_supported(tok, vals):
                 unsupported.append(f"number {tok}")
+
+        # is each value attached to the right scene / day, and are "clearest", "hottest", ... true?
+        from .pairing import check_pairing
+
+        user_numbers = [float(n) for t in user_texts for n in NUM_RE.findall(t)]
+        scrub = lambda s: PRODUCT_RE.sub(" ", SCENE_ID_RE.sub(" ", DATE_RE.sub(" ", s)))  # noqa: E731
+        for issue in check_pairing(text, scrub, [_as_obj(o) for o in tool_outputs], user_numbers):
+            checked += 1
+            if issue not in allowed:
+                unsupported.append(issue)
 
     return {"checked": checked, "unsupported": unsupported, "grounded": not unsupported}
 
 
+def _cited_as_source(reply: str, name: str) -> bool:
+    """True if *name* appears in parentheses attached to a value, e.g. "31.2 (get_weather)" or
+    "(get_weather, 2024-01-01)". A tool merely named (in backticks, or "the tool (get_weather) reaches 16
+    days") is a mention, not a claim that a result came from it."""
+    n = re.escape(name)
+    for m in re.finditer(rf"\(([^()\n]*\b{n}\b[^()\n]*)\)", reply):
+        before = reply[max(0, m.start() - 60): m.start()].split("\n")[-1]
+        if re.search(r"\d", m.group(1)) or re.search(r"\d|[A-Z0-9]{2,}_\w+", before):
+            return True
+    return False
+
+
 def find_uncalled_tool_citations(reply: str, tool_names: Iterable[str], called: Iterable[str]) -> List[str]:
-    """Tool names the reply cites ("(search_stac_items, …)") that were never called in the session."""
+    """Tool names the reply cites as the source of a value that were never called in the session."""
     called_set = set(called)
-    return [
-        f"tool {n} cited but never called"
-        for n in tool_names
-        if re.search(rf"\b{re.escape(n)}\b", reply) and n not in called_set
-    ]
+    return [f"tool {n} cited but never called" for n in tool_names if n not in called_set and _cited_as_source(reply, n)]

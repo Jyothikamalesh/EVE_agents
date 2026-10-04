@@ -17,12 +17,14 @@ Usage:
 import json
 import os
 import sys
+import time
 from pathlib import Path
 
 import httpx
 
 BASE = os.environ.get("DEMO_API_BASE", "http://127.0.0.1:8000")
-SESSION_ID = "demo-session"
+# A fresh id per run: sessions persist in SQLite, so a fixed id would continue an old conversation.
+SESSION_ID = f"demo-{int(time.time())}"
 DEMO = Path(__file__).resolve().parent.parent / "demo"
 LABELS = ["a question that needs a tool", "a follow-up that only works with context", "forced tool error"]
 

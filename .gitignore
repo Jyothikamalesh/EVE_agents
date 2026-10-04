@@ -3,7 +3,6 @@
 __pycache__/
 logs/*.jsonl
 data/*.sqlite*
-data/memory_qdrant/
 *.py[cod]
 *.egg-info/
 dist/

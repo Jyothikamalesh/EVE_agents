@@ -13,6 +13,7 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List
 
+from .node_trace import load_turns
 from .tracing import TRACE_LOG_PATH
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -79,6 +80,7 @@ def export_session(session_id: str, state_values: Dict[str, Any], model: str) ->
         "messages": serialize_messages(state_values.get("messages") or []),
         "summary": state_values.get("summary") or None,
         "summarized_turns": state_values.get("summarized_turns") or 0,
+        "node_runs": load_turns(session_id),
         "trace": _jsonl_for(TRACE_LOG_PATH, session_id),
         "terramind_log": _jsonl_for(TERRAMIND_LOG, session_id),
         "embeddings": session_embeddings(session_id),

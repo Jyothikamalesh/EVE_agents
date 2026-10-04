@@ -129,6 +129,42 @@ def test_unknown_id_and_unknown_skill_are_clear_errors():
         raise AssertionError("expected SkillError")
 
 
+def test_compare_ships_a_reading_guide_and_context():
+    st = fresh_store()
+    a = RNG.random((6, 224, 224), dtype=np.float32) + 0.1
+    embed("S2B_43QHV_20240113_0_L2A", a, st)
+    embed("S2A_43QHV_20240128_0_L2A", a * 1.02, st)
+    out = skills.compare_embeddings("emb_S2B_43QHV_20240113_0_L2A", "emb_S2A_43QHV_20240128_0_L2A", store=st)
+    assert out["days_apart"] == 15 and out["caveats"] == []      # clear, close in time: nothing to warn about
+    assert len(out["reading_guide"]) >= 3 and "percentage" in out["reading_guide"][0]
+    assert out["reference_points"]["examples"] and "small sample" in out["reference_points"]["basis"]
+    assert not any("city" in e["comparison"] for e in out["reference_points"]["examples"])   # the crops are tile centres
+    emb = embed("S2B_43QHV_20240113_0_L2A", a, st)
+    assert "centre of the Sentinel-2 tile" in emb["note"] and "crop_bbox" in emb["note"]
+
+
+def test_caveats_name_cloud_and_season_as_other_causes():
+    st = fresh_store()
+    a = RNG.random((6, 224, 224), dtype=np.float32) + 0.1
+    st.put("emb_A", a[:3, 0, :].repeat(66, axis=0)[:196].astype(np.float32), {"tile_id": "43QHV", "grid": [14, 14], "item_id": "A",
+           "datetime": "2024-01-13T05:00:00Z", "cloud_cover": 62.5})
+    st.put("emb_B", a[:3, 1, :].repeat(66, axis=0)[:196].astype(np.float32), {"tile_id": "43QHV", "grid": [14, 14], "item_id": "B",
+           "datetime": "2024-07-20T05:00:00Z", "cloud_cover": 1.0})
+    out = skills.compare_embeddings("emb_A", "emb_B", store=st)
+    text = " ".join(out["caveats"])
+    assert out["days_apart"] == 189 and "62.5% cloud" in text and "189 days apart" in text, out["caveats"]
+
+
+def test_rank_rows_carry_days_apart_and_the_guide_once():
+    st = fresh_store()
+    ref = RNG.random((6, 224, 224), dtype=np.float32) + 0.1
+    for day in ("20240101", "20240111"):
+        embed(f"S2B_43QHV_{day}_0_L2A", ref, st)
+    out = skills.rank_similar("emb_S2B_43QHV_20240101_0_L2A", ["emb_S2B_43QHV_20240111_0_L2A"], store=st)
+    assert out["ranking"][0]["days_apart"] == 10 and out["ranking"][0]["caveats"] == []
+    assert out["reading_guide"] and "reading_guide" not in out["ranking"][0]
+
+
 def test_float_args_from_a2a_are_accepted():
     fresh_store()
     try:

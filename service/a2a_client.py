@@ -89,24 +89,13 @@ class _RankArgs(BaseModel):
     candidate_ids: List[str] = Field(description="embedding_ids of the scenes to rank against the reference.")
 
 
-_TOOLS = {
-    "embed_scene": (
-        _EmbedArgs,
-        "Run a Sentinel-2 scene through the TerraMind foundation model (remote A2A agent). Returns an "
-        "embedding_id plus the scene's date, cloud cover, tile id and basic stats; the full tensor stays "
-        "server-side. Use only when the user asks to embed, analyse or compare imagery at a representation "
-        "level, after search_stac_items has given a collection and item_id.",
-    ),
-    "compare_embeddings": (
-        _CompareArgs,
-        "Compare two embedded scenes: overall cosine similarity, and where they differ (per-tile "
-        "mean/min/max and the 3 least-similar grid cells) when both share a tile id. Needs embedding_ids "
-        "from embed_scene. Useful for change detection between dates over the same tile.",
-    ),
-    "rank_similar": (
-        _RankArgs,
-        "Rank several embedded scenes by similarity to a reference scene. Needs embedding_ids from embed_scene.",
-    ),
+# Argument schemas live here because an A2A Agent Card describes skills but cannot declare typed
+# parameters. Everything else a model needs to use a skill (what it does, when to use it, how to read the
+# result) comes from the card's own skill description, so the remote agent owns its instructions.
+_ARG_SCHEMAS = {
+    "embed_scene": _EmbedArgs,
+    "compare_embeddings": _CompareArgs,
+    "rank_similar": _RankArgs,
 }
 
 
@@ -120,15 +109,27 @@ def _make_tool(name: str, schema: type[BaseModel], description: str, base_url: s
     return StructuredTool.from_function(coroutine=_run, name=name, description=description, args_schema=schema)
 
 
+def tools_from_card(card: Any, base_url: str, session_id_getter=lambda: None) -> List[BaseTool]:
+    """One tool per skill on the Agent Card, described by the card. Skills the client has no argument
+    schema for are skipped with a warning (it could not call them safely)."""
+    tools: List[BaseTool] = []
+    for skill in card.skills:
+        schema = _ARG_SCHEMAS.get(skill.id)
+        if schema is None:
+            logger.warning("A2A skill %r is on the card but this client has no argument schema for it; skipped.", skill.id)
+            continue
+        tools.append(_make_tool(skill.id, schema, skill.description, base_url, session_id_getter))
+    return tools
+
+
 async def load_a2a_tools(base_url: str = TERRAMIND_A2A_URL, session_id_getter=lambda: None) -> List[BaseTool]:
     """Tools for every skill the remote agent advertises; [] (with a warning) if it's unreachable."""
     try:
         async with httpx.AsyncClient(timeout=10) as http:
             card = await A2ACardResolver(http, base_url).get_agent_card()
-            skills = {s.id for s in card.skills}
     except Exception as exc:  # noqa: BLE001
         logger.warning("TerraMind A2A agent not reachable at %s (%s); continuing without it.", base_url, exc)
         return []
-    tools = [_make_tool(n, s, d, base_url, session_id_getter) for n, (s, d) in _TOOLS.items() if n in skills]
+    tools = tools_from_card(card, base_url, session_id_getter)
     logger.info("TerraMind A2A agent at %s: tools %s", base_url, [t.name for t in tools])
     return tools

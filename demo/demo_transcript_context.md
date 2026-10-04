@@ -1,9 +1,9 @@
-# Context-policy demo (session `ctx-demo-1791050346`)
+# Context-policy demo (session `ctx-demo-1791126214`)
 
 ## Turn 1
 **User:** What Sentinel-2 imagery is available for Hyderabad in January 2024 with less than 10% cloud cover?
 
-**Reply:** There are **7 Sentinel-2 L2A scenes** covering Hyderabad (Telangana, India) in January 2024 with cloud cover under 10% (search_stac_items):
+**Reply:** There are **7 Sentinel-2 L2A scenes** covering Hyderabad in January 2024 with cloud cover under 10% (search_stac_items):
 
 | Scene ID | Date | Cloud Cover |
 |---|---|---|
@@ -15,12 +15,9 @@
 | S2B_43QHV_20240103_0_L2A | 2024-01-03 | 0.87% |
 | S2B_44QKE_20240103_0_L2A | 2024-01-03 | 2.79% |
 
-Notes:
-- The scenes come in two tiling pairs (43QHV and 44QKE) that together cover the Hyderabad area, so each date effectively has full coverage.
-- The clearest scenes are the two from **2024-01-13** (0.02% cloud cover).
-- All scenes are atmospherically corrected L2A with full band assets (visual, NIR, red-edge, SWIR, etc.) available as COGs.
+The scenes come in pairs from two adjacent MGRS tiles (43QHV and 44QKE) that together cover the Hyderabad area. The clearest acquisitions are the January 13 pair, both with essentially zero cloud cover (~0.02%).
 
-Want me to pull the full asset links for any specific scene?
+Would you like me to pull full metadata or asset links for any of these scenes?
 
 Trace:
 - `tool_call` geocode_location {"query": "Hyderabad"}
@@ -30,48 +27,21 @@ Trace:
 ## Turn 2
 **User:** What was the weather like there during the same period?
 
-**Reply:** Here's the daily weather for Hyderabad (17.36°N, 78.47°E) in January 2024 (get_weather, archive source):
+**Reply:** Here's the weather in Hyderabad for January 2024 (get_weather, archive data):
 
-| Date | Max °C | Min °C | Precip mm | Max wind km/h |
-|---|---|---|---|---|
-| 2024-01-01 | 27.9 | 15.0 | 0.0 | 11.7 |
-| 2024-01-02 | 27.5 | 15.3 | 0.0 | 12.0 |
-| 2024-01-03 | 27.2 | 17.3 | 0.0 | 14.6 |
-| 2024-01-04 | 27.8 | 18.3 | 0.0 | 16.4 |
-| 2024-01-05 | 27.8 | 17.2 | 0.0 | 15.6 |
-| 2024-01-06 | 28.1 | 17.1 | 0.0 | 18.1 |
-| 2024-01-07 | 27.1 | 17.8 | 0.0 | 17.7 |
-| 2024-01-08 | 27.6 | 17.1 | 0.0 | 19.2 |
-| 2024-01-09 | 28.4 | 17.2 | 0.0 | 19.4 |
-| 2024-01-10 | 25.9 | 17.7 | 0.0 | 11.2 |
-| 2024-01-11 | 29.7 | 18.2 | 0.0 | 11.6 |
-| 2024-01-12 | 30.3 | 19.2 | 0.0 | 10.4 |
-| 2024-01-13 | 30.3 | 18.0 | 0.0 | 9.5 |
-| 2024-01-14 | 30.4 | 17.4 | 0.0 | 8.9 |
-| 2024-01-15 | 29.6 | 17.4 | 0.0 | 8.7 |
-| 2024-01-16 | 30.1 | 18.0 | 0.0 | 12.0 |
-| 2024-01-17 | 29.8 | 17.5 | 0.0 | 13.7 |
-| 2024-01-18 | 28.8 | 18.4 | 0.0 | 13.3 |
-| 2024-01-19 | 30.0 | 17.1 | 0.0 | 13.5 |
-| 2024-01-20 | 29.0 | 19.4 | 0.0 | 14.1 |
-| 2024-01-21 | 30.3 | 19.1 | 0.0 | 12.8 |
-| 2024-01-22 | 31.2 | 20.3 | 0.0 | 14.6 |
-| 2024-01-23 | 30.8 | 19.1 | 0.0 | 17.4 |
-| 2024-01-24 | 30.3 | 19.6 | 0.2 | 13.4 |
-| 2024-01-25 | 28.8 | 18.4 | 0.0 | 12.1 |
-| 2024-01-26 | 29.7 | 17.6 | 0.0 | 11.9 |
-| 2024-01-27 | 29.2 | 17.5 | 0.0 | 12.3 |
-| 2024-01-28 | 29.2 | 16.1 | 0.0 | 10.9 |
-| 2024-01-29 | 29.4 | 16.3 | 0.0 | 11.8 |
-| 2024-01-30 | 29.4 | 16.9 | 0.0 | 13.9 |
-| 2024-01-31 | 30.9 | 17.4 | 0.0 | 11.6 |
+**Overall:** A dry, warm month — typical of the local winter. Max temperatures ranged from 25.9 °C (Jan 10) to 31.2 °C (Jan 22), with most days between 27–30 °C. Mins stayed in the 15–20 °C range.
 
-**Summary:**
-- **Dry month** — essentially no rain all month; the only measurable precipitation was 0.2 mm on 2024-01-24.
-- **Temperatures** typical of the dry season: maxes ranged 25.9–31.2 °C (hottest day 2024-01-22 at 31.2 °C), mins 15.0–20.3 °C.
-- **Winds** light to moderate, peaking at 19.4 km/h on 2024-01-09.
+**Precipitation:** Essentially none — the only measurable rain was 0.2 mm on Jan 24. Every other day recorded 0.0 mm.
 
-This is consistent with the very low cloud cover in the Sentinel-2 scenes — the near-zero cloud days (e.g., 0.02% on 2024-01-13) line up with the dry, clear conditions.
+**Wind:** Light to moderate, with daily max gusts mostly 9–19 km/h; the windiest stretch was Jan 6–9 (17.7–19.4 km/h).
+
+**On the imagery dates specifically:**
+- Jan 3: max 27.2 °C, no rain, max wind 14.6 km/h
+- Jan 13: max 30.3 °C, no rain, max wind 9.5 km/h
+- Jan 18: max 28.8 °C, no rain, max wind 13.3 km/h
+- Jan 28: max 29.2 °C, no rain, max wind 10.9 km/h
+
+The dry, cloud-free conditions on those days are consistent with the very low cloud cover (0.02–2.79%) reported for the Sentinel-2 scenes.
 
 Trace:
 - `tool_call` get_weather {"end_date": "2024-01-31", "lat": 17.360589, "lon": 78.4740613, "start_date": "2024-01-01"}
@@ -80,57 +50,59 @@ Trace:
 ## Turn 3
 **User:** Where is Nairobi? Give me its coordinates.
 
-**Reply:** Nairobi is a city in Kenya (geocode_location).
+**Reply:** Nairobi, Kenya is located at:
 
-- **Coordinates:** Latitude −1.2890006, Longitude 36.8172812 (geocode_location)
-- **Bounding box:** [36.6647016, −1.4448822, 37.1048735, −1.1606749] (geocode_location)
+- **Latitude:** -1.3024° (1.30° S)
+- **Longitude:** 36.8289° (36.83° E)
+
+Its bounding box is [36.6647, -1.4449, 37.1049, -1.1607] (geocode_location).
 
 Trace:
 - `tool_call` geocode_location {"query": "Nairobi"}
-- `verify`  {"issues": ["number 1.289"], "rewritten": true, "caveat": false}
+- `verify`  {"issues": [], "rewritten": false, "caveat": false}
 
 ## Turn 4
 **User:** What was the weather in Nairobi from 2023-07-01 to 2023-07-07?
 
-**Reply:** Here's the daily weather for Nairobi (−1.3005272, 36.824646) from 2023-07-01 to 2023-07-07 (get_weather, archive source):
+**Reply:** Here's the weather in Nairobi from July 1–7, 2023 (get_weather, archive data):
 
-| Date | Max °C | Min °C | Precip mm | Max wind km/h |
+| Date | Max Temp | Min Temp | Precipitation | Max Wind |
 |---|---|---|---|---|
-| 2023-07-01 | 21.9 | 13.6 | 0.6 | 12.6 |
-| 2023-07-02 | 21.2 | 14.7 | 0.3 | 9.9 |
-| 2023-07-03 | 21.2 | 13.1 | 0.6 | 8.3 |
-| 2023-07-04 | 20.5 | 14.0 | 2.0 | 10.9 |
-| 2023-07-05 | 23.2 | 11.5 | 0.0 | 8.9 |
-| 2023-07-06 | 21.6 | 11.4 | 0.1 | 12.4 |
-| 2023-07-07 | 20.2 | 13.3 | 0.0 | 12.0 |
+| Jul 1 | 21.9 °C | 13.6 °C | 0.6 mm | 12.6 km/h |
+| Jul 2 | 21.2 °C | 14.7 °C | 0.3 mm | 9.9 km/h |
+| Jul 3 | 21.2 °C | 13.1 °C | 0.6 mm | 8.3 km/h |
+| Jul 4 | 20.5 °C | 14.0 °C | 2.0 mm | 10.9 km/h |
+| Jul 5 | 23.2 °C | 11.5 °C | 0.0 mm | 8.9 km/h |
+| Jul 6 | 21.6 °C | 11.4 °C | 0.1 mm | 12.4 km/h |
+| Jul 7 | 20.2 °C | 13.3 °C | 0.0 mm | 12.0 km/h |
 
-**Summary:**
-- **Temperatures:** maxes 20.2–23.2 °C (warmest 2023-07-05 at 23.2 °C), mins 11.4–14.7 °C (coolest 2023-07-06 at 11.4 °C).
-- **Precipitation:** mostly dry, with the highest daily amount on 2023-07-04 (2.0 mm).
-- **Winds:** light, peaking at 12.6 km/h on 2023-07-01.
+**Summary:** A mild, mostly dry week. Max temperatures hovered around 20–23 °C (warmest on Jul 5 at 23.2 °C), with cool nights dipping to 11.4 °C (Jul 6). Rain was light and sporadic — the only notable amount was 2.0 mm on Jul 4, with Jul 5 and Jul 7 completely dry. Winds were light, peaking at 12.6 km/h on Jul 1.
 
 Trace:
-- `tool_call` get_weather {"end_date": "2023-07-07", "lat": -1.2890006, "lon": 36.8172812, "start_date": "2023-07-01"}
-- `verify`  {"issues": ["number 3.6"], "rewritten": true, "caveat": false}
+- `tool_call` get_weather {"end_date": "2023-07-07", "lat": -1.302398, "lon": 36.8288509, "start_date": "2023-07-01"}
+- `verify`  {"issues": [], "rewritten": false, "caveat": false}
 
 ## Turn 5
 **User:** What imagery collections can you search?
 
-**Reply:** Here are the imagery collections available to search (list_stac_collections, catalog: earth-search.aws.element84.com):
+**Reply:** Here are the imagery collections I can search (list_stac_collections):
 
-| Collection ID | Title | Description |
-|---|---|---|
-| `sentinel-2-l2a` | Sentinel-2 Level-2A | Global Sentinel-2 MSI data, atmospherically corrected (the one we used for Hyderabad) |
-| `sentinel-2-l1c` | Sentinel-2 Level-1C | Global Sentinel-2 MSI data, top-of-atmosphere |
-| `sentinel-2-c1-l2a` | Sentinel-2 Collection 1 Level-2A | Sentinel-2 Collection 1 L2A |
-| `sentinel-2-pre-c1-l2a` | Sentinel-2 Pre-Collection 1 Level-2A | Pre-Collection 1 L2A (baseline < 05.00) |
-| `sentinel-1-grd` | Sentinel-1 Level-1C GRD | SAR (radar) imagery — works through clouds, 6-day revisit |
-| `landsat-c2-l2` | Landsat Collection 2 Level-2 | Atmospherically corrected Landsat 4/5/7/8/9 (TM, ETM+, OLI/TIRS) |
-| `naip` | NAIP: National Agriculture Imagery Program | U.S.-wide high-res aerial imagery (R, G, B, IR), 2010–present |
-| `cop-dem-glo-30` | Copernicus DEM GLO-30 | Digital Surface Model, 30 m, limited worldwide coverage |
-| `cop-dem-glo-90` | Copernicus DEM GLO-90 | Digital Surface Model, 90 m, worldwide |
+**Optical (cloud-filterable):**
+- **sentinel-2-l2a** — Sentinel-2 Level-2A (atmospherically corrected, MSI)
+- **sentinel-2-l1c** — Sentinel-2 Level-1C (top-of-atmosphere)
+- **sentinel-2-c1-l2a** — Sentinel-2 Collection 1 Level-2A
+- **sentinel-2-pre-c1-l2a** — Sentinel-2 Pre-Collection 1 Level-2A (baseline < 05.00)
+- **landsat-c2-l2** — Landsat Collection 2 Level-2 (Landsat 4/5 TM, 7 ETM+, 8/9 OLI+TIRS)
+- **naip** — NAIP: National Agriculture Imagery Program (U.S.-wide, high-res aerial, R/G/B/IR, 2010–present)
 
-So you can search optical (Sentinel-2, Landsat, NAIP), radar (Sentinel-1), and elevation (Copernicus DEM) data. Want me to search any of these for a location or date range?
+**Radar (cloud-penetrating):**
+- **sentinel-1-grd** — Sentinel-1 Level-1C Ground Range Detected (SAR, 6-day revisit, works through clouds)
+
+**Elevation / Digital Surface Models:**
+- **cop-dem-glo-30** — Copernicus DEM GLO-30 (30 m, limited worldwide coverage)
+- **cop-dem-glo-90** — Copernicus DEM GLO-90 (90 m, worldwide)
+
+The default for searches is **sentinel-2-l2a**. Want me to search any of these for a location and date range?
 
 Trace:
 - `tool_call` list_stac_collections {}
@@ -139,39 +111,44 @@ Trace:
 ## Turn 6
 **User:** Find Sentinel-2 scenes over Nairobi in March 2024 under 30% cloud, limit 3.
 
-**Reply:** Found 3 Sentinel-2 L2A scenes over Nairobi in March 2024, all well under 30% cloud (search_stac_items):
+**Reply:** Found 3 Sentinel-2 L2A scenes over Nairobi in March 2024 with <30% cloud cover (search_stac_items):
 
-| Scene ID | Date | Cloud cover |
-|---|---|---|
-| `S2A_36NZG_20240323_0_L2A` | 2024-03-23 | 2.20% |
-| `S2A_37NBB_20240323_0_L2A` | 2024-03-23 | 2.66% |
-| `S2B_36NZG_20240321_0_L2A` | 2024-03-21 | 0.36% |
+| Scene ID | Date | Cloud Cover | Tile |
+|---|---|---|---|
+| **S2B_36MZD_20240318_0_L2A** | 2024-03-18 | 26.75% | 36MZD |
+| **S2B_37MBU_20240318_0_L2A** | 2024-03-18 | 26.24% | 37MBU |
+| **S2A_36MZD_20240313_0_L2A** | 2024-03-13 | 2.39% | 36MZD |
 
-All three are atmospherically corrected L2A with full band assets (visual, NIR, red-edge, SWIR, etc.). The clearest is `S2B_36NZG_20240321_0_L2A` at 0.36% cloud. Want me to pull full metadata/asset links for any of these?
+The clearest scene is **S2A_36MZD_20240313_0_L2A** with only 2.39% cloud cover. The two March 18 scenes have higher cloud (~26%) but still under your 30% threshold.
+
+Want me to pull full asset links for any of these, or search a wider date range?
 
 Trace:
 - `tool_call` search_stac_items {"bbox": [36.6647016, 1.4448822, 37.1048735, 1.1606749], "collections": ["sentinel-2-l2a"], "end_date": "2024-03-31", "limit": 3, "max_cloud_cover": 30, "start_date": "2024-03-01"}
-- `tool_call` search_stac_items {"bbox": [36.6647016, 1.1606749, 37.1048735, 1.4448822], "collections": ["sentinel-2-l2a"], "end_date": "2024-03-31", "limit": 3, "max_cloud_cover": 30, "start_date": "2024-03-01"}
-- `context_summary`  - **Hyderabad, Telangana, India**
-  - Coordinates: 17.360589°N, 78.4740613°E
-  - Bounding box: [78.2387067, 17.2916377, 78.6223912, 17.5608321]
-  - **Sentinel-2 L2A Imagery (Jan 2024, <10% cloud):** 7 scenes found.
-    - 2024-01-28: S2A_43QHV_20240128_0_L2A (1.77%)
-    - 2024-01-18: S2A_43QHV_20240118_1_L2A (2.67%), S2A_44QKE_20240118_1_L2A (2.04%)
-    - 2024-01-13: S2B_43QHV_20240113_0_L2A (0.02%), S2B_44QKE_20240113_0_L2A (0.02%)
-    - 2024-01-03: S2B_43QHV_20240103_0_L2A (0.87%), S2B_44QKE_20240103_0_L2A (2.79%)
-  - **Weather (Jan 2024):** Dry month; total precipitation 0.2 mm (only on 2024-01-24). Max temps 25.9–31.2°C (peak 31.2°C on 2024-01-22); Min temps 15.0–20.3°C. Max wind speed 19.4 km/h (2024-01-09).
-- **Nairobi, Kenya**
-  - Coordinates: -1.2890006°N, 36.8172812°E
-  - Bounding box: [36.6647016, -1.4448822, 37.1048735, -1.1606749]
+- `tool_call` search_stac_items {"bbox": [36.6647016, -1.4448822, 37.1048735, -1.1606749], "collections": ["sentinel-2-l2a"], "end_date": "2024-03-31", "limit": 3, "max_cloud_cover": 30, "start_date": "2024-03-01"}
+- `context_summary`  - **Hyderabad, Telangana, India**: lat 17.360589, lon 78.4740613; bbox [78.2387067, 17.2916377, 78.6223912, 17.5608321].
+- **Sentinel-2 L2A search (Jan 2024, <10% cloud)**: 7 scenes found.
+  - S2A_43QHV_20240128_0_L2A (2024-01-28, 1.77% cloud)
+  - S2A_43QHV_20240118_1_L2A (2024-01-18, 2.67% cloud)
+  - S2A_44QKE_20240118_1_L2A (2024-01-18, 2.04% cloud)
+  - S2B_43QHV_20240113_0_L2A (2024-01-13, 0.02% cloud)
+  - S2B_44QKE_20240113_0_L2A (2024-01-13, 0.02% cloud)
+  - S2B_43QHV_20240103_0_L2A (2024-01-03, 0.87% cloud)
+  - S2B_44QKE_20240103_0_L2A (2024-01-03, 2.79% cloud)
+- **Hyderabad Weather (Jan 2024)**:
+  - Max temp: 25.9°C (Jan 10) to 31.2°C (Jan 22); mean 29.11°C.
+  - Min temp: 15.0°C (Jan 1) to 20.3°C (Jan 22); mean 17.71°C.
+  - Precipitation: Total 0.2 mm (only on Jan 24); all other days 0.0 mm.
+  - Wind: Max gusts 8.7–19.4 km/h; mean 13.36 km/h.
+- **Nairobi, Kenya**: lat -1.302398, lon 36.8288509; bbox [36.6647016, -1.4448822, 37.1048735, -1.1606749].
 - `verify`  {"issues": [], "rewritten": false, "caveat": false}
 
 ## Turn 7
 **User:** Going back to the very first thing I asked: which city was it, what cloud-cover limit did I set, and what date range?
 
-**Reply:** Your very first request was for **Hyderabad, Telangana, India** (17.360589°N, 78.4740613°E), with a **cloud-cover limit of under 10%**, for **January 2024** (2024-01-01 to 2024-01-31).
+**Reply:** Your very first question was about **Hyderabad** (Telangana, India), asking for **Sentinel-2 imagery** with **less than 10% cloud cover** in **January 2024**.
 
-That search returned 7 Sentinel-2 L2A scenes, the clearest being the 2024-01-13 pair (`S2B_43QHV_20240113_0_L2A` and `S2B_44QKE_20240113_0_L2A`) at just 0.02% cloud.
+That search returned 7 scenes, the clearest being S2B_43QHV_20240113_0_L2A and S2B_44QKE_20240113_0_L2A (both 0.02% cloud on 2024-01-13).
 
 Trace:
 - `verify`  {"issues": [], "rewritten": false, "caveat": false}

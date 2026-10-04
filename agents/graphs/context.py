@@ -157,6 +157,38 @@ async def summarize_turns(
     return _strip_thinking(str(content))
 
 
+LEDGER_MAX_CHARS = 240
+
+
+def request_ledger(messages: List[BaseMessage], upto_turns: int, max_chars: int = LEDGER_MAX_CHARS) -> List[str]:
+    """The user's own words for the first *upto_turns* turns, numbered, in order.
+
+    Deterministic (no LLM), so it cannot drift or invent: the summary keeps *facts* but loses
+    chronology, and "the first thing I asked" needs chronology. Costs ~30 tokens per turn.
+    """
+    lines: List[str] = []
+    for n, i in enumerate(turn_starts(messages)[: max(upto_turns, 0)], 1):
+        content = messages[i].content
+        if isinstance(content, list):
+            content = "".join(b.get("text", "") if isinstance(b, dict) else str(b) for b in content)
+        text = " ".join(str(content).split())
+        if len(text) > max_chars:
+            text = text[:max_chars].rstrip() + "…"
+        lines.append(f"{n}. {text}")
+    return lines
+
+
+def ledger_block(lines: List[str]) -> Optional[str]:
+    if not lines:
+        return None
+    return (
+        "## What the user asked in earlier turns (their own words, in order)\n"
+        + "\n".join(lines)
+        + "\nFor questions about what the user asked first, earlier or before, answer from this list "
+        "(and the verbatim turns below), not from the summary: the summary is a set of facts, not a chronology."
+    )
+
+
 def summary_block(summary: str) -> Optional[str]:
     if not summary:
         return None
