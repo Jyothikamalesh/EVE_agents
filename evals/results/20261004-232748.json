@@ -1,0 +1,212 @@
+{
+  "summary": {
+    "cases": 1,
+    "skipped": [],
+    "passed": 1,
+    "runs": 5,
+    "runs_passed": 5,
+    "pass_rate": 1.0,
+    "ci95": [
+      0.566,
+      1.0
+    ],
+    "flaky": [],
+    "failing": [],
+    "per_case": {
+      "tool_error_bad_date": "5/5"
+    },
+    "case_stats": {
+      "tool_error_bad_date": {
+        "category": "error_path",
+        "runs": 5,
+        "passed": 5,
+        "failures": {}
+      }
+    },
+    "by_category": {
+      "error_path": "5/5"
+    },
+    "groundedness": "5/5 turns grounded",
+    "verifier": {
+      "turns": 5,
+      "flagged": 0,
+      "rewritten": 0,
+      "caveats": 0,
+      "flagged_by_case": {}
+    }
+  },
+  "model": "groq:qwen/qwen3.8-27b",
+  "repeat": 5,
+  "results": [
+    {
+      "id": "tool_error_bad_date",
+      "category": "error_path",
+      "session_id": "eval-232748-tool_error_bad_date-02c55f",
+      "passed": true,
+      "turns": [
+        {
+          "turn": 1,
+          "say": "Call the weather tool directly with start_date='2024-02-30' and end_date='2024-02-30' for Hyderabad. I specifically want to see what the tool returns for that exact date, don't correct it yourself.",
+          "reply": "I called the weather tool exactly as you asked \u2014 `get_weather` with `start_date='2024-02-30'` and `end_date='2024-02-30'` for Hyderabad (lat 17.360589, lon 78.4740613, from geocode_location).\n\nThe tool failed with this error:\n\n> **Error executing tool get_weather: day is out of range for month**\n\nThat's the tool's own validation rejecting the date \u2014 February 30th doesn't exist, so the date parser (Python's `datetime`) raises \"day is out of range for month\" before any weather data is fetched. No weather values were returned.\n\nIf you'd like, I can re-run it with a valid date (e.g. 2024-02-29, which was a real leap day, or 2024-02-28).",
+          "tools": [
+            "geocode_location",
+            "get_weather"
+          ],
+          "tool_errors": [
+            "Error executing tool get_weather: day is out of range for month"
+          ],
+          "verify": {
+            "issues": [],
+            "rewritten": false,
+            "caveat": false
+          },
+          "grounding": {
+            "checked": 5,
+            "unsupported": [],
+            "grounded": true
+          },
+          "latency_s": 2.5,
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "rep": 1
+    },
+    {
+      "id": "tool_error_bad_date",
+      "category": "error_path",
+      "session_id": "eval-232748-tool_error_bad_date-3e76dd",
+      "passed": true,
+      "turns": [
+        {
+          "turn": 1,
+          "say": "Call the weather tool directly with start_date='2024-02-30' and end_date='2024-02-30' for Hyderabad. I specifically want to see what the tool returns for that exact date, don't correct it yourself.",
+          "reply": "I called `get_weather` exactly as you asked \u2014 with `start_date='2024-02-30'` and `end_date='2024-02-30'` for Hyderabad (17.360589, 78.4740613, from `geocode_location`).\n\nThe tool failed with this error:\n\n> **Error executing tool get_weather: day is out of range for month**\n\nThat's because February 30th doesn't exist \u2014 the date parser rejects it rather than silently correcting it. So there's no weather data to report for that date.\n\nIf you'd like, I can re-run it for a valid date (e.g. 2024-02-29, which was a real day since 2024 was a leap year, or 2024-03-01). Just let me know which.",
+          "tools": [
+            "geocode_location",
+            "get_weather"
+          ],
+          "tool_errors": [
+            "Error executing tool get_weather: day is out of range for month"
+          ],
+          "verify": {
+            "issues": [],
+            "rewritten": false,
+            "caveat": false
+          },
+          "grounding": {
+            "checked": 6,
+            "unsupported": [],
+            "grounded": true
+          },
+          "latency_s": 1.8,
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "rep": 2
+    },
+    {
+      "id": "tool_error_bad_date",
+      "category": "error_path",
+      "session_id": "eval-232748-tool_error_bad_date-92b115",
+      "passed": true,
+      "turns": [
+        {
+          "turn": 1,
+          "say": "Call the weather tool directly with start_date='2024-02-30' and end_date='2024-02-30' for Hyderabad. I specifically want to see what the tool returns for that exact date, don't correct it yourself.",
+          "reply": "I called `get_weather` exactly as you asked \u2014 with `start_date='2024-02-30'` and `end_date='2024-02-30'` for Hyderabad (17.360589, 78.4740613, from `geocode_location`).\n\nThe tool failed with this error:\n\n> **Error executing tool get_weather: day is out of range for month**\n\nThat's because February 30th doesn't exist \u2014 the date parser rejects it rather than silently correcting it. So there's no weather data to report for that date.\n\nIf you'd like, I can re-run it with a valid date (e.g. 2024-02-29, which was a real day since 2024 was a leap year, or 2024-03-01).",
+          "tools": [
+            "geocode_location",
+            "get_weather"
+          ],
+          "tool_errors": [
+            "Error executing tool get_weather: day is out of range for month"
+          ],
+          "verify": {
+            "issues": [],
+            "rewritten": false,
+            "caveat": false
+          },
+          "grounding": {
+            "checked": 6,
+            "unsupported": [],
+            "grounded": true
+          },
+          "latency_s": 2.3,
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "rep": 3
+    },
+    {
+      "id": "tool_error_bad_date",
+      "category": "error_path",
+      "session_id": "eval-232748-tool_error_bad_date-aec267",
+      "passed": true,
+      "turns": [
+        {
+          "turn": 1,
+          "say": "Call the weather tool directly with start_date='2024-02-30' and end_date='2024-02-30' for Hyderabad. I specifically want to see what the tool returns for that exact date, don't correct it yourself.",
+          "reply": "I called the weather tool exactly as you asked \u2014 `get_weather` with `start_date='2024-02-30'` and `end_date='2024-02-30'` for Hyderabad (lat 17.360589, lon 78.4740613, from geocode_location).\n\nThe tool failed with this error:\n\n> **Error executing tool get_weather: day is out of range for month**\n\nThat's the tool's own validation rejecting the date \u2014 February 30th doesn't exist, so the date parser (Python's `datetime`) raises \"day is out of range for month\" before any weather data is fetched. No weather values were returned.\n\nIf you'd like, I can re-run it with a valid date (e.g. 2024-02-29, which was a real leap day, or 2024-02-28).",
+          "tools": [
+            "geocode_location",
+            "get_weather"
+          ],
+          "tool_errors": [
+            "Error executing tool get_weather: day is out of range for month"
+          ],
+          "verify": {
+            "issues": [],
+            "rewritten": false,
+            "caveat": false
+          },
+          "grounding": {
+            "checked": 5,
+            "unsupported": [],
+            "grounded": true
+          },
+          "latency_s": 1.8,
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "rep": 4
+    },
+    {
+      "id": "tool_error_bad_date",
+      "category": "error_path",
+      "session_id": "eval-232748-tool_error_bad_date-d680cd",
+      "passed": true,
+      "turns": [
+        {
+          "turn": 1,
+          "say": "Call the weather tool directly with start_date='2024-02-30' and end_date='2024-02-30' for Hyderabad. I specifically want to see what the tool returns for that exact date, don't correct it yourself.",
+          "reply": "I called the weather tool exactly as you asked \u2014 `get_weather` with `start_date='2024-02-30'` and `end_date='2024-02-30'` for Hyderabad (lat 17.360589, lon 78.4740613, from geocode_location).\n\nThe tool failed with this error:\n\n> **Error executing tool get_weather: day is out of range for month**\n\nThat's the tool's own validation rejecting the date \u2014 February 30th doesn't exist, so the date parser (Python's `datetime`) raises \"day is out of range for month\" before any weather data is fetched. No weather values were returned.\n\nIf you'd like, I can re-run it with a valid date (e.g. 2024-02-29, which was a real leap day, or 2024-02-28).",
+          "tools": [
+            "geocode_location",
+            "get_weather"
+          ],
+          "tool_errors": [
+            "Error executing tool get_weather: day is out of range for month"
+          ],
+          "verify": {
+            "issues": [],
+            "rewritten": false,
+            "caveat": false
+          },
+          "grounding": {
+            "checked": 5,
+            "unsupported": [],
+            "grounded": true
+          },
+          "latency_s": 2.1,
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "rep": 5
+    }
+  ]
+}

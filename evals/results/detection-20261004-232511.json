@@ -1,0 +1,3559 @@
+{
+ "summary": {
+  "items": 284,
+  "supported": 37,
+  "hallucinated": 247,
+  "overall": {
+   "tp": 219,
+   "fp": 0,
+   "fn": 28,
+   "precision": 1.0,
+   "recall": 0.8866396761133604,
+   "f1": 0.9399141630901288,
+   "positives": 247,
+   "negatives": 37,
+   "tn": 37
+  },
+  "predicted_detectable": {
+   "tp": 218,
+   "fp": 0,
+   "fn": 2,
+   "precision": 1.0,
+   "recall": 0.990909090909091,
+   "f1": 0.995433789954338,
+   "positives": 220
+  },
+  "predicted_weaknesses": {
+   "positives": 27,
+   "caught": 1
+  },
+  "false_alarm_rate": {
+   "flagged": 0,
+   "of": 37,
+   "rate": 0.0,
+   "items": []
+  },
+  "scenarios": {
+   "S1": {
+    "tp": 36,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 36,
+    "negatives": 3,
+    "tn": 3
+   },
+   "S2": {
+    "tp": 68,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 68,
+    "negatives": 2,
+    "tn": 2
+   },
+   "S3": {
+    "tp": 24,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 24,
+    "negatives": 2,
+    "tn": 2
+   },
+   "S4": {
+    "tp": 24,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 24,
+    "negatives": 2,
+    "tn": 2
+   },
+   "S5": {
+    "tp": 37,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 37,
+    "negatives": 5,
+    "tn": 5
+   },
+   "S6": {
+    "tp": 12,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 12,
+    "negatives": 8,
+    "tn": 8
+   },
+   "S7": {
+    "tp": 10,
+    "fp": 0,
+    "fn": 8,
+    "precision": 1.0,
+    "recall": 0.5555555555555556,
+    "f1": 0.7142857142857143,
+    "positives": 18,
+    "negatives": 4,
+    "tn": 4
+   },
+   "S8": {
+    "tp": 8,
+    "fp": 0,
+    "fn": 12,
+    "precision": 1.0,
+    "recall": 0.4,
+    "f1": 0.5714285714285715,
+    "positives": 20,
+    "negatives": 4,
+    "tn": 4
+   },
+   "S9": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 5,
+    "precision": null,
+    "recall": 0.0,
+    "f1": null,
+    "positives": 5,
+    "negatives": 3,
+    "tn": 3
+   },
+   "S10": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 3,
+    "precision": null,
+    "recall": 0.0,
+    "f1": null,
+    "positives": 3,
+    "negatives": 4,
+    "tn": 4
+   }
+  },
+  "error_types": {
+   "misattributed_value": {
+    "tp": 18,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 18,
+    "negatives": 3,
+    "tn": 3,
+    "scenario": "S1",
+    "expected": "detect",
+    "description": "a real cloud value moved onto a different scene",
+    "recall_ci95": [
+     0.824,
+     1.0
+    ],
+    "as_predicted": true
+   },
+   "invented_value": {
+    "tp": 18,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 18,
+    "negatives": 3,
+    "tn": 3,
+    "scenario": "S1",
+    "expected": "detect",
+    "description": "a cloud value that exists nowhere in the data",
+    "recall_ci95": [
+     0.824,
+     1.0
+    ],
+    "as_predicted": true
+   },
+   "swapped_weather_cell": {
+    "tp": 68,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 68,
+    "negatives": 2,
+    "tn": 2,
+    "scenario": "S2",
+    "expected": "detect",
+    "description": "two rows' values for one weather column swapped",
+    "recall_ci95": [
+     0.947,
+     1.0
+    ],
+    "as_predicted": true
+   },
+   "invented_scene_id": {
+    "tp": 24,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 24,
+    "negatives": 2,
+    "tn": 2,
+    "scenario": "S3",
+    "expected": "detect",
+    "description": "a scene id with an altered tile or date that does not exist",
+    "recall_ci95": [
+     0.862,
+     1.0
+    ],
+    "as_predicted": true
+   },
+   "date_not_in_data": {
+    "tp": 12,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 12,
+    "negatives": 2,
+    "tn": 2,
+    "scenario": "S4",
+    "expected": "detect",
+    "description": "an acquisition date one day off, not present in the data",
+    "recall_ci95": [
+     0.757,
+     1.0
+    ],
+    "as_predicted": true
+   },
+   "date_of_another_scene": {
+    "tp": 12,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 12,
+    "negatives": 2,
+    "tn": 2,
+    "scenario": "S4",
+    "expected": "detect",
+    "description": "a real date, but belonging to a different scene",
+    "recall_ci95": [
+     0.757,
+     1.0
+    ],
+    "as_predicted": true
+   },
+   "false_scene_superlative": {
+    "tp": 10,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 10,
+    "negatives": 5,
+    "tn": 5,
+    "scenario": "S5",
+    "expected": "detect",
+    "description": "\u201cclearest/cloudiest scene\u201d naming a scene that is not the min/max",
+    "recall_ci95": [
+     0.722,
+     1.0
+    ],
+    "as_predicted": true
+   },
+   "false_weather_superlative": {
+    "tp": 27,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 27,
+    "negatives": 5,
+    "tn": 5,
+    "scenario": "S5",
+    "expected": "detect",
+    "description": "\u201chottest/wettest/windiest day\u201d naming a day that is not the max",
+    "recall_ci95": [
+     0.875,
+     1.0
+    ],
+    "as_predicted": true
+   },
+   "uncalled_tool_citation": {
+    "tp": 12,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 12,
+    "negatives": 8,
+    "tn": 8,
+    "scenario": "S6",
+    "expected": "detect",
+    "description": "a real value cited to a tool that was never called",
+    "recall_ci95": [
+     0.757,
+     1.0
+    ],
+    "as_predicted": true
+   },
+   "invented_similarity_value": {
+    "tp": 4,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 4,
+    "negatives": 4,
+    "tn": 4,
+    "scenario": "S7",
+    "expected": "detect",
+    "description": "a TerraMind similarity score that is not in the result",
+    "recall_ci95": [
+     0.51,
+     1.0
+    ],
+    "as_predicted": true
+   },
+   "invented_tile_statistic": {
+    "tp": 5,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "positives": 5,
+    "negatives": 4,
+    "tn": 4,
+    "scenario": "S7",
+    "expected": "detect",
+    "description": "a per-tile min/mean that is not in the result",
+    "recall_ci95": [
+     0.566,
+     1.0
+    ],
+    "as_predicted": true
+   },
+   "wrong_grid_cell": {
+    "tp": 1,
+    "fp": 0,
+    "fn": 2,
+    "precision": 1.0,
+    "recall": 0.3333333333333333,
+    "f1": 0.5,
+    "positives": 3,
+    "negatives": 4,
+    "tn": 4,
+    "scenario": "S7",
+    "expected": "miss",
+    "description": "wrong row/col of the least-similar cell (small integers collide with other numbers)",
+    "recall_ci95": [
+     0.061,
+     0.792
+    ],
+    "as_predicted": true
+   },
+   "invented_embedding_id": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 3,
+    "precision": null,
+    "recall": 0.0,
+    "f1": null,
+    "positives": 3,
+    "negatives": 4,
+    "tn": 4,
+    "scenario": "S7",
+    "expected": "miss",
+    "description": "an embedding id that does not exist (the id check only covers uppercase scene ids)",
+    "recall_ci95": [
+     0.0,
+     0.562
+    ],
+    "as_predicted": true
+   },
+   "wrong_days_apart": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 3,
+    "precision": null,
+    "recall": 0.0,
+    "f1": null,
+    "positives": 3,
+    "negatives": 4,
+    "tn": 4,
+    "scenario": "S7",
+    "expected": "miss",
+    "description": "a wrong whole number of days between scenes (small integers collide)",
+    "recall_ci95": [
+     0.0,
+     0.562
+    ],
+    "as_predicted": true
+   },
+   "wrong_average_off_data": {
+    "tp": 8,
+    "fp": 0,
+    "fn": 2,
+    "precision": 1.0,
+    "recall": 0.8,
+    "f1": 0.888888888888889,
+    "positives": 10,
+    "negatives": 4,
+    "tn": 4,
+    "scenario": "S8",
+    "expected": "detect",
+    "description": "a wrong average that matches no data point",
+    "recall_ci95": [
+     0.49,
+     0.943
+    ],
+    "as_predicted": false
+   },
+   "wrong_average_matches_data": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 10,
+    "precision": null,
+    "recall": 0.0,
+    "f1": null,
+    "positives": 10,
+    "negatives": 4,
+    "tn": 4,
+    "scenario": "S8",
+    "expected": "miss",
+    "description": "a wrong average that equals some data point",
+    "recall_ci95": [
+     0.0,
+     0.278
+    ],
+    "as_predicted": true
+   },
+   "echoed_false_user_claim": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 5,
+    "precision": null,
+    "recall": 0.0,
+    "f1": null,
+    "positives": 5,
+    "negatives": 3,
+    "tn": 3,
+    "scenario": "S9",
+    "expected": "miss",
+    "description": "agreeing with a wrong number the user supplied",
+    "recall_ci95": [
+     0.0,
+     0.434
+    ],
+    "as_predicted": true
+   },
+   "claim_hidden_in_advice": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 3,
+    "precision": null,
+    "recall": 0.0,
+    "f1": null,
+    "positives": 3,
+    "negatives": 4,
+    "tn": 4,
+    "scenario": "S10",
+    "expected": "miss",
+    "description": "a wrong value inside a sentence that starts \u201cfor example / try \u2026\u201d (advice is exempt)",
+    "recall_ci95": [
+     0.0,
+     0.562
+    ],
+    "as_predicted": true
+   }
+  },
+  "coincidence_sweep": {
+   "one_decimal_dense_payload": {
+    "tried": 230,
+    "passed": 75,
+    "rate": 0.32608695652173914
+   },
+   "two_decimals_sparse_payload": {
+    "tried": 5000,
+    "passed": 51,
+    "rate": 0.0102
+   }
+  }
+ },
+ "results": [
+  {
+   "scenario": "S1",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "correct, table"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 17.82: not a value of S2B_29SMC_20240104_0_L2A, it belongs to S2A_29SMC_20240109_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 17.82% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 1"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 7.77"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 7.77% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 1"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 0.64: not a value of S2A_29SMC_20240109_0_L2A, it belongs to S2B_29SMC_20240114_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 0.64% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 2"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 28.13"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 28.13% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 2"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 44.09: not a value of S2B_29SMC_20240114_0_L2A, it belongs to S2A_29SMC_20240119_1_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 44.09% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 3"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 1.91"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 1.91% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 3"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 9.28: not a value of S2A_29SMC_20240119_1_L2A, it belongs to S2B_29SMC_20240124_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 9.28% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 4"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 36.52"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 36.52% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 4"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 22.37: not a value of S2B_29SMC_20240124_0_L2A, it belongs to S2A_29SMC_20240129_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 22.37% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 5"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 13.46"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 13.46% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 5"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 3.41: not a value of S2A_29SMC_20240129_0_L2A, it belongs to S2B_29SMC_20240104_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 3.41% |\n\n(search_stac_items)",
+   "note": "table, scene 6"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 4.08"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 4.08% |\n\n(search_stac_items)",
+   "note": "table, scene 6"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "correct, bullets"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 17.82: not a value of S2B_29SMC_20240104_0_L2A, it belongs to S2A_29SMC_20240109_0_L2A"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 17.82% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 1"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 7.77"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 7.77% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 1"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 0.64: not a value of S2A_29SMC_20240109_0_L2A, it belongs to S2B_29SMC_20240114_0_L2A"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 0.64% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 2"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 28.13"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 28.13% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 2"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 44.09: not a value of S2B_29SMC_20240114_0_L2A, it belongs to S2A_29SMC_20240119_1_L2A"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 44.09% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 3"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 1.91"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 1.91% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 3"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 9.28: not a value of S2A_29SMC_20240119_1_L2A, it belongs to S2B_29SMC_20240124_0_L2A"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 9.28% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 4"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 36.52"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 36.52% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 4"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 22.37: not a value of S2B_29SMC_20240124_0_L2A, it belongs to S2A_29SMC_20240129_0_L2A"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 22.37% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 5"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 13.46"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 13.46% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 5"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 3.41: not a value of S2A_29SMC_20240129_0_L2A, it belongs to S2B_29SMC_20240104_0_L2A"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 3.41% (search_stac_items)",
+   "note": "bullets, scene 6"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 4.08"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 4.08% (search_stac_items)",
+   "note": "bullets, scene 6"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "correct, prose"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 17.82: not a value of S2B_29SMC_20240104_0_L2A, it belongs to S2A_29SMC_20240109_0_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 17.82% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, scene 1"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 7.77"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 7.77% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, scene 1"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 0.64: not a value of S2A_29SMC_20240109_0_L2A, it belongs to S2B_29SMC_20240114_0_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 0.64% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, scene 2"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 28.13"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 28.13% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, scene 2"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 44.09: not a value of S2B_29SMC_20240114_0_L2A, it belongs to S2A_29SMC_20240119_1_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 44.09% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, scene 3"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 1.91"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 1.91% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, scene 3"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 9.28: not a value of S2A_29SMC_20240119_1_L2A, it belongs to S2B_29SMC_20240124_0_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 9.28% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, scene 4"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 36.52"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 36.52% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, scene 4"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 22.37: not a value of S2B_29SMC_20240124_0_L2A, it belongs to S2A_29SMC_20240129_0_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 22.37% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, scene 5"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 13.46"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 13.46% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, scene 5"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "misattributed_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 3.41: not a value of S2A_29SMC_20240129_0_L2A, it belongs to S2B_29SMC_20240104_0_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 3.41% cloud cover. (search_stac_items)",
+   "note": "prose, scene 6"
+  },
+  {
+   "scenario": "S1",
+   "error_type": "invented_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 4.08"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 4.08% cloud cover. (search_stac_items)",
+   "note": "prose, scene 6"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "correct, table"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 15.8: not a value of 2024-02-01, it belongs to 2024-02-02",
+    "pairing 14.2: not a value of 2024-02-02, it belongs to 2024-02-01"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 15.8 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 14.2 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, max, days 1/2"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 16.5: not a value of 2024-02-02, it belongs to 2024-02-03",
+    "pairing 15.8: not a value of 2024-02-03, it belongs to 2024-02-02"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 16.5 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 15.8 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, max, days 2/3"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 13.9: not a value of 2024-02-03, it belongs to 2024-02-04",
+    "pairing 16.5: not a value of 2024-02-04, it belongs to 2024-02-03"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 13.9 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 16.5 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, max, days 3/4"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 12.7: not a value of 2024-02-04, it belongs to 2024-02-05",
+    "pairing 13.9: not a value of 2024-02-05, it belongs to 2024-02-04"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 12.7 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 13.9 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, max, days 4/5"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 14.4: not a value of 2024-02-05, it belongs to 2024-02-06",
+    "pairing 12.7: not a value of 2024-02-06, it belongs to 2024-02-05"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 14.4 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 12.7 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, max, days 5/6"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 17.1: not a value of 2024-02-06, it belongs to 2024-02-07",
+    "pairing 14.4: not a value of 2024-02-07, it belongs to 2024-02-06"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 17.1 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 14.4 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, max, days 6/7"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 18.3: not a value of 2024-02-07, it belongs to 2024-02-08",
+    "pairing 17.1: not a value of 2024-02-08, it belongs to 2024-02-07"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 18.3 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 17.1 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, max, days 7/8"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 16.0: not a value of 2024-02-08, it belongs to 2024-02-09",
+    "pairing 18.3: not a value of 2024-02-09, it belongs to 2024-02-08"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 16.0 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 18.3 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, max, days 8/9"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 15.2: not a value of 2024-02-09, it belongs to 2024-02-10",
+    "pairing 16.0: not a value of 2024-02-10, it belongs to 2024-02-09"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 15.2 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 16.0 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, max, days 9/10"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 8.4: not a value of 2024-02-01, it belongs to 2024-02-02",
+    "pairing 7.1: not a value of 2024-02-02, it belongs to 2024-02-01"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 8.4 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 7.1 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, min, days 1/2"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 9.0: not a value of 2024-02-02, it belongs to 2024-02-03",
+    "pairing 8.4: not a value of 2024-02-03, it belongs to 2024-02-02"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 9.0 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 8.4 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, min, days 2/3"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 6.8: not a value of 2024-02-03, it belongs to 2024-02-04",
+    "pairing 9.0: not a value of 2024-02-04, it belongs to 2024-02-03"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 6.8 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 9.0 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, min, days 3/4"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 5.9: not a value of 2024-02-04, it belongs to 2024-02-05",
+    "pairing 6.8: not a value of 2024-02-05, it belongs to 2024-02-04"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 5.9 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 6.8 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, min, days 4/5"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 7.7: not a value of 2024-02-05, it belongs to 2024-02-06",
+    "pairing 5.9: not a value of 2024-02-06, it belongs to 2024-02-05"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 7.7 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 5.9 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, min, days 5/6"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 9.5: not a value of 2024-02-06, it belongs to 2024-02-07",
+    "pairing 7.7: not a value of 2024-02-07, it belongs to 2024-02-06"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 9.5 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 7.7 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, min, days 6/7"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 10.2: not a value of 2024-02-07, it belongs to 2024-02-08",
+    "pairing 9.5: not a value of 2024-02-08, it belongs to 2024-02-07"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 10.2 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 9.5 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, min, days 7/8"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 8.8: not a value of 2024-02-08, it belongs to 2024-02-09",
+    "pairing 10.2: not a value of 2024-02-09, it belongs to 2024-02-08"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 8.8 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 10.2 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, min, days 8/9"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 8.1: not a value of 2024-02-09, it belongs to 2024-02-10",
+    "pairing 8.8: not a value of 2024-02-10, it belongs to 2024-02-09"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.1 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.8 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, min, days 9/10"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 2.4: not a value of 2024-02-01, it belongs to 2024-02-02"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 2.4 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 0.0 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, rain, days 1/2"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 5.1: not a value of 2024-02-02, it belongs to 2024-02-03",
+    "pairing 2.4: not a value of 2024-02-03, it belongs to 2024-02-02"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 5.1 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 2.4 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, rain, days 2/3"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 5.1: not a value of 2024-02-04, it belongs to 2024-02-03"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 0.0 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 5.1 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, rain, days 3/4"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 1.2: not a value of 2024-02-05, it belongs to 2024-02-06"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 1.2 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 0.0 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, rain, days 5/6"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 1.2: not a value of 2024-02-07, it belongs to 2024-02-06"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 0.0 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 1.2 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, rain, days 6/7"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 3.6: not a value of 2024-02-08, it belongs to 2024-02-09"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 3.6 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 0.0 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, rain, days 8/9"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 0.8: not a value of 2024-02-09, it belongs to 2024-02-10",
+    "pairing 3.6: not a value of 2024-02-10, it belongs to 2024-02-09"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 0.8 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 3.6 | 17.6 |\n\n(get_weather)",
+   "note": "table, rain, days 9/10"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 22.5: not a value of 2024-02-01, it belongs to 2024-02-02",
+    "pairing 18.2: not a value of 2024-02-02, it belongs to 2024-02-01"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 22.5 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 18.2 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, wind, days 1/2"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 27.9: not a value of 2024-02-02, it belongs to 2024-02-03",
+    "pairing 22.5: not a value of 2024-02-03, it belongs to 2024-02-02"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 27.9 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 22.5 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, wind, days 2/3"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 15.3: not a value of 2024-02-03, it belongs to 2024-02-04",
+    "pairing 27.9: not a value of 2024-02-04, it belongs to 2024-02-03"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 15.3 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 27.9 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, wind, days 3/4"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 12.1: not a value of 2024-02-04, it belongs to 2024-02-05",
+    "pairing 15.3: not a value of 2024-02-05, it belongs to 2024-02-04"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 12.1 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 15.3 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, wind, days 4/5"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 19.8: not a value of 2024-02-05, it belongs to 2024-02-06",
+    "pairing 12.1: not a value of 2024-02-06, it belongs to 2024-02-05"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 19.8 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 12.1 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, wind, days 5/6"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 24.4: not a value of 2024-02-06, it belongs to 2024-02-07",
+    "pairing 19.8: not a value of 2024-02-07, it belongs to 2024-02-06"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 24.4 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 19.8 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, wind, days 6/7"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 21.0: not a value of 2024-02-07, it belongs to 2024-02-08",
+    "pairing 24.4: not a value of 2024-02-08, it belongs to 2024-02-07"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 21.0 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 24.4 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 26.3 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, wind, days 7/8"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 26.3: not a value of 2024-02-08, it belongs to 2024-02-09",
+    "pairing 21.0: not a value of 2024-02-09, it belongs to 2024-02-08"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 26.3 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 21.0 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 17.6 |\n\n(get_weather)",
+   "note": "table, wind, days 8/9"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 17.6: not a value of 2024-02-09, it belongs to 2024-02-10",
+    "pairing 26.3: not a value of 2024-02-10, it belongs to 2024-02-09"
+   ],
+   "reply": "| Date | Max \u00b0C | Min \u00b0C | Rain mm | Wind km/h |\n|---|---|---|---|---|\n| 2024-02-01 | 14.2 | 7.1 | 0.0 | 18.2 |\n| 2024-02-02 | 15.8 | 8.4 | 2.4 | 22.5 |\n| 2024-02-03 | 16.5 | 9.0 | 5.1 | 27.9 |\n| 2024-02-04 | 13.9 | 6.8 | 0.0 | 15.3 |\n| 2024-02-05 | 12.7 | 5.9 | 0.0 | 12.1 |\n| 2024-02-06 | 14.4 | 7.7 | 1.2 | 19.8 |\n| 2024-02-07 | 17.1 | 9.5 | 0.0 | 24.4 |\n| 2024-02-08 | 18.3 | 10.2 | 0.0 | 21.0 |\n| 2024-02-09 | 16.0 | 8.8 | 3.6 | 17.6 |\n| 2024-02-10 | 15.2 | 8.1 | 0.8 | 26.3 |\n\n(get_weather)",
+   "note": "table, wind, days 9/10"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "correct, bullets"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 15.8: not a value of 2024-02-01, it belongs to 2024-02-02",
+    "pairing 14.2: not a value of 2024-02-02, it belongs to 2024-02-01"
+   ],
+   "reply": "- 2024-02-01: max 15.8 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 14.2 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, max, days 1/2"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 16.5: not a value of 2024-02-02, it belongs to 2024-02-03",
+    "pairing 15.8: not a value of 2024-02-03, it belongs to 2024-02-02"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 16.5 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 15.8 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, max, days 2/3"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 13.9: not a value of 2024-02-03, it belongs to 2024-02-04",
+    "pairing 16.5: not a value of 2024-02-04, it belongs to 2024-02-03"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 13.9 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 16.5 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, max, days 3/4"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 12.7: not a value of 2024-02-04, it belongs to 2024-02-05",
+    "pairing 13.9: not a value of 2024-02-05, it belongs to 2024-02-04"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 12.7 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 13.9 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, max, days 4/5"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 14.4: not a value of 2024-02-05, it belongs to 2024-02-06",
+    "pairing 12.7: not a value of 2024-02-06, it belongs to 2024-02-05"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 14.4 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 12.7 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, max, days 5/6"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 17.1: not a value of 2024-02-06, it belongs to 2024-02-07",
+    "pairing 14.4: not a value of 2024-02-07, it belongs to 2024-02-06"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 17.1 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 14.4 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, max, days 6/7"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 18.3: not a value of 2024-02-07, it belongs to 2024-02-08",
+    "pairing 17.1: not a value of 2024-02-08, it belongs to 2024-02-07"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 18.3 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 17.1 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, max, days 7/8"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 16.0: not a value of 2024-02-08, it belongs to 2024-02-09",
+    "pairing 18.3: not a value of 2024-02-09, it belongs to 2024-02-08"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 16.0 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 18.3 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, max, days 8/9"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 15.2: not a value of 2024-02-09, it belongs to 2024-02-10",
+    "pairing 16.0: not a value of 2024-02-10, it belongs to 2024-02-09"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 15.2 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 16.0 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, max, days 9/10"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 8.4: not a value of 2024-02-01, it belongs to 2024-02-02",
+    "pairing 7.1: not a value of 2024-02-02, it belongs to 2024-02-01"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 8.4 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 7.1 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, min, days 1/2"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 9.0: not a value of 2024-02-02, it belongs to 2024-02-03",
+    "pairing 8.4: not a value of 2024-02-03, it belongs to 2024-02-02"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 9.0 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 8.4 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, min, days 2/3"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 6.8: not a value of 2024-02-03, it belongs to 2024-02-04",
+    "pairing 9.0: not a value of 2024-02-04, it belongs to 2024-02-03"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 6.8 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 9.0 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, min, days 3/4"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 5.9: not a value of 2024-02-04, it belongs to 2024-02-05",
+    "pairing 6.8: not a value of 2024-02-05, it belongs to 2024-02-04"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, min, days 4/5"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 7.7: not a value of 2024-02-05, it belongs to 2024-02-06",
+    "pairing 5.9: not a value of 2024-02-06, it belongs to 2024-02-05"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 7.7 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 5.9 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, min, days 5/6"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 9.5: not a value of 2024-02-06, it belongs to 2024-02-07",
+    "pairing 7.7: not a value of 2024-02-07, it belongs to 2024-02-06"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 9.5 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 7.7 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, min, days 6/7"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 10.2: not a value of 2024-02-07, it belongs to 2024-02-08",
+    "pairing 9.5: not a value of 2024-02-08, it belongs to 2024-02-07"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, min, days 7/8"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 8.8: not a value of 2024-02-08, it belongs to 2024-02-09",
+    "pairing 10.2: not a value of 2024-02-09, it belongs to 2024-02-08"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 8.8 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 10.2 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, min, days 8/9"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 8.1: not a value of 2024-02-09, it belongs to 2024-02-10",
+    "pairing 8.8: not a value of 2024-02-10, it belongs to 2024-02-09"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.1 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.8 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, min, days 9/10"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 2.4: not a value of 2024-02-01, it belongs to 2024-02-02"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 2.4 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 0.0 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, rain, days 1/2"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 5.1: not a value of 2024-02-02, it belongs to 2024-02-03",
+    "pairing 2.4: not a value of 2024-02-03, it belongs to 2024-02-02"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 5.1 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 2.4 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, rain, days 2/3"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 5.1: not a value of 2024-02-04, it belongs to 2024-02-03"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 0.0 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 5.1 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, rain, days 3/4"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 1.2: not a value of 2024-02-05, it belongs to 2024-02-06"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 1.2 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 0.0 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, rain, days 5/6"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 1.2: not a value of 2024-02-07, it belongs to 2024-02-06"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 0.0 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 1.2 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, rain, days 6/7"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 3.6: not a value of 2024-02-08, it belongs to 2024-02-09"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 3.6 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 0.0 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, rain, days 8/9"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 0.8: not a value of 2024-02-09, it belongs to 2024-02-10",
+    "pairing 3.6: not a value of 2024-02-10, it belongs to 2024-02-09"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 0.8 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 3.6 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, rain, days 9/10"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 22.5: not a value of 2024-02-01, it belongs to 2024-02-02",
+    "pairing 18.2: not a value of 2024-02-02, it belongs to 2024-02-01"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 22.5 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 18.2 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, wind, days 1/2"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 27.9: not a value of 2024-02-02, it belongs to 2024-02-03",
+    "pairing 22.5: not a value of 2024-02-03, it belongs to 2024-02-02"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 27.9 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 22.5 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, wind, days 2/3"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 15.3: not a value of 2024-02-03, it belongs to 2024-02-04",
+    "pairing 27.9: not a value of 2024-02-04, it belongs to 2024-02-03"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 15.3 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 27.9 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, wind, days 3/4"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 12.1: not a value of 2024-02-04, it belongs to 2024-02-05",
+    "pairing 15.3: not a value of 2024-02-05, it belongs to 2024-02-04"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, wind, days 4/5"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 19.8: not a value of 2024-02-05, it belongs to 2024-02-06",
+    "pairing 12.1: not a value of 2024-02-06, it belongs to 2024-02-05"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 19.8 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 12.1 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, wind, days 5/6"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 24.4: not a value of 2024-02-06, it belongs to 2024-02-07",
+    "pairing 19.8: not a value of 2024-02-07, it belongs to 2024-02-06"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 24.4 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 19.8 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, wind, days 6/7"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 21.0: not a value of 2024-02-07, it belongs to 2024-02-08",
+    "pairing 24.4: not a value of 2024-02-08, it belongs to 2024-02-07"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 26.3 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, wind, days 7/8"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 26.3: not a value of 2024-02-08, it belongs to 2024-02-09",
+    "pairing 21.0: not a value of 2024-02-09, it belongs to 2024-02-08"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 26.3 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 21.0 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 17.6 km/h (get_weather)",
+   "note": "bullets, wind, days 8/9"
+  },
+  {
+   "scenario": "S2",
+   "error_type": "swapped_weather_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 17.6: not a value of 2024-02-09, it belongs to 2024-02-10",
+    "pairing 26.3: not a value of 2024-02-10, it belongs to 2024-02-09"
+   ],
+   "reply": "- 2024-02-01: max 14.2 \u00b0C, min 7.1 \u00b0C, rain 0.0 mm, wind 18.2 km/h (get_weather)\n- 2024-02-02: max 15.8 \u00b0C, min 8.4 \u00b0C, rain 2.4 mm, wind 22.5 km/h (get_weather)\n- 2024-02-03: max 16.5 \u00b0C, min 9.0 \u00b0C, rain 5.1 mm, wind 27.9 km/h (get_weather)\n- 2024-02-04: max 13.9 \u00b0C, min 6.8 \u00b0C, rain 0.0 mm, wind 15.3 km/h (get_weather)\n- 2024-02-05: max 12.7 \u00b0C, min 5.9 \u00b0C, rain 0.0 mm, wind 12.1 km/h (get_weather)\n- 2024-02-06: max 14.4 \u00b0C, min 7.7 \u00b0C, rain 1.2 mm, wind 19.8 km/h (get_weather)\n- 2024-02-07: max 17.1 \u00b0C, min 9.5 \u00b0C, rain 0.0 mm, wind 24.4 km/h (get_weather)\n- 2024-02-08: max 18.3 \u00b0C, min 10.2 \u00b0C, rain 0.0 mm, wind 21.0 km/h (get_weather)\n- 2024-02-09: max 16.0 \u00b0C, min 8.8 \u00b0C, rain 3.6 mm, wind 17.6 km/h (get_weather)\n- 2024-02-10: max 15.2 \u00b0C, min 8.1 \u00b0C, rain 0.8 mm, wind 26.3 km/h (get_weather)",
+   "note": "bullets, wind, days 9/10"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "correct ids, table"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "correct ids, prose"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2B_29SNC_20240104_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SNC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, altered tile"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2B_29SMC_20240105_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240105_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, altered date"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2A_29SNC_20240109_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SNC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, altered tile"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2A_29SMC_20240100_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240100_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, altered date"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2B_29SNC_20240114_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SNC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, altered tile"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2B_29SMC_20240115_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240115_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, altered date"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2A_29SNC_20240119_1_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SNC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, altered tile"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2A_29SMC_20240110_1_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240110_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, altered date"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2B_29SNC_20240124_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SNC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, altered tile"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2B_29SMC_20240125_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240125_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, altered date"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2A_29SNC_20240129_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SNC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, altered tile"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2A_29SMC_20240120_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240120_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, altered date"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2B_29SNC_20240104_0_L2A"
+   ],
+   "reply": "Scene S2B_29SNC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, altered tile"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2B_29SMC_20240105_0_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240105_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, altered date"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2A_29SNC_20240109_0_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SNC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, altered tile"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2A_29SMC_20240100_0_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240100_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, altered date"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2B_29SNC_20240114_0_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SNC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, altered tile"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2B_29SMC_20240115_0_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240115_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, altered date"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2A_29SNC_20240119_1_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SNC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, altered tile"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2A_29SMC_20240110_1_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240110_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, altered date"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2B_29SNC_20240124_0_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SNC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, altered tile"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2B_29SMC_20240125_0_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240125_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, altered date"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2A_29SNC_20240129_0_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SNC_20240129_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, altered tile"
+  },
+  {
+   "scenario": "S3",
+   "error_type": "invented_scene_id",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "id S2A_29SMC_20240120_0_L2A"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A was acquired on 2024-01-04 with 3.41% cloud cover. Scene S2A_29SMC_20240109_0_L2A was acquired on 2024-01-09 with 17.82% cloud cover. Scene S2B_29SMC_20240114_0_L2A was acquired on 2024-01-14 with 0.64% cloud cover. Scene S2A_29SMC_20240119_1_L2A was acquired on 2024-01-19 with 44.09% cloud cover. Scene S2B_29SMC_20240124_0_L2A was acquired on 2024-01-24 with 9.28% cloud cover. Scene S2A_29SMC_20240120_0_L2A was acquired on 2024-01-29 with 22.37% cloud cover. (search_stac_items)",
+   "note": "prose, altered date"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "correct dates, table"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "correct dates, bullets"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_not_in_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "date 2024-01-05"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-05 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 1"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_of_another_scene",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 2024-01-09: not the date of S2B_29SMC_20240104_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-09 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 1"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_not_in_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "date 2024-01-10"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-10 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 2"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_of_another_scene",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 2024-01-14: not the date of S2A_29SMC_20240109_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-14 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 2"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_not_in_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "date 2024-01-15"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-15 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 3"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_of_another_scene",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 2024-01-19: not the date of S2B_29SMC_20240114_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-19 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 3"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_not_in_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "date 2024-01-20"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-20 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 4"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_of_another_scene",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 2024-01-24: not the date of S2A_29SMC_20240119_1_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-24 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 4"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_not_in_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "date 2024-01-25"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-25 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 5"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_of_another_scene",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 2024-01-29: not the date of S2B_29SMC_20240124_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-29 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-29 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 5"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_not_in_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "date 2024-01-30"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-30 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 6"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_of_another_scene",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 2024-01-04: not the date of S2A_29SMC_20240129_0_L2A"
+   ],
+   "reply": "| Scene | Date | Cloud cover |\n|---|---|---|\n| S2B_29SMC_20240104_0_L2A | 2024-01-04 | 3.41% |\n| S2A_29SMC_20240109_0_L2A | 2024-01-09 | 17.82% |\n| S2B_29SMC_20240114_0_L2A | 2024-01-14 | 0.64% |\n| S2A_29SMC_20240119_1_L2A | 2024-01-19 | 44.09% |\n| S2B_29SMC_20240124_0_L2A | 2024-01-24 | 9.28% |\n| S2A_29SMC_20240129_0_L2A | 2024-01-04 | 22.37% |\n\n(search_stac_items)",
+   "note": "table, scene 6"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_not_in_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "date 2024-01-05"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-05, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 1"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_of_another_scene",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 2024-01-09: not the date of S2B_29SMC_20240104_0_L2A"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-09, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 1"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_not_in_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "date 2024-01-10"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-10, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 2"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_of_another_scene",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 2024-01-14: not the date of S2A_29SMC_20240109_0_L2A"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-14, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 2"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_not_in_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "date 2024-01-15"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-15, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 3"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_of_another_scene",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 2024-01-19: not the date of S2B_29SMC_20240114_0_L2A"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-19, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 3"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_not_in_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "date 2024-01-20"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-20, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 4"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_of_another_scene",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 2024-01-24: not the date of S2A_29SMC_20240119_1_L2A"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-24, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 4"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_not_in_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "date 2024-01-25"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-25, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 5"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_of_another_scene",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 2024-01-29: not the date of S2B_29SMC_20240124_0_L2A"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-29, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-29, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 5"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_not_in_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "date 2024-01-30"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-30, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 6"
+  },
+  {
+   "scenario": "S4",
+   "error_type": "date_of_another_scene",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 2024-01-04: not the date of S2A_29SMC_20240129_0_L2A"
+   ],
+   "reply": "- S2B_29SMC_20240104_0_L2A on 2024-01-04, cloud cover 3.41% (search_stac_items)\n- S2A_29SMC_20240109_0_L2A on 2024-01-09, cloud cover 17.82% (search_stac_items)\n- S2B_29SMC_20240114_0_L2A on 2024-01-14, cloud cover 0.64% (search_stac_items)\n- S2A_29SMC_20240119_1_L2A on 2024-01-19, cloud cover 44.09% (search_stac_items)\n- S2B_29SMC_20240124_0_L2A on 2024-01-24, cloud cover 9.28% (search_stac_items)\n- S2A_29SMC_20240129_0_L2A on 2024-01-04, cloud cover 22.37% (search_stac_items)",
+   "note": "bullets, scene 6"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "The clearest scene is S2B_29SMC_20240114_0_L2A (0.64% cloud cover).",
+   "note": "true clearest"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "The cloudiest scene is S2A_29SMC_20240119_1_L2A (44.09% cloud cover).",
+   "note": "true cloudiest"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_scene_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'clearest': S2B_29SMC_20240104_0_L2A is not it; S2B_29SMC_20240114_0_L2A has the lowest cloud_cover (0.64)"
+   ],
+   "reply": "The clearest scene is S2B_29SMC_20240104_0_L2A (3.41% cloud cover).",
+   "note": "scene 1"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_scene_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'cloudiest': S2B_29SMC_20240104_0_L2A is not it; S2A_29SMC_20240119_1_L2A has the highest cloud_cover (44.09)"
+   ],
+   "reply": "The cloudiest scene is S2B_29SMC_20240104_0_L2A (3.41% cloud cover).",
+   "note": "scene 1"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_scene_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'clearest': S2A_29SMC_20240109_0_L2A is not it; S2B_29SMC_20240114_0_L2A has the lowest cloud_cover (0.64)"
+   ],
+   "reply": "The clearest scene is S2A_29SMC_20240109_0_L2A (17.82% cloud cover).",
+   "note": "scene 2"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_scene_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'cloudiest': S2A_29SMC_20240109_0_L2A is not it; S2A_29SMC_20240119_1_L2A has the highest cloud_cover (44.09)"
+   ],
+   "reply": "The cloudiest scene is S2A_29SMC_20240109_0_L2A (17.82% cloud cover).",
+   "note": "scene 2"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_scene_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'cloudiest': S2B_29SMC_20240114_0_L2A is not it; S2A_29SMC_20240119_1_L2A has the highest cloud_cover (44.09)"
+   ],
+   "reply": "The cloudiest scene is S2B_29SMC_20240114_0_L2A (0.64% cloud cover).",
+   "note": "scene 3"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_scene_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'clearest': S2A_29SMC_20240119_1_L2A is not it; S2B_29SMC_20240114_0_L2A has the lowest cloud_cover (0.64)"
+   ],
+   "reply": "The clearest scene is S2A_29SMC_20240119_1_L2A (44.09% cloud cover).",
+   "note": "scene 4"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_scene_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'clearest': S2B_29SMC_20240124_0_L2A is not it; S2B_29SMC_20240114_0_L2A has the lowest cloud_cover (0.64)"
+   ],
+   "reply": "The clearest scene is S2B_29SMC_20240124_0_L2A (9.28% cloud cover).",
+   "note": "scene 5"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_scene_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'cloudiest': S2B_29SMC_20240124_0_L2A is not it; S2A_29SMC_20240119_1_L2A has the highest cloud_cover (44.09)"
+   ],
+   "reply": "The cloudiest scene is S2B_29SMC_20240124_0_L2A (9.28% cloud cover).",
+   "note": "scene 5"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_scene_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'clearest': S2A_29SMC_20240129_0_L2A is not it; S2B_29SMC_20240114_0_L2A has the lowest cloud_cover (0.64)"
+   ],
+   "reply": "The clearest scene is S2A_29SMC_20240129_0_L2A (22.37% cloud cover).",
+   "note": "scene 6"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_scene_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'cloudiest': S2A_29SMC_20240129_0_L2A is not it; S2A_29SMC_20240119_1_L2A has the highest cloud_cover (44.09)"
+   ],
+   "reply": "The cloudiest scene is S2A_29SMC_20240129_0_L2A (22.37% cloud cover).",
+   "note": "scene 6"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Hottest day: 2024-02-08, max 18.3 \u00b0C.",
+   "note": "true max superlative"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'Hottest': 2024-02-01 is not it; 2024-02-08 has the highest temperature_2m_max (18.3)"
+   ],
+   "reply": "Hottest day: 2024-02-01, max 14.2 \u00b0C.",
+   "note": "max, day 1"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'Hottest': 2024-02-02 is not it; 2024-02-08 has the highest temperature_2m_max (18.3)"
+   ],
+   "reply": "Hottest day: 2024-02-02, max 15.8 \u00b0C.",
+   "note": "max, day 2"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'Hottest': 2024-02-03 is not it; 2024-02-08 has the highest temperature_2m_max (18.3)"
+   ],
+   "reply": "Hottest day: 2024-02-03, max 16.5 \u00b0C.",
+   "note": "max, day 3"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'Hottest': 2024-02-04 is not it; 2024-02-08 has the highest temperature_2m_max (18.3)"
+   ],
+   "reply": "Hottest day: 2024-02-04, max 13.9 \u00b0C.",
+   "note": "max, day 4"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'Hottest': 2024-02-05 is not it; 2024-02-08 has the highest temperature_2m_max (18.3)"
+   ],
+   "reply": "Hottest day: 2024-02-05, max 12.7 \u00b0C.",
+   "note": "max, day 5"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'Hottest': 2024-02-06 is not it; 2024-02-08 has the highest temperature_2m_max (18.3)"
+   ],
+   "reply": "Hottest day: 2024-02-06, max 14.4 \u00b0C.",
+   "note": "max, day 6"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'Hottest': 2024-02-07 is not it; 2024-02-08 has the highest temperature_2m_max (18.3)"
+   ],
+   "reply": "Hottest day: 2024-02-07, max 17.1 \u00b0C.",
+   "note": "max, day 7"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'Hottest': 2024-02-09 is not it; 2024-02-08 has the highest temperature_2m_max (18.3)"
+   ],
+   "reply": "Hottest day: 2024-02-09, max 16.0 \u00b0C.",
+   "note": "max, day 9"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'Hottest': 2024-02-10 is not it; 2024-02-08 has the highest temperature_2m_max (18.3)"
+   ],
+   "reply": "Hottest day: 2024-02-10, max 15.2 \u00b0C.",
+   "note": "max, day 10"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "The wettest day was 2024-02-03 with 5.1 mm.",
+   "note": "true rain superlative"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'wettest': 2024-02-01 is not it; 2024-02-03 has the highest precipitation_sum (5.1)"
+   ],
+   "reply": "The wettest day was 2024-02-01 with 0.0 mm.",
+   "note": "rain, day 1"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'wettest': 2024-02-02 is not it; 2024-02-03 has the highest precipitation_sum (5.1)"
+   ],
+   "reply": "The wettest day was 2024-02-02 with 2.4 mm.",
+   "note": "rain, day 2"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'wettest': 2024-02-04 is not it; 2024-02-03 has the highest precipitation_sum (5.1)"
+   ],
+   "reply": "The wettest day was 2024-02-04 with 0.0 mm.",
+   "note": "rain, day 4"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'wettest': 2024-02-05 is not it; 2024-02-03 has the highest precipitation_sum (5.1)"
+   ],
+   "reply": "The wettest day was 2024-02-05 with 0.0 mm.",
+   "note": "rain, day 5"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'wettest': 2024-02-06 is not it; 2024-02-03 has the highest precipitation_sum (5.1)"
+   ],
+   "reply": "The wettest day was 2024-02-06 with 1.2 mm.",
+   "note": "rain, day 6"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'wettest': 2024-02-07 is not it; 2024-02-03 has the highest precipitation_sum (5.1)"
+   ],
+   "reply": "The wettest day was 2024-02-07 with 0.0 mm.",
+   "note": "rain, day 7"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'wettest': 2024-02-08 is not it; 2024-02-03 has the highest precipitation_sum (5.1)"
+   ],
+   "reply": "The wettest day was 2024-02-08 with 0.0 mm.",
+   "note": "rain, day 8"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'wettest': 2024-02-09 is not it; 2024-02-03 has the highest precipitation_sum (5.1)"
+   ],
+   "reply": "The wettest day was 2024-02-09 with 3.6 mm.",
+   "note": "rain, day 9"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'wettest': 2024-02-10 is not it; 2024-02-03 has the highest precipitation_sum (5.1)"
+   ],
+   "reply": "The wettest day was 2024-02-10 with 0.8 mm.",
+   "note": "rain, day 10"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "The windiest day was 2024-02-03 (27.9 km/h).",
+   "note": "true wind superlative"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'windiest': 2024-02-01 is not it; 2024-02-03 has the highest windspeed_10m_max (27.9)"
+   ],
+   "reply": "The windiest day was 2024-02-01 (18.2 km/h).",
+   "note": "wind, day 1"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'windiest': 2024-02-02 is not it; 2024-02-03 has the highest windspeed_10m_max (27.9)"
+   ],
+   "reply": "The windiest day was 2024-02-02 (22.5 km/h).",
+   "note": "wind, day 2"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'windiest': 2024-02-04 is not it; 2024-02-03 has the highest windspeed_10m_max (27.9)"
+   ],
+   "reply": "The windiest day was 2024-02-04 (15.3 km/h).",
+   "note": "wind, day 4"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'windiest': 2024-02-05 is not it; 2024-02-03 has the highest windspeed_10m_max (27.9)"
+   ],
+   "reply": "The windiest day was 2024-02-05 (12.1 km/h).",
+   "note": "wind, day 5"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'windiest': 2024-02-06 is not it; 2024-02-03 has the highest windspeed_10m_max (27.9)"
+   ],
+   "reply": "The windiest day was 2024-02-06 (19.8 km/h).",
+   "note": "wind, day 6"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'windiest': 2024-02-07 is not it; 2024-02-03 has the highest windspeed_10m_max (27.9)"
+   ],
+   "reply": "The windiest day was 2024-02-07 (24.4 km/h).",
+   "note": "wind, day 7"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'windiest': 2024-02-08 is not it; 2024-02-03 has the highest windspeed_10m_max (27.9)"
+   ],
+   "reply": "The windiest day was 2024-02-08 (21.0 km/h).",
+   "note": "wind, day 8"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'windiest': 2024-02-09 is not it; 2024-02-03 has the highest windspeed_10m_max (27.9)"
+   ],
+   "reply": "The windiest day was 2024-02-09 (26.3 km/h).",
+   "note": "wind, day 9"
+  },
+  {
+   "scenario": "S5",
+   "error_type": "false_weather_superlative",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "pairing 'windiest': 2024-02-10 is not it; 2024-02-03 has the highest windspeed_10m_max (27.9)"
+   ],
+   "reply": "The windiest day was 2024-02-10 (17.6 km/h).",
+   "note": "wind, day 10"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A had 3.41% cloud cover (search_stac_items).",
+   "note": "correct citation"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "uncalled_tool_citation",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "tool get_weather cited but never called"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A had 3.41% cloud cover (get_weather).",
+   "note": "cites get_weather"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "uncalled_tool_citation",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "tool compare_embeddings cited but never called"
+   ],
+   "reply": "Scene S2B_29SMC_20240104_0_L2A had 3.41% cloud cover (compare_embeddings).",
+   "note": "cites compare_embeddings"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Scene S2A_29SMC_20240109_0_L2A had 17.82% cloud cover (search_stac_items).",
+   "note": "correct citation"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "uncalled_tool_citation",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "tool get_weather cited but never called"
+   ],
+   "reply": "Scene S2A_29SMC_20240109_0_L2A had 17.82% cloud cover (get_weather).",
+   "note": "cites get_weather"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "uncalled_tool_citation",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "tool compare_embeddings cited but never called"
+   ],
+   "reply": "Scene S2A_29SMC_20240109_0_L2A had 17.82% cloud cover (compare_embeddings).",
+   "note": "cites compare_embeddings"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Scene S2B_29SMC_20240114_0_L2A had 0.64% cloud cover (search_stac_items).",
+   "note": "correct citation"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "uncalled_tool_citation",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "tool get_weather cited but never called"
+   ],
+   "reply": "Scene S2B_29SMC_20240114_0_L2A had 0.64% cloud cover (get_weather).",
+   "note": "cites get_weather"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "uncalled_tool_citation",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "tool compare_embeddings cited but never called"
+   ],
+   "reply": "Scene S2B_29SMC_20240114_0_L2A had 0.64% cloud cover (compare_embeddings).",
+   "note": "cites compare_embeddings"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Scene S2A_29SMC_20240119_1_L2A had 44.09% cloud cover (search_stac_items).",
+   "note": "correct citation"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "uncalled_tool_citation",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "tool get_weather cited but never called"
+   ],
+   "reply": "Scene S2A_29SMC_20240119_1_L2A had 44.09% cloud cover (get_weather).",
+   "note": "cites get_weather"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "uncalled_tool_citation",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "tool compare_embeddings cited but never called"
+   ],
+   "reply": "Scene S2A_29SMC_20240119_1_L2A had 44.09% cloud cover (compare_embeddings).",
+   "note": "cites compare_embeddings"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Scene S2B_29SMC_20240124_0_L2A had 9.28% cloud cover (search_stac_items).",
+   "note": "correct citation"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "uncalled_tool_citation",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "tool get_weather cited but never called"
+   ],
+   "reply": "Scene S2B_29SMC_20240124_0_L2A had 9.28% cloud cover (get_weather).",
+   "note": "cites get_weather"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "uncalled_tool_citation",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "tool compare_embeddings cited but never called"
+   ],
+   "reply": "Scene S2B_29SMC_20240124_0_L2A had 9.28% cloud cover (compare_embeddings).",
+   "note": "cites compare_embeddings"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Scene S2A_29SMC_20240129_0_L2A had 22.37% cloud cover (search_stac_items).",
+   "note": "correct citation"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "uncalled_tool_citation",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "tool get_weather cited but never called"
+   ],
+   "reply": "Scene S2A_29SMC_20240129_0_L2A had 22.37% cloud cover (get_weather).",
+   "note": "cites get_weather"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "uncalled_tool_citation",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "tool compare_embeddings cited but never called"
+   ],
+   "reply": "Scene S2A_29SMC_20240129_0_L2A had 22.37% cloud cover (compare_embeddings).",
+   "note": "cites compare_embeddings"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "I could also run `get_weather` for Lisbon if you would like, or `compare_embeddings` on two scenes.",
+   "note": "mention only"
+  },
+  {
+   "scenario": "S6",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "The weather tool (get_weather) reaches about 16 days ahead.",
+   "note": "capability mention"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Cosine similarity 0.9971 (compare_embeddings); mean per-tile similarity 0.9814, min 0.7712. The scenes are 15 days apart. The least similar cell is row 4, col 9.",
+   "note": "correct, prose"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "- similarity: 0.9971 (compare_embeddings)\n- per-tile mean 0.9814, min 0.7712, max 0.9968\n- 15 days apart",
+   "note": "correct, bullets"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Similarity 0.9971 on the compressed scale; the gap of 15 days is within the typical range.",
+   "note": "correct, short"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "The least similar cell is row 4, col 9 (0.7712); the next are row 4, col 10 (0.8035) and row 5, col 9 (0.8291).",
+   "note": "correct, cells"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "invented_similarity_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 0.9912"
+   ],
+   "reply": "Cosine similarity 0.9912 (compare_embeddings); mean per-tile similarity 0.9814, min 0.7712. The scenes are 15 days apart. The least similar cell is row 4, col 9.",
+   "note": "cosine 0.9912"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "invented_similarity_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 0.9834"
+   ],
+   "reply": "Cosine similarity 0.9834 (compare_embeddings); mean per-tile similarity 0.9814, min 0.7712. The scenes are 15 days apart. The least similar cell is row 4, col 9.",
+   "note": "cosine 0.9834"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "invented_similarity_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 0.9755"
+   ],
+   "reply": "Cosine similarity 0.9755 (compare_embeddings); mean per-tile similarity 0.9814, min 0.7712. The scenes are 15 days apart. The least similar cell is row 4, col 9.",
+   "note": "cosine 0.9755"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "invented_similarity_value",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 0.9650"
+   ],
+   "reply": "Cosine similarity 0.9650 (compare_embeddings); mean per-tile similarity 0.9814, min 0.7712. The scenes are 15 days apart. The least similar cell is row 4, col 9.",
+   "note": "cosine 0.9650"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "invented_tile_statistic",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 0.7219"
+   ],
+   "reply": "Cosine similarity 0.9971 (compare_embeddings); mean per-tile similarity 0.9814, min 0.7219. The scenes are 15 days apart. The least similar cell is row 4, col 9.",
+   "note": "mn 0.7219"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "invented_tile_statistic",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 0.6905"
+   ],
+   "reply": "Cosine similarity 0.9971 (compare_embeddings); mean per-tile similarity 0.9814, min 0.6905. The scenes are 15 days apart. The least similar cell is row 4, col 9.",
+   "note": "mn 0.6905"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "invented_tile_statistic",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 0.8120"
+   ],
+   "reply": "Cosine similarity 0.9971 (compare_embeddings); mean per-tile similarity 0.9814, min 0.8120. The scenes are 15 days apart. The least similar cell is row 4, col 9.",
+   "note": "mn 0.8120"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "invented_tile_statistic",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 0.9650"
+   ],
+   "reply": "Cosine similarity 0.9971 (compare_embeddings); mean per-tile similarity 0.9650, min 0.7712. The scenes are 15 days apart. The least similar cell is row 4, col 9.",
+   "note": "mean 0.9650"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "invented_tile_statistic",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 0.9421"
+   ],
+   "reply": "Cosine similarity 0.9971 (compare_embeddings); mean per-tile similarity 0.9421, min 0.7712. The scenes are 15 days apart. The least similar cell is row 4, col 9.",
+   "note": "mean 0.9421"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "wrong_grid_cell",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Cosine similarity 0.9971 (compare_embeddings); mean per-tile similarity 0.9814, min 0.7712. The scenes are 15 days apart. The least similar cell is row 3, col 7.",
+   "note": "row 3, col 7"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "wrong_grid_cell",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Cosine similarity 0.9971 (compare_embeddings); mean per-tile similarity 0.9814, min 0.7712. The scenes are 15 days apart. The least similar cell is row 2, col 5.",
+   "note": "row 2, col 5"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "wrong_grid_cell",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 11"
+   ],
+   "reply": "Cosine similarity 0.9971 (compare_embeddings); mean per-tile similarity 0.9814, min 0.7712. The scenes are 15 days apart. The least similar cell is row 6, col 11.",
+   "note": "row 6, col 11"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "invented_embedding_id",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Compared emb_S2B_29SMC_20240114_0_L2A with emb_S2A_29SMC_20240211_0_L2A: cosine similarity 0.9971 (compare_embeddings).",
+   "note": "emb_S2A_29SMC_20240211_0_L2A"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "invented_embedding_id",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Compared emb_S2B_29SMC_20240114_0_L2A with emb_S2B_29SMC_20240226_0_L2A: cosine similarity 0.9971 (compare_embeddings).",
+   "note": "emb_S2B_29SMC_20240226_0_L2A"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "invented_embedding_id",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Compared emb_S2B_29SMC_20240114_0_L2A with emb_S2A_29SNC_20240129_0_L2A: cosine similarity 0.9971 (compare_embeddings).",
+   "note": "emb_S2A_29SNC_20240129_0_L2A"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "wrong_days_apart",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Cosine similarity 0.9971 (compare_embeddings); mean per-tile similarity 0.9814, min 0.7712. The scenes are 14 days apart. The least similar cell is row 4, col 9.",
+   "note": "14 days"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "wrong_days_apart",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Cosine similarity 0.9971 (compare_embeddings); mean per-tile similarity 0.9814, min 0.7712. The scenes are 4 days apart. The least similar cell is row 4, col 9.",
+   "note": "4 days"
+  },
+  {
+   "scenario": "S7",
+   "error_type": "wrong_days_apart",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Cosine similarity 0.9971 (compare_embeddings); mean per-tile similarity 0.9814, min 0.7712. The scenes are 9 days apart. The least similar cell is row 4, col 9.",
+   "note": "9 days"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "The highest daily max was 18.3 \u00b0C on 2024-02-08 (get_weather).",
+   "note": "correct maximum"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Total rain over the 10 days: 13.1 mm (get_weather).",
+   "note": "correct sum"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "The average max temperature was 15.4 \u00b0C (get_weather).",
+   "note": "correct average"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_off_data",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "The average max temperature was 15.9 \u00b0C (get_weather).",
+   "note": "avg 15.9"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_off_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 16.9"
+   ],
+   "reply": "The average max temperature was 16.9 \u00b0C (get_weather).",
+   "note": "avg 16.9"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_off_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 12.3"
+   ],
+   "reply": "The average max temperature was 12.3 \u00b0C (get_weather).",
+   "note": "avg 12.3"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_off_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 19.4"
+   ],
+   "reply": "The average max temperature was 19.4 \u00b0C (get_weather).",
+   "note": "avg 19.4"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_off_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 14.9"
+   ],
+   "reply": "The average max temperature was 14.9 \u00b0C (get_weather).",
+   "note": "avg 14.9"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_matches_data",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "The average max temperature was 16.0 \u00b0C (get_weather).",
+   "note": "avg 16.0 equals a data point"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_matches_data",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "The average max temperature was 14.2 \u00b0C (get_weather).",
+   "note": "avg 14.2 equals a data point"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_matches_data",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "The average max temperature was 17.1 \u00b0C (get_weather).",
+   "note": "avg 17.1 equals a data point"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_matches_data",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "The average max temperature was 15.8 \u00b0C (get_weather).",
+   "note": "avg 15.8 equals a data point"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_matches_data",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "The average max temperature was 13.9 \u00b0C (get_weather).",
+   "note": "avg 13.9 equals a data point"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Average daily max: 15.4 \u00b0C (get_weather), over 10 days.",
+   "note": "correct average"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_off_data",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Average daily max: 15.9 \u00b0C (get_weather), over 10 days.",
+   "note": "avg 15.9"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_off_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 16.9"
+   ],
+   "reply": "Average daily max: 16.9 \u00b0C (get_weather), over 10 days.",
+   "note": "avg 16.9"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_off_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 12.3"
+   ],
+   "reply": "Average daily max: 12.3 \u00b0C (get_weather), over 10 days.",
+   "note": "avg 12.3"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_off_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 19.4"
+   ],
+   "reply": "Average daily max: 19.4 \u00b0C (get_weather), over 10 days.",
+   "note": "avg 19.4"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_off_data",
+   "label": "hallucinated",
+   "flagged": true,
+   "issues": [
+    "number 14.9"
+   ],
+   "reply": "Average daily max: 14.9 \u00b0C (get_weather), over 10 days.",
+   "note": "avg 14.9"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_matches_data",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Average daily max: 16.0 \u00b0C (get_weather), over 10 days.",
+   "note": "avg 16.0 equals a data point"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_matches_data",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Average daily max: 14.2 \u00b0C (get_weather), over 10 days.",
+   "note": "avg 14.2 equals a data point"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_matches_data",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Average daily max: 17.1 \u00b0C (get_weather), over 10 days.",
+   "note": "avg 17.1 equals a data point"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_matches_data",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Average daily max: 15.8 \u00b0C (get_weather), over 10 days.",
+   "note": "avg 15.8 equals a data point"
+  },
+  {
+   "scenario": "S8",
+   "error_type": "wrong_average_matches_data",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Average daily max: 13.9 \u00b0C (get_weather), over 10 days.",
+   "note": "avg 13.9 equals a data point"
+  },
+  {
+   "scenario": "S9",
+   "error_type": "echoed_false_user_claim",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Yes, the max temperature on 2024-02-03 was 25.3 \u00b0C (get_weather).",
+   "note": ""
+  },
+  {
+   "scenario": "S9",
+   "error_type": "echoed_false_user_claim",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Correct: 25.3 \u00b0C on 2024-02-03 (get_weather).",
+   "note": ""
+  },
+  {
+   "scenario": "S9",
+   "error_type": "echoed_false_user_claim",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "That's right, 2024-02-03 reached 25.3 \u00b0C (get_weather).",
+   "note": ""
+  },
+  {
+   "scenario": "S9",
+   "error_type": "echoed_false_user_claim",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Yes. Max 25.3 \u00b0C on 2024-02-03, as you said (get_weather).",
+   "note": ""
+  },
+  {
+   "scenario": "S9",
+   "error_type": "echoed_false_user_claim",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Confirmed: the maximum on 2024-02-03 was 25.3 \u00b0C (get_weather).",
+   "note": ""
+  },
+  {
+   "scenario": "S9",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "No: the max temperature on 2024-02-03 was 16.5 \u00b0C (get_weather), not 25.3 \u00b0C.",
+   "note": "corrects the user"
+  },
+  {
+   "scenario": "S9",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "That is not right. On 2024-02-03 the maximum was 16.5 \u00b0C (get_weather).",
+   "note": "corrects the user"
+  },
+  {
+   "scenario": "S9",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Not quite: 16.5 \u00b0C on 2024-02-03 (get_weather); 25.3 \u00b0C does not appear in the data.",
+   "note": "corrects the user"
+  },
+  {
+   "scenario": "S10",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "No scenes had exactly 0% cloud. Would you like me to relax the filter (e.g. <=10% or <=20% cloud)?",
+   "note": "advice control"
+  },
+  {
+   "scenario": "S10",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "Nothing matched. If you'd like, I can try a different month (e.g. 2024-03-01 to 2024-03-31) or a looser cloud limit such as 15%.",
+   "note": "advice control"
+  },
+  {
+   "scenario": "S10",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "None found at 0%. You could try another date range, for example 2024-02-01 to 2024-02-29, or raise the cloud limit.",
+   "note": "advice control"
+  },
+  {
+   "scenario": "S10",
+   "error_type": "",
+   "label": "supported",
+   "flagged": false,
+   "issues": [],
+   "reply": "The weather tool only reaches about 16 days ahead, but the archive goes back to 1940.",
+   "note": "capability control"
+  },
+  {
+   "scenario": "S10",
+   "error_type": "claim_hidden_in_advice",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "No scenes had 0% cloud. For example, the cloud cover on 2024-01-19 is 12.5%, so a looser filter would help.",
+   "note": ""
+  },
+  {
+   "scenario": "S10",
+   "error_type": "claim_hidden_in_advice",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "Nothing matched. Try a filter such as 5%, since the clearest scene has 8.8% cloud cover.",
+   "note": ""
+  },
+  {
+   "scenario": "S10",
+   "error_type": "claim_hidden_in_advice",
+   "label": "hallucinated",
+   "flagged": false,
+   "issues": [],
+   "reply": "None at 0%. For instance, scene S2B_29SMC_20240114_0_L2A had 33.3% cloud, which you could consider.",
+   "note": ""
+  }
+ ]
+}
