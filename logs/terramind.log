@@ -1,0 +1,60 @@
+INFO:     Started server process [1665]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8767 (Press CTRL+C to quit)
+INFO:     127.0.0.1:61184 - "GET /.well-known/agent-card.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61203 - "GET /.well-known/agent-card.json HTTP/1.1" 200 OK
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+/Users/Jyothikamalesh/learn/EVE/EVE_agents/.venv/lib/python3.13/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/ibm-esa-geospatial/TerraMind-1.0-tiny/resolve/main/TerraMind_v1_tiny.pt "HTTP/1.1 302 Found"
+INFO:root:Loaded weights for BLUE in position 0 of patch embed
+INFO:root:Loaded weights for GREEN in position 1 of patch embed
+INFO:root:Loaded weights for RED in position 2 of patch embed
+INFO:root:Loaded weights for NIR_NARROW in position 3 of patch embed
+INFO:root:Loaded weights for SWIR_1 in position 4 of patch embed
+INFO:root:Loaded weights for SWIR_2 in position 5 of patch embed
+INFO:terramind_agent:[run-check-2] embed_scene ok
+INFO:     127.0.0.1:61203 - "POST / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61212 - "GET /.well-known/agent-card.json HTTP/1.1" 200 OK
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:terramind_agent:[run-check-2] embed_scene ok
+INFO:     127.0.0.1:61212 - "POST / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61221 - "GET /.well-known/agent-card.json HTTP/1.1" 200 OK
+INFO:terramind_agent:[run-check-2] compare_embeddings ok
+INFO:     127.0.0.1:61221 - "POST / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61508 - "GET /.well-known/agent-card.json HTTP/1.1" 200 OK
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:terramind_agent:[bdee8be6-85be-4c69-8259-a7982408c80f] embed_scene ok
+INFO:     127.0.0.1:61508 - "POST / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61510 - "GET /.well-known/agent-card.json HTTP/1.1" 200 OK
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:rasterio.session:boto3 not available, falling back to a DummySession.
+INFO:terramind_agent:[bdee8be6-85be-4c69-8259-a7982408c80f] embed_scene ok
+INFO:     127.0.0.1:61510 - "POST / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61512 - "GET /.well-known/agent-card.json HTTP/1.1" 200 OK
+INFO:terramind_agent:[bdee8be6-85be-4c69-8259-a7982408c80f] compare_embeddings ok
+INFO:     127.0.0.1:61512 - "POST / HTTP/1.1" 200 OK

@@ -1,0 +1,169 @@
+INFO:     Started server process [97322]
+INFO:     Waiting for application startup.
+StreamableHTTP session manager started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8765 (Press CTRL+C to quit)
+Created new transport with session ID: f120c245a7a4478ca0c2f1442cdd03f6
+INFO:     127.0.0.1:61188 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61189 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61190 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61191 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+HTTP Request: GET https://nominatim.openstreetmap.org/search?q=Hyderabad&format=jsonv2&limit=1&addressdetails=0 "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:61193 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: f120c245a7a4478ca0c2f1442cdd03f6
+INFO:     127.0.0.1:61194 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: c6be3b7a690246eab2515e3848be2245
+INFO:     127.0.0.1:61195 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61196 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61197 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61198 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+INFO:     127.0.0.1:61201 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: c6be3b7a690246eab2515e3848be2245
+INFO:     127.0.0.1:61202 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: cf58fe1581cc41dead936c11e484da46
+INFO:     127.0.0.1:61256 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61257 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61258 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61259 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+HTTP Request: GET https://nominatim.openstreetmap.org/search?q=Paris%2C+France&format=jsonv2&limit=1&addressdetails=0 "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:61261 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: cf58fe1581cc41dead936c11e484da46
+INFO:     127.0.0.1:61262 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: 7a3870fbcfe641bc83b639165ae42dd7
+INFO:     127.0.0.1:61263 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61264 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61265 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61266 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+INFO:     127.0.0.1:61268 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: 7a3870fbcfe641bc83b639165ae42dd7
+INFO:     127.0.0.1:61269 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: 718ac0a22f814fe7b76bb802f3623d59
+INFO:     127.0.0.1:61270 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61272 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61271 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61273 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+INFO:     127.0.0.1:61275 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: 718ac0a22f814fe7b76bb802f3623d59
+INFO:     127.0.0.1:61276 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: e849484ee39740d297518013efea2403
+INFO:     127.0.0.1:61408 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61409 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61410 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61411 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+HTTP Request: GET https://nominatim.openstreetmap.org/search?q=Paris%2C+France&format=jsonv2&limit=1&addressdetails=0 "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:61413 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: e849484ee39740d297518013efea2403
+INFO:     127.0.0.1:61414 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: 6e73c9be30cf4156a666f7f53e881f8f
+INFO:     127.0.0.1:61415 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61416 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61417 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61418 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+INFO:     127.0.0.1:61420 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: 6e73c9be30cf4156a666f7f53e881f8f
+INFO:     127.0.0.1:61421 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: 5c0ea495c41c44ca806fd4576fa39a65
+INFO:     127.0.0.1:61422 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61423 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61424 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61425 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+INFO:     127.0.0.1:61427 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: 5c0ea495c41c44ca806fd4576fa39a65
+INFO:     127.0.0.1:61428 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: 9568f9ed1fb64a00bbf75c9d53876380
+INFO:     127.0.0.1:61444 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61445 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61446 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61447 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+INFO:     127.0.0.1:61449 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: 9568f9ed1fb64a00bbf75c9d53876380
+INFO:     127.0.0.1:61450 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: b72e22ced66b4eeeaeb12fef3a45fb50
+INFO:     127.0.0.1:61451 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61452 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61453 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61454 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+INFO:     127.0.0.1:61456 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: b72e22ced66b4eeeaeb12fef3a45fb50
+INFO:     127.0.0.1:61457 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: 9002ddf3e17d447e9467bfa1f7de891c
+INFO:     127.0.0.1:61458 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61459 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61460 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61461 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+INFO:     127.0.0.1:61463 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: 9002ddf3e17d447e9467bfa1f7de891c
+INFO:     127.0.0.1:61464 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: 3fd87c1035184bc69623d1867127d5bc
+INFO:     127.0.0.1:61465 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61466 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61467 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61468 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+INFO:     127.0.0.1:61470 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: 3fd87c1035184bc69623d1867127d5bc
+INFO:     127.0.0.1:61471 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: 93dec652866649c59a6a1cf33d917309
+INFO:     127.0.0.1:61472 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61473 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61474 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61475 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+INFO:     127.0.0.1:61477 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: 93dec652866649c59a6a1cf33d917309
+INFO:     127.0.0.1:61478 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: 83e30c45186842259475046915e1f2a7
+INFO:     127.0.0.1:61479 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61480 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61481 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61482 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+INFO:     127.0.0.1:61484 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: 83e30c45186842259475046915e1f2a7
+INFO:     127.0.0.1:61485 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: 7143c96be7b44e6099da165a9b9fbb5c
+INFO:     127.0.0.1:61494 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61495 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61496 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61497 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+HTTP Request: GET https://nominatim.openstreetmap.org/search?q=Hyderabad&format=jsonv2&limit=1&addressdetails=0 "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:61499 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: 7143c96be7b44e6099da165a9b9fbb5c
+INFO:     127.0.0.1:61500 - "DELETE /mcp HTTP/1.1" 200 OK
+Created new transport with session ID: dbddf5f8ee30445ba48a48dc891da7df
+INFO:     127.0.0.1:61501 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61503 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61502 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61504 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type CallToolRequest
+INFO:     127.0.0.1:61506 - "POST /mcp HTTP/1.1" 200 OK
+Processing request of type ListToolsRequest
+Terminating session: dbddf5f8ee30445ba48a48dc891da7df
+INFO:     127.0.0.1:61507 - "DELETE /mcp HTTP/1.1" 200 OK
