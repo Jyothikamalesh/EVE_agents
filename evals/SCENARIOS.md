@@ -9,7 +9,7 @@ The three layers, briefly (details in `README.md` in this folder):
 | Layer | What it tests | Where |
 |---|---|---|
 | Live cases (25) | the whole system end to end: tools, refusals, recovery, groundedness | `cases.yaml`, `run_evals.py` |
-| Offline tests (96) | one mechanism at a time, with fakes | `test_*.py` |
+| Offline tests (97) | one mechanism at a time, with fakes | `test_*.py` |
 | **Detection benchmark** | **how well the verifier separates hallucinated from correct replies** | `detection_fixtures.py`, `eval_detection.py`, `test_detection.py` |
 
 ## 1. The hallucination-detection benchmark

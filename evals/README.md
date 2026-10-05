@@ -49,11 +49,12 @@ The report also shows how often the **verifier intervened** (flagged, rewrote, l
 cases are scored on the final reply: a pass that needed a rewrite is not the same as a model that was right
 the first time.
 
-**Measured** (`--repeat 3`, all 25 cases): **75/75 runs passed** (95% CI 95% to 100% pooled; each case
-alone is 3/3, which supports only about 44%), 102/102 turns grounded, no flaky case. The verifier flagged
-**4 of 102 turns (4%)**: 3 were a real, repeatable model error (in a 31-row weather table the model puts the Jan 26
-and Jan 29 values on the Jan 28 row, and the pairing check catches and fixes it every time) and 1 was a derived value
-(the model subtracted two similarity scores, which the strict check treats as unsupported by design).
+**Measured** (`--repeat 5`, all 25 cases, run `20261004-222556`): **125/125 runs passed** (95% CI 97% to 100% pooled; each case
+alone is 5/5, which supports only about 57%), 170/170 turns grounded, no flaky case. The verifier flagged
+**5 of 170 turns (3%)**, all in `long_session_recall`: in a 31-row weather table the model puts a neighbouring day's value
+on the wrong row (29.4, which belongs to Jan 29, on Jan 28), and the pairing check catches it and the rewrite fixes it. An earlier
+`--repeat 3` run (75/75 runs, 102 turns) found the same error and also one derived value (two similarity scores subtracted),
+which the strict check treats as unsupported by design.
 
 **What the first `--repeat 5` run found, and the fix.** On the original 18 cases (90/90 passing) the verifier
 had flagged and rewritten 20% of turns, always in `forecast_horizon`, `empty_result`, `tool_error_bad_date`
@@ -102,3 +103,27 @@ python -m evals.test_detection         # the detection benchmark's results, incl
 
 The `a2a` cases in `cases.yaml` need `python -m terramind_agent.server` running. A case can list `requires_tools`;
 the runner reads the bound tools from `GET /health` and reports the case as `SKIP`, not `FAIL`, when one is missing.
+
+
+## Limits of this evaluation and the production path
+
+### Current limits
+
+- **The detection benchmark is synthetic and written by one person.** Its 247 hallucinated replies are controlled
+  corruptions of 37 correct ones (about 13% correct), so precision, recall and F1 describe how the verifier handles
+  *these* error types, not hallucination in general, and F1 depends on calling "hallucinated" the positive class.
+  Per-scenario recall, the false-alarm rate (0 of 37, 95% upper bound 9%) and the weak scenarios matter more than the
+  headline F1. Predictions were written before the first run to limit tuning to the data.
+- **25 live cases is a regression suite, not a quality estimate.** One case is 4% of the set; use `--repeat` and the
+  interval table above. Scoring is deterministic (regexes, tool counts, the groundedness check), so it cannot judge
+  meaning or intent.
+- **Not covered:** tool-result prompt injection, intent alignment, units, ambiguous place names, latency and cost,
+  concurrent sessions (see Coverage above and `SCENARIOS.md`).
+
+### Production path (not built)
+
+- Replies from real sessions, **labelled by a person**, as a held-out set the checker was not developed against.
+- An **LLM judge for intent and alignment**, from a different model family than the agent, compared with those labels
+  (agreement, not just accuracy), then run in the loop for the scenarios that need it.
+- A **labelled A2A set** (scene pairs and what differs) to calibrate the TerraMind similarity score.
+- Larger runs per case where a rate must be certified (about 30 clean runs for a lower bound near 90%).

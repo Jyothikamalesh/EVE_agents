@@ -6,6 +6,30 @@ the TerraMind foundation model through a separate A2A agent. It is exposed over 
 its tools through a real MCP server, with per-session conversation state, bounded context, a
 groundedness check on every answer, and a readable trace of every tool call.
 
+**Contents**
+
+| | |
+|---|---|
+| [Install & run](#install--run-clean-checkout) | set up and start everything from a clean checkout |
+| [Architecture](#architecture) | the processes and how they connect |
+| [The graph](#the-graph) | context, agent, tools and verify nodes; where sessions are kept |
+| [MCP server](#mcp-server) | the 5 EO tools |
+| [Context policy](#context-policy) | how the prompt is kept bounded |
+| [Hallucination control and evals](#hallucination-control-and-evals) | the verifier and how it is measured |
+| [TerraMind agent - A2A](#terramind-agent---a2a) | the second agent and its three skills |
+| [Eval suite](#eval-suite) | live cases, and the verifier's precision / recall / F1 |
+| [Graph trace in the UI](#graph-trace-in-the-ui) | the per-turn graph in the browser |
+| **[Appendix](#appendix)** | |
+| · [HTTP API](#http-api) | endpoints and error codes |
+| · [Errors, logging, trace](#errors-logging-trace) | what happens when a tool fails |
+| · [Session memory](#session-memory) | what the agent remembers |
+| · [Sessions, logs and traceability](#sessions-logs-and-traceability) | finding one session in the logs |
+| · [Retrieval (RAG)](#retrieval-rag) | not built: what it would serve and how |
+| · [What I left out, and what I'd do next](#what-i-left-out-and-what-id-do-next) | scope cuts and next steps |
+| · [Repo layout](#repo-layout) | where the code lives |
+
+Deeper detail lives in [`docs/`](docs/): [API](docs/api.md), [API · MCP · A2A interaction](docs/API_MCP_A2A_interaction.md), [UI](docs/ui.md), [MCP](docs/mcp-details.md), [TerraMind](docs/terramind-details.md), [context](docs/context-details.md), [hallucination control](docs/hallucination-details.md).
+
 ## Install & run (clean checkout)
 
 Needs Python 3.11–3.13 and a free Groq key (console.groq.com). One environment, no conda:
@@ -71,114 +95,148 @@ HTTP, not a Python import of `agents.tools`.
 
 ## The graph
 
-`service/eo_agent/graph.py::EOReactAgent` is `agents/graphs/react/graph.py
-::ReactAgent` with one override: its own `prompts.yaml`, which holds only the cross-tool policy
-(never invent, report failures, cite the source tool, stay in scope). **It names no tools.** Each
-tool describes itself: MCP tools through their schemas and descriptions, A2A skills through their
-Agent Card, so what the agent is told always matches what is actually bound.
+One LangGraph agent. Each turn runs through four nodes:
 
 ```
 START → context → agent ⇄ tools
                     └──(final answer)──→ verify → END
 ```
 
-- **`context`** — builds the prompt view each turn: compacts old tool output, and folds older turns
-  into a rolling summary only when the prompt would exceed the token budget (see Context policy).
-- **`agent`** — calls the LLM (bound to the MCP tools) with the instruction, the
-  summary, and the compacted/trimmed history. Tool calls (native, or the
-  text-format `[TOOL_CALLS]` variants handled by
-  `agents/graphs/utils.py::parse_text_tool_calls`) route to `tools`; a plain
-  answer routes to `verify`.
-- **`tools`** — runs each requested call (MCP-sourced, tracing-wrapped), turns
-  any exception into a `ToolMessage` (`"Tool error: …"`) instead of raising,
-  and loops back to `agent`.
-- **`verify`** — checks the final answer against the tool results (see
-  Hallucination control). Runs once per turn, outside the tool loop.
+**What happens in one turn**
 
-**Where the loop stops:** when the agent answers without requesting a tool (the answer then goes to `verify`), or after
-`EVE_MAX_TOOL_CALLS` tool calls (default 10), when the `limit` node skips the pending calls and ends the turn with a plain
-message that says it stopped and quotes the last error.
-- **`agent_fallback`** — not wired here (no `fallback_llm`); the library
-  supports it.
+1. **`context`** prepares what the model will see: old tool output is shrunk, and if the conversation has grown past the
+   token budget, older turns are folded into a short summary (see Context policy).
+2. **`agent`** is the LLM call. It either asks for tools or gives a final answer.
+3. **`tools`** runs the requested tools (MCP tools and TerraMind skills, each timed and logged) and hands the results
+   back to `agent`. If a tool fails, the model gets a `Tool error: …` message instead of a crash, and explains it.
+   Steps 2 and 3 repeat until the model answers.
+4. **`verify`** checks the final answer once: every date, scene id and number must come from a tool result. If not,
+   the model rewrites once; if it still fails, the reply carries a visible `⚠️ Could not verify…` note
+   (see Hallucination control).
+
+**When the loop stops:** when the agent answers without asking for a tool, or after `EVE_MAX_TOOL_CALLS` tool calls
+(default 10). Then the remaining calls are skipped and the reply says it stopped and quotes the last error.
+
+**How the agent finds its tools.** When the API starts it asks the MCP server for its tool list and reads the TerraMind
+Agent Card for its skills. Each tool describes itself, so the prompt names no tools and always matches what is
+actually available. The prompt holds only general rules: never invent, report failures, cite the source tool, stay in
+scope.
+
+**Where each session is kept.** A SQLite checkpointer (`data/checkpoints.sqlite`) stores every message under the
+`session_id` you send to `/chat`. That is why the next turn can say "the same period", why a session survives an API
+restart, and why it can be reloaded by id. Each session also has a trace you can read:
+
+| Trace | Where | Contains |
+|---|---|---|
+| Tool calls | `logs/traces.jsonl` | session id, step, tool, arguments, duration, error, final answer |
+| Node runs | `logs/node_runs/<session_id>.jsonl` | which node ran, model calls, tool calls, verifier verdict (drawn by the UI) |
+
+For several machines, swap SQLite for Postgres (`AsyncPostgresSaver`); the interface is the same.
+
+## MCP server
+
+**Design.** One FastMCP server (`mcp_server/server.py`, streamable-http) with 5 tools, each wrapping a free public API that needs no key:
+- **Place:** `geocode_location` (Nominatim) turns a name into coordinates and a bbox.
+- **Imagery:** `list_stac_collections`, `search_stac_items`, `get_stac_item` (Earth Search STAC).
+- **Weather:** `get_weather` (Open-Meteo), historical or forecast.
+
+The agent reaches them only through an MCP connection (`MultiServerMCPClient`), never by importing the functions, so the
+tools run as a separate process and describe themselves to the model.
+
+**Not done: authenticated EO services (CDSE, SentinelHub, openEO).** The three public APIs need no keys, which keeps the
+setup runnable from a clean checkout; the others need OAuth and key handling, and are the natural next tools.
+
+More: [docs/mcp-details.md](docs/mcp-details.md).
 
 ## Context policy
 
-The full conversation is always **stored**. Each turn, the model is sent a **smaller view** of it:
+**Design.** The full conversation is stored (SQLite, by session id); each turn the model sees a smaller view of it:
+- **Tool-output compaction:** earlier tool results shrink to the facts a follow-up needs (a scene search keeps id, date, cloud).
+- **Token-bound summary:** once the prompt would pass the token budget, older turns are folded into a short summary.
+- **Request ledger:** the user's own requests, numbered in order and built in code, so "what did I ask first?" stays exact.
 
-1. **Stored per session:** every message, keyed by session id in a SQLite checkpointer (`data/checkpoints.sqlite`). Nothing is deleted, and it survives an API restart. (For several hosts: `AsyncPostgresSaver`, same interface.)
-2. **Old tool output is shrunk:** results from earlier turns are replaced by a short form (a scene search keeps only id / date / cloud). The current turn is never shrunk.
-3. **Long chats get a summary:** if the prompt would pass 3,000 tokens, older turns are folded into a short summary by one LLM call. Short chats never pay for it.
-4. **A numbered list of the user's own requests** is added for the folded turns. It is built in code, with no LLM, so "what did I ask first?" is answered from the user's real words and not from the summary.
+**Not done: Qdrant / RAG for context.** Inside one session, even a long one, a summary plus the request ledger is exact where
+similarity retrieval is not: it returns what is *similar*, not what was *asked first*. RAG earns its place for memory
+*across* sessions, which also needs a write policy (what to store, staleness, privacy).
 
-A 96k-token trim sits behind all of this as a last resort. Settings: `EVE_SUMMARY_TOKEN_BUDGET`, `EVE_KEEP_RECENT_TURNS`. More: [docs/context-details.md](docs/context-details.md).
-
-**Shown working:** a 7-turn session ([transcript](demo/demo_transcript_context.md); run it with `python scripts/run_demo_context.py`).
-
-- By turn 6 the prompt would pass the budget, so turns 1-3 are folded into a summary and the prompt shrinks.
-- Turn 7 asks about turn 1, which has left the prompt, and is answered correctly (5 of 5 runs).
-- Without the numbered request list this failed (1 of 3): the model gave the latest request as the first.
+More: [docs/context-details.md](docs/context-details.md).
 
 ## Hallucination control and evals
 
-- **Prompt rules:** every fact must come from a tool result, errors are reported rather than hidden, and each value names its source tool, e.g. `cloud cover 3% (search_stac_items, S2C_43PGQ_…)`.
-- **`verify` node** (`agents/graphs/verify.py`): a rule-based check, no LLM. Every date, scene id and number in the final answer must trace to a tool result, the summary or the user's own words, and a value must sit on the right record (right scene, right day). If not, the model gets one rewrite, then a visible `⚠️ Could not verify…` caveat. It is a tripwire, not a proof: claims with no value in them ("mostly clear") are not checked.
-- **Measured:** a benchmark of 284 labelled replies (`python -m evals.eval_detection`) gives precision 100%, recall 89%, F1 94%. It is strong on attribution, ids, dates, superlatives and citations, and weak on plain numbers in dense data, echoed user claims and derived values.
-- **Evals:** 25 live cases (`python -m evals.run_evals --repeat 5`) plus offline tests (`python -m evals.test_*`). `run_evals` also prints the benchmark's precision / recall / F1.
+**Design.** The `verify` node checks the final answer against the tool results with plain rules, no LLM:
+- **Value check:** every date, scene id and number must trace to a tool result, the summary or the user's own words.
+- **Pairing:** a value must sit on the right record (the right scene, the right day).
+- **Superlatives:** "clearest", "hottest", "most similar" are recomputed as the min or max over the tool data.
+- **Tool citation:** a tool named as the source of a value must actually have been called.
+
+A failure gets one rewrite, then a visible `⚠️ Could not verify…` note. Measured on 284 labelled replies: precision 100%,
+recall 89%.
+
+**Not done: a second LLM call as a judge.** The verifier checks evidence, not intent, so it is deterministic and adds no
+model call or cost per turn; an LLM judge is probabilistic and needs human-labelled data to trust. It is the next step for
+intent checks, and for claims with no value in them ("mostly clear"), which this does not catch.
 
 More: [docs/hallucination-details.md](docs/hallucination-details.md), [evals/README.md](evals/README.md), [evals/SCENARIOS.md](evals/SCENARIOS.md).
 
+## TerraMind agent - A2A
 
+**Design.** A second, separate agent (`terramind_agent/`, A2A 1.0) wraps the TerraMind-1.0-tiny EO foundation model. It publishes an
+Agent Card, the EO agent discovers it and calls its three skills as ordinary tools:
+- **`embed_scene`:** runs a Sentinel-2 scene through TerraMind, keeps the embedding on the agent's side and returns only an `embedding_id`.
+- **`compare_embeddings`:** cosine similarity of two scenes, plus where they differ when they share a tile.
+- **`rank_similar`:** ranks embedded scenes by similarity to a reference.
 
-## TerraMind agent over A2A
+Each result ships its own reading guide (scores sit near 1.0 and mean "looks alike", not "same"), so the wording comes from
+the agent that knows its numbers. The model only ever sees ids and summary numbers, and the verifier checks them like any tool output.
 
-A second, separate **agent** (`terramind_agent/`, official `a2a-sdk` 1.x, A2A protocol 1.0, JSON-RPC)
-wraps the **TerraMind-1.0-tiny** EO foundation model (IBM/ESA, Apache 2.0). It publishes an Agent
-Card at `/.well-known/agent-card.json` with three skills, and the EO agent calls them as ordinary
-tools (`service/a2a_client.py`; skills **and their descriptions** are read from the card, so the remote
-agent owns its own usage instructions; only the argument schemas stay in the client, because an Agent
-Card cannot declare typed parameters):
-
-| skill / tool | what it does |
-|---|---|
-| `embed_scene(collection, item_id, patch_size=224)` | fetches the 6 Sentinel-2 bands over one shared geographic window, runs TerraMind, keeps the full (196, 192) tensor **server-side** under an `embedding_id`; returns the id, scene date, cloud cover, tile id, crop bbox, shape and stats |
-| `compare_embeddings(id_a, id_b)` | cosine similarity of the mean-pooled embeddings; when both scenes share a tile id also per-tile mean/min/max and the 3 least-similar grid cells (row, col) = *where* they differ; says `same_footprint: false` otherwise |
-| `rank_similar(reference_id, candidate_ids)` | ranks embedded scenes by similarity to a reference |
-
-**How to read the numbers.** The embeddings measure how similar two scenes *look*. They carry no land-cover labels, and scores sit very close to 1.0. So every `compare_embeddings` / `rank_similar` result comes with its own reading guide, reference scores and caveats (a cloudy scene or a long gap can lower similarity). The EO prompt only says to follow that guidance; the wording comes from the agent that knows what its numbers mean.
-
-- The LLM sees only ids and summary numbers, never the embedding tensor. The verifier checks the numbers it quotes like any other tool output.
-- Embeddings are kept in memory and also saved in `data/embeddings/`, so they survive a restart.
-- A crop that is more than 20% no-data (a scene at the edge of the satellite swath) is rejected with an explanation instead of being embedded.
+**Not done: a calibrated similarity score.** There are no human-labelled scene pairs, so the reference scores come from three scenes
+and are indicative only. Labelled pairs would give real thresholds, and labelled vectors would let it say "closest to these areas".
 
 Demo: `python scripts/run_demo_terramind.py` ([transcript](demo/demo_transcript_terramind.md)). More: [docs/terramind-details.md](docs/terramind-details.md).
 
-## Session memory
+## Eval suite
 
-The agent's memory of a conversation is the checkpointed state plus the
-rolling summary above. Cross-session semantic memory is deliberately not part
-of the core design.
+Two kinds of test: one checks the **agent end to end**, the other checks the **verifier** as a hallucination detector.
 
-## Sessions, logs and traceability
+**1. Live cases: does the agent behave?** 25 cases in `evals/cases.yaml`. Each runs in a fresh session against the live API and
+is scored on the tools it called, the content of the reply and groundedness (the verifier's own checks). Seven kinds:
+- **Tool use (7):** picks the right tools and arguments (geocode, search, weather, collections, a 10-day table).
+- **Multi-turn context (4):** "the same period", "that scene", no leak between sessions, a 7-turn recall.
+- **Refusal and robustness (7):** out-of-scope asks, prompt injection, unknown places, empty results, future dates.
+- **Error path (1):** a bad date forces a tool error; the reply explains it and the trace records it.
+- **Hallucination bait (3):** a fabricated scene id, a false premise from the user, a memory override.
+- **A2A (3):** embed and compare through TerraMind, an unknown embedding id, no "percent sameness".
 
-Everything is keyed by the **session id** (the `session_id` you send to `/chat`):
+**2. Detection benchmark: does the verifier catch lies?** 284 labelled replies (247 hallucinated, 37 correct) in ten scenarios.
+Overall: **precision 100%, recall 89%, F1 94%**.
 
-- `GET /sessions/{id}` returns the stored conversation (tool calls and results included);
-  404 if unknown. `GET /sessions/{id}/export` returns one JSON file with the messages, the API
-  trace for that session, the TerraMind agent's log lines and the metadata of the embeddings it
-  created. `python scripts/export_session.py <id>` writes it to a file.
-- The UI loads a session by id (`Load session`) or replays an exported file read-only
-  (`Open a session file`, no API history needed), so a session JSON can be sent to someone who
-  can then read the whole test. `demo/session_terramind_example.json` is one such file.
-- Logs: every API log line carries `[session_id]`, so `grep <id> logs/api.log`; per-tool-call trace
-  lines are in `logs/traces.jsonl` (`jq 'select(.session_id=="<id>")'`); the TerraMind agent writes
-  `logs/terramind.jsonl` (one line per skill call: session, skill, args, ok/error, duration,
-  embedding id) and `[session_id]` on its console log. The session id travels to the TerraMind
-  agent as the A2A message's `context_id` and metadata.
-- TerraMind embeddings are persisted in `data/embeddings/<embedding_id>.npz` + `.json` (the JSON
-  records the creating session), so they survive an agent restart (verified: restart, then
-  `compare_embeddings` on earlier ids). Ids are scene-keyed, so any session can reuse them.
+| Scenario | Precision | Recall | F1 |
+|---|---|---|---|
+| S1 value on the wrong scene, or invented | 100% | 100% | 100% |
+| S2 weather cell on the wrong day | 100% | 100% | 100% |
+| S3 invented scene id | 100% | 100% | 100% |
+| S4 shifted or borrowed date | 100% | 100% | 100% |
+| S5 false superlative | 100% | 100% | 100% |
+| S6 tool cited but never called | 100% | 100% | 100% |
+| S7 wrong numbers from the A2A agent | 100% | 56% | 71% |
+| S8 wrong derived value (an average) | 100% | 40% | 57% |
+| S9 agreeing with a false user value | n/a | 0% | n/a |
+| S10 claims hidden in advice text | n/a | 0% | n/a |
+
+Strong where a claim is tied to a record; weak on derived values, echoed user claims and plain numbers in dense data.
+
+```bash
+python -m evals.run_evals --repeat 5      # live cases, 5 runs each
+python -m evals.eval_detection            # the benchmark
+```
+
+More: [evals/README.md](evals/README.md) (how cases are scored, repeat runs) and [evals/SCENARIOS.md](evals/SCENARIOS.md) (why each scenario, what is not covered).
 
 ## Graph trace in the UI
+
+![Graph trace of a TerraMind turn in the UI](assets/images/graph_ui.png)
+
+*One TerraMind turn. Blue numbers are the order the nodes ran: `context` (1), `agent` (2), then four `agent ⇄ tools` rounds (3-10) that made three calls to the TerraMind A2A agent (dashed green, 4.4 s of the tools' 6.8 s), then `verify` (11) and the answer (12).*
 
 After every turn the UI draws the graph for that turn (`🧭 Graph trace`): the fixed topology
 (`context → agent ⇄ tools → verify`, plus the TerraMind A2A agent when it was called), with the path
@@ -196,17 +254,30 @@ serves it at `GET /sessions/{id}/node_runs`, the session export includes it, so 
 id or replaying an exported file shows the same graphs. `python -m evals.test_node_trace` checks the
 recorded sequence, model calls, tool calls and errors offline with a fake model.
 
-## MCP server
 
-`mcp_server/server.py` — `FastMCP`, `streamable-http` transport, 5 tools:
-`geocode_location`, `list_stac_collections`, `search_stac_items`,
-`get_stac_item`, `get_weather`. Each calls a free, no-auth-key public API
-(Nominatim/OSM, Earth Search/Element84, Open-Meteo). `service/mcp_client.py`
-connects via `langchain_mcp_adapters.client.MultiServerMCPClient` and that
-connection — not a direct import — is the only way `service/api.py` obtains
-tools for the graph.
 
-## Errors, logging, trace
+## Appendix
+
+### HTTP API
+
+FastAPI, `service/api.py`. `POST /chat {"session_id", "message"} -> {"session_id", "reply", "trace", "turn"}`.
+Run with `uvicorn service.api:app --port 8000` (or `scripts/start_all.sh`).
+
+| Endpoint | Returns | Errors |
+|---|---|---|
+| `POST /chat` | the reply plus this request's trace steps | 422 bad body; 500 on a failure outside a tool |
+| `GET /health` | status, model, bound tools | |
+| `GET /tools` | each tool's description and parameter text | |
+| `GET /sessions/{id}` | the stored conversation | 404 unknown session |
+| `GET /sessions/{id}/node_runs` | node-level trace per turn | |
+| `GET /sessions/{id}/export` | one JSON file for the whole session | 404 unknown session |
+
+A failing **tool** is not an HTTP error: the reply is a 200 that explains the failure, and the trace carries the error.
+Full reference with request/response examples and error behaviour: [docs/api.md](docs/api.md). How the API, the MCP
+server and the A2A agent call each other: [docs/API_MCP_A2A_interaction.md](docs/API_MCP_A2A_interaction.md). Using the UI: [docs/ui.md](docs/ui.md).
+
+
+### Errors, logging, trace
 
 - **Loop guard:** a model that keeps retrying a failing tool is stopped after `EVE_MAX_TOOL_CALLS`
   (default 10) calls in a turn: pending calls are answered as skipped and the turn ends with a plain
@@ -233,44 +304,53 @@ tools for the graph.
   plain language, and `GET /health` immediately after confirms the server
   stayed up. Full trace: `demo/demo_trace.jsonl`.
 
-## HTTP API
+### Session memory
 
-FastAPI, `service/api.py`. `POST /chat {"session_id", "message"} ->
-{"session_id", "reply", "trace"}`; `GET /health`. Run with `uvicorn
-service.api:app --port 8000` (see above).
+The agent's memory of a conversation is the checkpointed state plus the
+rolling summary above. Cross-session semantic memory is deliberately not part
+of the core design.
 
+### Sessions, logs and traceability
 
-## What I left out, and what I'd do next
+Everything is keyed by the **session id** (the `session_id` you send to `/chat`):
+
+- `GET /sessions/{id}` returns the stored conversation (tool calls and results included);
+  404 if unknown. `GET /sessions/{id}/export` returns one JSON file with the messages, the API
+  trace for that session, the TerraMind agent's log lines and the metadata of the embeddings it
+  created. `python scripts/export_session.py <id>` writes it to a file.
+- The UI loads a session by id (`Load session`) or replays an exported file read-only
+  (`Open a session file`, no API history needed), so a session JSON can be sent to someone who
+  can then read the whole test. `demo/session_terramind_example.json` is one such file.
+- Logs: every API log line carries `[session_id]`, so `grep <id> logs/api.log`; per-tool-call trace
+  lines are in `logs/traces.jsonl` (`jq 'select(.session_id=="<id>")'`); the TerraMind agent writes
+  `logs/terramind.jsonl` (one line per skill call: session, skill, args, ok/error, duration,
+  embedding id) and `[session_id]` on its console log. The session id travels to the TerraMind
+  agent as the A2A message's `context_id` and metadata.
+- TerraMind embeddings are persisted in `data/embeddings/<embedding_id>.npz` + `.json` (the JSON
+  records the creating session), so they survive an agent restart (verified: restart, then
+  `compare_embeddings` on earlier ids). Ids are scene-keyed, so any session can reuse them.
+
+### Retrieval (RAG)
+
+Not built. It would serve two things: questions about EO knowledge that no tool answers ("what does the SCL band mean?"), and
+memory across sessions. Plan: embed product guides and past sessions into a vector store (Qdrant, or pgvector since Postgres
+is the production checkpointer), expose it as a `search_docs` MCP tool returning cited passages, let the verifier accept
+retrieved passages as evidence, and measure it on labelled questions (recall@k, groundedness). This is a design only, with no
+prototype behind it. See also [docs/context-details.md](docs/context-details.md) for why it is not used inside a session.
+
+### What I left out, and what I'd do next
 
 Scope is the agent, MCP tools, context policy, error handling and API, plus the TerraMind A2A agent. Deliberately left out:
 
-- **Agent Skills (`SKILL.md`).** Not attempted. A2A is done for the TerraMind agent only;
-  the EO agent itself is not exposed over A2A, and there is no supervisor or multi-agent routing.
-- **Persistent checkpointer — done, partially.** Swapped `InMemorySaver` for
-  `AsyncSqliteSaver`; state now survives a restart (verified: killed the API
-  process, restarted it, a follow-up on the same session recalled an earlier
-  fact with no reminder). That's as far as SQLite should go, though — it's a
-  single-box fix (WAL mode handles multiple workers on one machine, not
-  multiple hosts). For an actual distributed deployment I'd still move to
-  `AsyncPostgresSaver` (`langgraph-checkpoint-postgres`) — same `thread_id`-
-  keyed interface, so it's a one-line swap in `service/api.py` whenever
-  that's warranted, not a redesign — and the natural fit since EVE's backend
-  is already Mongo/Postgres-adjacent infrastructure.
-- **Auth.** None: Nominatim, Earth Search and Open-Meteo need no API keys. Production EO
-  services (CDSE, SentinelHub, openEO) need OAuth/key handling this doesn't cover.
+
+- **Live tool discovery.** Tools are discovered once, at start-up, so the tool list stays fixed and predictable for a
+  run; a TerraMind agent started later needs an API restart. In production the API would keep looking for new tools,
+  either by re-querying the Agent Card and the MCP tool list on a timer (or on a failed call), or by being told when
+  a server changes, and would drop tools whose agent has gone away.
 - **Broader EO stack (openEO, CDSE, SentinelHub, GEE).** Not in
   scope here. Geocoding, STAC and weather plus the TerraMind agent prove the
   pattern for both "data catalogue" and "foundation model" integrations;
   these are the natural next additions once auth is in place.
-- **Image rendering in the API response itself.** `scripts/ui_app.py`
-  (Streamlit, a thin client of the API) renders STAC thumbnails
-  inline; the API returns thumbnail URLs as plain JSON
-  fields rather than fetching/embedding images, which is the right call for
-  an API response but means a raw `curl` won't show pictures.
-- **Automated test suite.** Offline tests cover the groundedness checker, the
-  verifier node and the context policy (`python -m evals.test_*`, no network);
-  the eval set runs live against the API and model. There's no CI wiring, and
-  tool-level tests (Nominatim / Earth Search / Open-Meteo) are not mocked.
 - **TerraMind crops are not centred on the place.** `embed_scene` embeds a 2.2 km square at the centre of
   the Sentinel-2 tile (about 110 km across), not at the geocoded place; in my checks the crop was 25-28 km
   from Hyderabad and Bengaluru. The result's `note` and `crop_bbox` say so and the agent relays it, but the
@@ -280,21 +360,23 @@ Scope is the agent, MCP tools, context policy, error handling and API, plus the 
   verifier rewriting 20% of turns that were actually good (capability statements quoting a tool's own limits,
   suggested thresholds and dates, tool names merely mentioned), sometimes into a worse answer. Whole numbers from
   tool descriptions now count as supported, values in advisory sentences are exempt (never scene ids), and a tool
-  name is a citation only when attached to a value; the rewrite prompt keeps explanations and suggestions. Now:
-  75/75 runs over 25 cases, 4 of 102 turns flagged, 3 of those a genuine repeatable table-transcription error
-  (see `evals/README.md`). Remaining limit: a derived value (a difference of two scores) is still flagged.
+  name is a citation only when attached to a value; the rewrite prompt keeps explanations and suggestions. Now: 125/125
+  runs over 25 cases (5 repeats), 5 of 170 turns flagged, all in `long_session_recall`: the model puts a weather-table
+  value on the neighbouring day's row (29.4, which belongs to Jan 29, on Jan 28), and the pairing check catches it and
+  the rewrite fixes it (see `evals/README.md`). Remaining limit: a derived value (a difference of two scores) is still flagged.
 - **Hard guarantees on hallucination.** The verifier is a deterministic
   tripwire plus one rewrite: every value must exist in the tool data and sit
   with the right record, and superlatives are recomputed. It does not check
   claims with no value in them ("mostly clear skies"), swaps inside a sentence
   that compares records, or references by position. Next steps: a larger,
-  independently written test set for the catch and false-alarm rates (the 137
-  replies above are this project's own runs). An LLM judge or NLI check would
+  independently written test set for the catch and false-alarm rates (the 284-reply
+  benchmark is this project's own). An LLM judge or NLI check would
   catch more semantic errors at the cost of another model call per turn.
 
-## Repo layout
+### Repo layout
 
 ```
+docs/                    api.md, API_MCP_A2A_interaction.md, ui.md, mcp-details.md and the per-topic detail files
 agents/                  Portable LangGraph library (no backend imports)
   graphs/
     base.py              AgentGraph, make_tools_node (catches tool errors)
@@ -337,19 +419,3 @@ logs/
   traces.jsonl           live trace log (grows on every /chat request)
 ```
 
-## Develop
-
-```bash
-scripts/setup.sh                    # or: python -m venv .venv && . .venv/bin/activate && pip install -e ".[dev,terramind]"
-python -m evals.test_groundedness   # offline tests, no network or model (see evals/README.md)
-python -m evals.run_evals           # live evals against the running API
-```
-
-## Reusing the agent library
-
-`agents/` is the portable LangGraph library this service is built on (from
-[eve-esa/agents](https://github.com/eve-esa/agents)): `ReactAgent` (the tool loop, with LLM
-timeouts, retries and an optional fallback model) plus the pieces added for this project
-(`context.py`, `verify.py`, `grounding.py`, the loop guard). `service/eo_agent/` subclasses it
-with an EO system prompt. The `simple` graph (single LLM node, no tools) is kept from upstream
-for smoke tests.
